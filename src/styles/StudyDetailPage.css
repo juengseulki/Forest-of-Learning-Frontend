@@ -1,0 +1,26 @@
+.detail-container {
+  background-color: var(--color-white);
+  max-width: 1200px;
+  height: 889px;
+  margin-top: 30px;
+  padding: 40px;
+  border-radius: 15px;
+}
+.detail-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-top-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-bottom-section {
+  margin-top: 50px;
+  width: 100%;
+
+  border: 1px solid rgb(182, 179, 179);
+  border-radius: 15px;
+  padding: 30px;
+}
