@@ -1,0 +1,33 @@
+.habit {
+  display: flex;
+  padding: 40px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 1120px;
+  height: 551px;
+  gap: 10px;
+  background-color: #ffffff;
+  border-radius: 20px;
+}
+.habit-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 722px;
+}
+.habit-header-top-text1 {
+  color: #414141;
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.habit-header-top-text2 {
+  width: 144px;
+  height: 48px;
+  border-radius: 15px;
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  background: #fff;
+}
