@@ -10,7 +10,7 @@ export default function StudyCard({ studys, point }) {
 
   return (
     <>
-      <div className="study-card" key={studys.id}>
+      <div className="study-card">
         <section className="card-header">
           <div className="header-top">
             <div className="title-group">

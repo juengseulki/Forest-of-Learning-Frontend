@@ -10,7 +10,11 @@ function StudyList() {
   return (
     <div className="card-list">
       {study.map((studys) => {
-        return <StudyCard studys={studys} point={point} />;
+        return (
+          <div key={studys.id}>
+            <StudyCard studys={studys} point={point} />
+          </div>
+        );
       })}
     </div>
   );

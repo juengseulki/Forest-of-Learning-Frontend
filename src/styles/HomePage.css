@@ -1,5 +1,99 @@
+input:focus {
+  outline: none;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.recent-lookup {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.home-title {
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #414141;
+}
+
+.study-list {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  gap: 60px;
+}
+.list-top {
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+}
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-container {
+  width: 335px;
+  height: 42px;
+  border-radius: 15px;
+  border: 1px solid var(--gray-200);
+  padding: 12px 20px;
+  display: flex;
+  gap: 10px;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.select-container {
+  width: 180px;
+  height: 42px;
+
+  border-radius: 15px;
+  border: 1px solid #d9d9d9;
+  padding: 9px 20px;
+
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--gray-300);
+  cursor: pointer;
+}
+
+.select-container:focus {
+  outline: none;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.see-more {
+  width: 280px;
+  border-radius: 20px;
+  border: 1px solid var(--gray-200);
+  padding: 17px 119px;
+
+  color: var(--color-green-text);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  white-space: nowrap;
+  cursor: pointer;
 }
