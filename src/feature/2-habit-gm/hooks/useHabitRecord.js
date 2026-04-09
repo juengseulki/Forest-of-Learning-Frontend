@@ -4,9 +4,8 @@ import { mapRecordsToCheckedMap } from '../utils/habitMapper';
 
 export default function useHabitRecord(studyId, { startDate, endDate }) {
   const queryClient = useQueryClient();
-  const queryKey = ['habitRecords', studyId, startDate, endDate]; // 기록 데이터 이름표
+  const queryKey = ['habitRecords', studyId, startDate, endDate];
 
-  // 데이터 가져오기
   const { data: checkedMap = {}, isLoading } = useQuery({
     queryKey,
     queryFn: async () => {
@@ -16,13 +15,11 @@ export default function useHabitRecord(studyId, { startDate, endDate }) {
     enabled: !!studyId,
   });
 
-  // 데이터 변경하기 (체크/해제)
   const toggleMutation = useMutation({
     mutationFn: ({ habitId, date }) => toggleHabitCheck(studyId, habitId, date),
     
     onMutate: async ({ habitId, date }) => {
       await queryClient.cancelQueries({ queryKey });
-
       const previousMap = queryClient.getQueryData(queryKey);
 
       queryClient.setQueryData(queryKey, (oldMap) => {
@@ -30,9 +27,9 @@ export default function useHabitRecord(studyId, { startDate, endDate }) {
         const habitDates = new Set(newMap[habitId] || []);
         
         if (habitDates.has(date)) {
-          habitDates.delete(date); // 이미 있으면 체크 해제
+          habitDates.delete(date);
         } else {
-          habitDates.add(date); // 없으면 체크
+          habitDates.add(date);
         }
         newMap[habitId] = habitDates;
         return newMap;
