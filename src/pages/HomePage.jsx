@@ -9,6 +9,7 @@ function HomePage() {
   const study = studiesMockResponse.data.items;
   const point = pointMockResponse.data;
 
+  // API 연동 이후 삭제
   const recentLimit = 3;
   const recentPage = 1;
   const recentStartIndex = (recentPage - 1) * recentLimit;
@@ -16,10 +17,14 @@ function HomePage() {
   const recentStudy = study.slice(recentStartIndex, recentEndIndex);
 
   const listLimit = 6;
-  const listPage = 1;
-  const listStartIndex = (listPage - 1) * listLimit;
-  const listEndIndex = listStartIndex + listLimit;
-  const listStudy = study.slice(listStartIndex, listEndIndex);
+  const [listPage, setListPage] = useState(1);
+  const listStudy = study.slice(0, listPage * listLimit);
+
+  function moreSee() {
+    setListPage((t) => t + 1);
+    console.log('클릭됨');
+  }
+  console.log(listStudy);
 
   return (
     <div className="main-container">
@@ -45,7 +50,9 @@ function HomePage() {
           <StudyList study={listStudy} point={point} />
         </div>
         <div className="button-container">
-          <button className="see-more">더보기</button>
+          <button className="see-more" onClick={moreSee}>
+            더보기
+          </button>
         </div>
       </section>
     </div>
