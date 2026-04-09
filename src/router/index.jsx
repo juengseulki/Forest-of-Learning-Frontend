@@ -5,6 +5,7 @@ import HomePage from '../pages/HomePage';
 import CreateStudyPage from '../pages/CreateStudyPage';
 import FocusTest from '../feature/1-focus-hs/components/FocusTimer';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
+import HabitHome from '../feature/habit-1/components/HabitHome';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/focus',
         element: <FocusTest />,
+      },
+      {
+        path: '/habit',
+        element: <HabitHome />,
       },
     ],
   },
