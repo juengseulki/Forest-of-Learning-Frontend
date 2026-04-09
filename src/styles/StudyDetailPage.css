@@ -1,10 +1,16 @@
 /*레이아웃*/
+/* .detail-wrapper {
+  width: 100%;
+  padding: 0 200px;
+  box-sizing: border-box;
+} */
 .detail-container {
   background-color: var(--color-white);
-  max-width: 1200px;
+
+  width: 100%;
   height: auto;
   min-height: 809px;
-  margin: auto 0;
+  margin: 0 auto;
   margin-top: 30px;
   padding: 40px;
   border-radius: 30px;

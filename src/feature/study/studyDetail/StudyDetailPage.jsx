@@ -19,57 +19,59 @@ function StudyDetailPage() {
   };
 
   return (
-    <div className="detail-container">
-      <section className="detail-top-section">
-        <div className="detail-left">
-          <span className="emoji">
-            <div className="emoji-wrap">
-              <button className="emoji-btn">🔥 9</button>
-              <button className="emoji-btn">🤩 9</button>
-            </div>
-            <button className="emoji-add-btn">
-              <img src={smileIcon} alt="이모지 추가" />
-              추가
-            </button>
-          </span>
+    <div className="detail-wrapper">
+      <div className="detail-container">
+        <section className="detail-top-section">
+          <div className="detail-left">
+            <span className="emoji">
+              <div className="emoji-wrap">
+                <button className="emoji-btn">🔥 9</button>
+                <button className="emoji-btn">🤩 9</button>
+              </div>
+              <button className="emoji-add-btn">
+                <img src={smileIcon} alt="이모지 추가" />
+                추가
+              </button>
+            </span>
 
-          <section className="detail-info">
-            <h1>{data.name}</h1>
-            <div className="detail-field">
-              <h3>소개</h3>
-              <p>{data.description}</p>
+            <section className="detail-info">
+              <h1>{data.name}</h1>
+              <div className="detail-field">
+                <h3>소개</h3>
+                <p>{data.description}</p>
+              </div>
+            </section>
+            <div className="detail-point-group">
+              <h3 className="detail-field">현재까지 획득한 포인트</h3>
+              <div className="detail-point">
+                <img src={pointIcon} alt="포인트 아이콘" />
+                {data.totalPoint}P 획득
+              </div>
             </div>
-          </section>
-          <div className="detail-point-group">
-            <h3 className="detail-field">현재까지 획득한 포인트</h3>
-            <div className="detail-point">
-              <img src={pointIcon} alt="포인트 아이콘" />
-              {data.totalPoint}P 획득
+          </div>
+          <div className="detail-right">
+            <div className="detail-action-group">
+              <button className="action-item ">공유하기 </button>
+              <button className="action-item">수정하기 </button>
+              <button className="action-item detail-delete">
+                스터디 삭제하기{' '}
+              </button>
+            </div>
+            <div className="detail-link-group">
+              <Link to="" className="link-btn">
+                오늘의 습관 <img src={allowRight} alt="오른쪽 이미지" />
+              </Link>
+              <Link to="" className="link-btn">
+                오늘의 집중 <img src={allowRight} alt="오른쪽 이미지" />
+              </Link>
             </div>
           </div>
-        </div>
-        <div className="detail-right">
-          <div className="detail-action-group">
-            <button className="action-item ">공유하기 </button>
-            <button className="action-item">수정하기 </button>
-            <button className="action-item detail-delete">
-              스터디 삭제하기{' '}
-            </button>
-          </div>
-          <div className="detail-link-group">
-            <Link to="" className="link-btn">
-              오늘의 습관 <img src={allowRight} alt="오른쪽 이미지" />
-            </Link>
-            <Link to="" className="link-btn">
-              오늘의 집중 <img src={allowRight} alt="오른쪽 이미지" />
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="detail-bottom-section">
-        <h2>습관 기록표</h2>
-        <div>아직 습관이 없어요.</div>
-      </section>
+        </section>
+        <section className="detail-bottom-section">
+          <h2>습관 기록표</h2>
+          <div>아직 습관이 없어요.</div>
+        </section>
+      </div>
     </div>
   );
 }
