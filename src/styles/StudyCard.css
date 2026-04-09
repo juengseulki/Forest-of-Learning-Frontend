@@ -1,5 +1,4 @@
 .study-card {
-  background-color: var(--color-green);
   width: 358px;
   height: 243px;
   border-radius: var(--radius-lg);
@@ -8,6 +7,9 @@
   flex-direction: column;
   padding: 24px;
   justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .card-header {

@@ -1,5 +1,6 @@
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
+import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
 
 export default function StudyCard({ studys, point, emoji }) {
   function getDaysFrom(createdAt) {
@@ -8,9 +9,18 @@ export default function StudyCard({ studys, point, emoji }) {
     );
   }
 
+  const backgrounds = backgroundsMockResponse.data.items;
+
+  const background = backgrounds.find((bg) => bg.id === studys.background.id);
+  console.log(background);
   return (
     <>
-      <div className="study-card">
+      <div
+        className="study-card"
+        style={{
+          backgroundImage: `url(${background?.imageUrl})`,
+        }}
+      >
         <section className="card-header">
           <div className="header-top">
             <div className="title-group">
