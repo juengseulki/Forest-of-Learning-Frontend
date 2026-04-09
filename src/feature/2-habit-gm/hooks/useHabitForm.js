@@ -1,73 +1,38 @@
-import { useState, useCallback } from 'react';
-import { createHabit, updateHabit } from '../../../api/habitApi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createHabit, updateHabit, deleteHabit } from '../../../api/habitApi';
 
-const INITIAL_FORM = { name: '' };
+export default function useHabitMutations(studyId, { onSuccess } = {}) {
+  const queryClient = useQueryClient();
+  const habitQueryKey = ['habits', studyId];
 
-function useHabitForm(studyId, { onSuccess } = {}) {
-  const [formData, setFormData] = useState(INITIAL_FORM);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // 습관 추가
+  const createMutation = useMutation({
+    mutationFn: (newHabit) => createHabit(studyId, newHabit),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: habitQueryKey });
+      onSuccess?.();
+    },
+    onError: () => alert('습관 추가에 실패했습니다.'),
+  });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
+  // 습관 수정
+  const updateMutation = useMutation({
+    mutationFn: ({ habitId, data }) => updateHabit(studyId, habitId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: habitQueryKey });
+      onSuccess?.();
+    },
+    onError: () => alert('습관 수정에 실패했습니다.'),
+  });
 
-  function resetForm() {
-    setFormData(INITIAL_FORM);
-    setError(null);
-  }
+  // 습관 삭제
+  const deleteMutation = useMutation({
+    mutationFn: (habitId) => deleteHabit(studyId, habitId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: habitQueryKey });
+    },
+    onError: () => alert('습관 삭제에 실패했습니다.'),
+  });
 
-  const initForm = useCallback((habit) => {
-    setFormData({ name: habit.name });
-  }, []);
-
-  async function submitCreate() {
-    if (!formData.name.trim()) {
-      setError(new Error('습관 이름을 입력해주세요.'));
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    try {
-      const { data } = await createHabit(studyId, formData);
-      resetForm();
-      onSuccess?.(data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function submitUpdate(habitId) {
-    if (!formData.name.trim()) {
-      setError(new Error('습관 이름을 입력해주세요.'));
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    try {
-      const { data } = await updateHabit(studyId, habitId, formData);
-      resetForm();
-      onSuccess?.(data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  return {
-    formData,
-    isLoading,
-    error,
-    handleChange,
-    resetForm,
-    initForm,
-    submitCreate,
-    submitUpdate,
-  };
+  return { createMutation, updateMutation, deleteMutation };
 }
-
-export default useHabitForm;

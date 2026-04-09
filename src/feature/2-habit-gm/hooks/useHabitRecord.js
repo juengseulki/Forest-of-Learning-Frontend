@@ -1,61 +1,63 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getHabitRecords, toggleHabitCheck } from '../../../api/habitApi';
+import { mapRecordsToCheckedMap } from '../utils/habitMapper';
 
-function useHabitRecord(studyId, { startDate, endDate } = {}) {
-  const [records, setRecords] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+export default function useHabitRecord(studyId, { startDate, endDate }) {
+  const queryClient = useQueryClient();
+  const queryKey = ['habitRecords', studyId, startDate, endDate]; // 기록 데이터 이름표
 
-  const fetchRecords = useCallback(async () => {
-    if (!studyId) return;
-    setIsLoading(true);
-    setError(null);
-    try {
+  // 데이터 가져오기
+  const { data: checkedMap = {}, isLoading } = useQuery({
+    queryKey,
+    queryFn: async () => {
       const { data } = await getHabitRecords(studyId, { startDate, endDate });
-      setRecords(data.items ?? []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [studyId, startDate, endDate]);
+      return mapRecordsToCheckedMap(data.records); 
+    },
+    enabled: !!studyId,
+  });
 
-  useEffect(() => {
-    fetchRecords();
-  }, [fetchRecords]);
+  // 데이터 변경하기 (체크/해제)
+  const toggleMutation = useMutation({
+    mutationFn: ({ habitId, date }) => toggleHabitCheck(studyId, habitId, date),
+    
+    onMutate: async ({ habitId, date }) => {
+      await queryClient.cancelQueries({ queryKey });
 
-  // 특정 날짜의 습관 체크 여부 확인
-  function isChecked(habitId, date) {
-    const record = records.find((r) => r.habitId === habitId);
-    return record?.checkedDates?.includes(date) ?? false;
-  }
+      const previousMap = queryClient.getQueryData(queryKey);
 
-  // 습관 체크 / 해제
-  async function toggleCheck(habitId, date) {
-    setError(null);
-    setRecords((prev) =>
-      prev.map((record) => {
-        if (record.habitId !== habitId) return record;
-        const checkedDates = record.checkedDates ?? [];
-        const alreadyChecked = checkedDates.includes(date);
-        return {
-          ...record,
-          checkedDates: alreadyChecked
-            ? checkedDates.filter((d) => d !== date)
-            : [...checkedDates, date],
-        };
-      })
-    );
-    try {
-      await toggleHabitCheck(studyId, habitId, date);
-    } catch (err) {
-      setError(err);
-      // 에러 처리
-      fetchRecords();
-    }
-  }
+      queryClient.setQueryData(queryKey, (oldMap) => {
+        const newMap = { ...oldMap };
+        const habitDates = new Set(newMap[habitId] || []);
+        
+        if (habitDates.has(date)) {
+          habitDates.delete(date); // 이미 있으면 체크 해제
+        } else {
+          habitDates.add(date); // 없으면 체크
+        }
+        newMap[habitId] = habitDates;
+        return newMap;
+      });
 
-  return { records, isLoading, error, isChecked, toggleCheck, fetchRecords };
+      return { previousMap };
+    },
+    
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(queryKey, context.previousMap);
+      alert('체크 처리에 실패했습니다. 네트워크를 확인해주세요.');
+    },
+    
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+
+  const isChecked = (habitId, date) => {
+    return checkedMap[habitId]?.has(date) ?? false;
+  };
+
+  const toggleCheck = (habitId, date) => {
+    toggleMutation.mutate({ habitId, date });
+  };
+
+  return { isChecked, toggleCheck, isLoading };
 }
-
-export default useHabitRecord;

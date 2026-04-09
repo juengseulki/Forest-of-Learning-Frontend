@@ -1,22 +1,27 @@
-// API 응답 -> UI 모델 변환
-
-export function mapHabit(raw) {
-  return {
-    id: raw.id,
-    name: raw.name,
-    studyId: raw.studyId,
-    createdAt: raw.createdAt,
-  };
+// 습관 목록 매핑
+export function mapHabitList(rawItems) {
+  return (rawItems ?? []).map(item => ({
+    id: item.id,
+    name: item.name,
+    isEnded: item.isEnded,
+    // 오늘 기록이 포함되어 온다면 활용할 수 있습니다.
+    todayCompleted: item.todayRecord?.completed ?? false, 
+  }));
 }
 
-export function mapHabitList(rawList) {
-  return (rawList ?? []).map(mapHabit);
-}
-
-// 기록용 -> { [habitId]: Set<dateString> } 형태로 변환
+// 습관 기록 매핑 (객체 형태 대응)
 export function mapRecordsToCheckedMap(records) {
   return (records ?? []).reduce((acc, record) => {
-    acc[record.habitId] = new Set(record.checkedDates ?? []);
+    // record.dates가 { '2026-04-07': true, '2026-04-08': false } 형태임
+    const completedDates = new Set();
+    
+    Object.entries(record.dates ?? {}).forEach(([date, isCompleted]) => {
+      if (isCompleted) {
+        completedDates.add(date);
+      }
+    });
+
+    acc[record.habitId] = completedDates;
     return acc;
   }, {});
 }

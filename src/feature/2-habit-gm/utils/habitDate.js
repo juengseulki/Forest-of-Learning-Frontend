@@ -1,5 +1,5 @@
 import { format, eachDayOfInterval, parseISO, isToday } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { ko } from "date-fns/locale/ko";
 
 // Date → "yyyy-MM-dd" 문자열
 export function toDateString(date) {

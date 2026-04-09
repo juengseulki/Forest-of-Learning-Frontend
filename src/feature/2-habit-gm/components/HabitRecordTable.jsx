@@ -1,7 +1,6 @@
 import useHabitList from '../hooks/useHabitList';
 import useHabitRecord from '../hooks/useHabitRecord';
 import { getDateRange } from '../utils/habitDate';
-import './HabitRecordTable.css';
 
 function HabitRecordTable({ studyId, startDate, endDate }) {
   const dateRange = getDateRange(startDate, endDate);

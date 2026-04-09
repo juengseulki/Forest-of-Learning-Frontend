@@ -1,10 +1,10 @@
-function HomePage() {
+function StudyDetailPage() {
   return (
     <section>
-      <h1>홈 페이지</h1>
-      <p>여기에 홈 화면 내용이 들어갑니다.</p>
+      <h1>스터디 상세 페이지</h1>
+      <p>여기에 스터디 상세 내용이 들어갑니다.</p>
     </section>
   );
 }
 
-export default HomePage;
+export default StudyDetailPage;
