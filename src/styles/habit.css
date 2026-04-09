@@ -1,33 +1,237 @@
-.habit {
-  display: flex;
+body {
+  background: #f6f5f2;
+  color: #414141;
+  font-family: Pretendard, sans-serif;
+}
+
+.habit-page {
+  width: 100%;
+  min-height: 100vh;
   padding: 40px;
+  background: #f6f5f2;
+}
+
+.habit-home {
+  width: 100%;
+  max-width: 1168px;
+  margin: 0 auto;
+}
+
+.habit-home__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.habit-home__left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.habit-home__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #414141;
+}
+
+.habit-home__time-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.habit-home__time-label {
+  font-size: 16px;
+  font-weight: 400;
+  color: #818181;
+}
+
+.habit-home__time-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  color: #414141;
+}
+
+.habit-home__nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.habit-home__nav-button {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+
+.habit-home__nav-button.small {
+  min-width: 72px;
+}
+
+.habit-home__nav-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #818181;
+}
+
+.habit-home__nav-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.habit-card {
+  min-height: 720px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.habit-card__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.habit-card__header-left {
+  width: 92px;
+  flex-shrink: 0;
+}
+
+.habit-card__title {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #414141;
+}
+
+.habit-card__edit {
+  width: 92px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  color: #818181;
+  cursor: pointer;
+}
+
+.habit-list {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1120px;
-  height: 551px;
-  gap: 10px;
-  background-color: #ffffff;
-  border-radius: 20px;
 }
-.habit-header {
+
+.habit-list__item {
+  width: 330px;
+  min-height: 44px;
+  margin-bottom: 16px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: #ececec;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 722px;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
 }
-.habit-header-top-text1 {
-  color: #414141;
-  font-family: Pretendard;
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 800;
-  line-height: normal;
+
+.habit-list__item.is-done {
+  background: #97bc88;
+  color: #fff;
 }
-.habit-header-top-text2 {
-  width: 144px;
-  height: 48px;
-  border-radius: 15px;
-  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
-  background: #fff;
+
+.habit-empty {
+  width: 100%;
+  flex: 1;
+  min-height: 498px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.habit-empty__title,
+.habit-empty__desc {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #818181;
+}
+
+@media (max-width: 768px) {
+  .habit-page {
+    padding: 20px;
+  }
+
+  .habit-home__header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .habit-home__nav {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .habit-card {
+    min-height: 600px;
+    padding: 20px 16px;
+  }
+
+  .habit-card__header {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .habit-card__header-left {
+    display: none;
+  }
+
+  .habit-card__title {
+    flex: 0;
+    text-align: left;
+    font-size: 20px;
+  }
+
+  .habit-card__edit {
+    width: auto;
+    text-align: right;
+  }
+
+  .habit-list__item {
+    width: 100%;
+    max-width: 330px;
+  }
 }

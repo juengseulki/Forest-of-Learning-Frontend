@@ -3,6 +3,7 @@ import MainLayout from '../shared/layouts/MainLayout/MainLayout';
 import HomePage from '../pages/HomePage';
 import StudyDetailPage from '../pages/StudyDetailPage';
 import CreateStudyPage from '../pages/CreateStudyPage';
+import HabitHome from '../feature/habit-1/components/HabitHome';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'study/create',
         element: <CreateStudyPage />,
+      },
+      {
+        path: 'habit', // 🔥 여기 추가
+        element: <HabitHome />,
       },
     ],
   },
