@@ -1,9 +1,12 @@
 import '../../../styles/reset.css';
 import '../../../styles/habit.css';
 import arrowRightIcon from '../../../shared/images/icons/ic_arrow_right.svg';
+import { habitsMockResponse } from '../../../mocks/habit/habitMockData';
 
 function HabitHome() {
-  const now = new Date();
+  const { currentTime, items = [] } = habitsMockResponse.data;
+
+  const now = new Date(currentTime);
 
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -15,39 +18,37 @@ function HabitHome() {
 
   const formattedTime = `${year}-${month}-${date} ${period} ${hour}:${minute}`;
 
-  const habits = [];
-
   return (
     <section className="habit-page">
       <main className="habit-home">
         <header className="habit-home__header">
-          <div className="habit-home__left">
+          <div className="habit-home__top-block">
             <h1 className="habit-home__title">연우의 개발공장</h1>
 
-            <div className="habit-home__time-wrap">
-              <span className="habit-home__time-label">현재 시간</span>
-              <span className="habit-home__time-badge">{formattedTime}</span>
+            <div className="habit-home__nav">
+              <button type="button" className="habit-home__nav-button">
+                <span className="habit-home__nav-text">오늘의 집중</span>
+                <img
+                  src={arrowRightIcon}
+                  alt=""
+                  className="habit-home__nav-icon"
+                />
+              </button>
+
+              <button type="button" className="habit-home__nav-button small">
+                <span className="habit-home__nav-text">홈</span>
+                <img
+                  src={arrowRightIcon}
+                  alt=""
+                  className="habit-home__nav-icon"
+                />
+              </button>
             </div>
           </div>
 
-          <div className="habit-home__nav">
-            <button type="button" className="habit-home__nav-button">
-              <span className="habit-home__nav-text">오늘의 집중</span>
-              <img
-                src={arrowRightIcon}
-                alt=""
-                className="habit-home__nav-icon"
-              />
-            </button>
-
-            <button type="button" className="habit-home__nav-button small">
-              <span className="habit-home__nav-text">홈</span>
-              <img
-                src={arrowRightIcon}
-                alt=""
-                className="habit-home__nav-icon"
-              />
-            </button>
+          <div className="habit-home__time-wrap">
+            <span className="habit-home__time-label">현재 시간</span>
+            <span className="habit-home__time-badge">{formattedTime}</span>
           </div>
         </header>
 
@@ -61,7 +62,7 @@ function HabitHome() {
           </div>
 
           <div className="habit-list">
-            {habits.length === 0 ? (
+            {items.length === 0 ? (
               <div className="habit-empty">
                 <p className="habit-empty__title">아직 습관이 없어요</p>
                 <p className="habit-empty__desc">
@@ -69,12 +70,14 @@ function HabitHome() {
                 </p>
               </div>
             ) : (
-              habits.map((habit) => (
+              items.map((habit) => (
                 <div
                   key={habit.id}
-                  className={`habit-list__item ${habit.done ? 'is-done' : ''}`}
+                  className={`habit-list__item ${
+                    habit.todayRecord?.completed ? 'is-done' : ''
+                  }`}
                 >
-                  {habit.text}
+                  {habit.name}
                 </div>
               ))
             )}
