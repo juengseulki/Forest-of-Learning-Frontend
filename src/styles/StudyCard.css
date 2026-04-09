@@ -1,0 +1,151 @@
+.study-card {
+  width: 358px;
+  height: 243px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  gap: 54px;
+  flex-direction: column;
+  padding: 24px;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header-top {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #414141;
+}
+
+.point {
+  display: flex;
+  border-radius: 50px;
+  border: 1px solid #0000001a;
+  background-color: #ffffff4d;
+  padding: 4px 8px;
+  gap: 8px;
+  align-items: center;
+}
+
+.point-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.point-text {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #414141;
+}
+
+.duration {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--gray-300);
+}
+
+.description {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+}
+
+.card-footer {
+  display: flex;
+  gap: 5px;
+}
+
+.footer-content {
+  display: flex;
+  gap: 5px;
+  border-radius: 50px;
+  padding: 6px 8px;
+  background-color: #00000066;
+  align-items: center;
+}
+
+.icon {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.icon-count {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--color-white);
+}
+
+@media (max-width: 744px) {
+  .recent-scroll .study-card {
+    width: 358px;
+    height: 243px;
+  }
+  .study-card {
+    width: 312px;
+    height: 243px;
+  }
+}
+
+@media (max-width: 375px) {
+  .recent-scroll .study-card {
+    width: 240px;
+    height: 180px;
+    gap: 11px;
+  }
+  .study-card {
+    width: 312px;
+    height: 180px;
+    gap: 11px;
+  }
+  .title {
+    font-size: 16px;
+  }
+  .duration {
+    font-size: 12px;
+  }
+  .description {
+    font-size: 14px;
+  }
+  .icon {
+    font-size: 12px;
+  }
+  .point {
+    align-self: flex-start;
+    gap: 4px;
+  }
+  .title-group {
+    gap: 6px;
+  }
+  .card-header {
+    gap: 12px;
+  }
+}
