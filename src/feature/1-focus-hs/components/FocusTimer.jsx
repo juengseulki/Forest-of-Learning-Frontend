@@ -70,10 +70,18 @@ function calculateFinalReward(durationMinutes, actualMinutes) {
 export default function FocusTimerTest() {
   const [durationMinutes, setDurationMinutes] = useState(1);
   const [session, setSession] = useState(() => getStoredSession());
-  const [now, setNow] = useState(() => Date.now());
   const [message, setMessage] = useState('');
 
   const savingRef = useRef(false);
+
+  const [now, setNow] = useState(() => {
+    const stored = getStoredSession();
+
+    if (stored?.status === 'PAUSED' && stored?.pausedAt) {
+      return new Date(stored.pausedAt).getTime();
+    }
+    return Date.now();
+  });
 
   /**
    * 타이머 + 1차 저장 처리
@@ -91,9 +99,10 @@ export default function FocusTimerTest() {
         if (prev.firstSaved) return prev;
         if (savingRef.current) return prev;
 
-        const plannedEnd = new Date(prev.plannedEndAt).getTime();
-
-        if (currentNow < plannedEnd) return prev;
+        const realElapsedMs =
+          currentNow - new Date(prev.startedAt).getTime() - prev.totalPausedMs;
+        const realElapsedMinutes = Math.floor(realElapsedMs / 60000);
+        if (realElapsedMinutes < prev.durationMinutes) return prev;
 
         savingRef.current = true;
 
@@ -223,8 +232,15 @@ export default function FocusTimerTest() {
   const handleFinish = () => {
     if (!session) return;
 
+    const totalPausedMs = session.totalPausedMs ?? 0;
+
+    const endTime =
+      session.status === 'PAUSED'
+        ? new Date(session.pausedAt).getTime()
+        : Date.now();
+
     const actualMinutesNow = Math.floor(
-      (Date.now() - new Date(session.startedAt).getTime()) / 60000
+      (endTime - new Date(session.startedAt).getTime() - totalPausedMs) / 60000
     );
 
     let next = { ...session };
