@@ -1,7 +1,7 @@
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
 
-export default function StudyCard({ studys, point }) {
+export default function StudyCard({ studys, point, emoji }) {
   function getDaysFrom(createdAt) {
     return (
       Math.floor((new Date() - new Date(createdAt)) / (1000 * 60 * 60 * 24)) + 1
@@ -35,14 +35,12 @@ export default function StudyCard({ studys, point }) {
           <p className="description">{studys.description}</p>
         </section>
         <section className="card-footer">
-          <div className="footer-content">
-            <img className="icon" src={ic_point} alt="임시 데이터" />
-            <p className="icon-count">37</p>
-          </div>
-          <div className="footer-content">
-            <img className="icon" src={ic_point} alt="임시 데이터" />
-            <p className="icon-count">37</p>
-          </div>
+          {emoji?.emojis?.map((item) => (
+            <div className="footer-content" key={item.emoji}>
+              <p className="icon">{item.emoji}</p>
+              <p className="icon-count">{item.count}</p>
+            </div>
+          ))}
         </section>
       </div>
     </>
