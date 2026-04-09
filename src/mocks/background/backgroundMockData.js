@@ -5,6 +5,8 @@ export const backgroundsMockResponse = {
         id: 1,
         name: 'blue',
         imageUrl: '/images/background/card-bg-blue.png',
+        name: 'forest',
+        imageUrl: '/images/forest.png',
         createdAt: '2026-04-07T09:00:00.000Z',
       },
       {
@@ -47,6 +49,8 @@ export const backgroundsMockResponse = {
         id: 8,
         name: 'workspace',
         imageUrl: '/images/background/card-img-workspace.png',
+        name: 'night',
+        imageUrl: '/images/night.png',
         createdAt: '2026-04-07T09:10:00.000Z',
       },
     ],
