@@ -101,3 +101,49 @@
   letter-spacing: 0%;
   color: var(--color-white);
 }
+
+@media (max-width: 744px) {
+  .recent-scroll .study-card {
+    width: 358px;
+    height: 243px;
+  }
+  .study-card {
+    width: 312px;
+    height: 243px;
+  }
+}
+
+@media (max-width: 375px) {
+  .recent-scroll .study-card {
+    width: 240px;
+    height: 180px;
+    gap: 11px;
+  }
+  .study-card {
+    width: 312px;
+    height: 180px;
+    gap: 11px;
+  }
+  .title {
+    font-size: 16px;
+  }
+  .duration {
+    font-size: 12px;
+  }
+  .description {
+    font-size: 14px;
+  }
+  .icon {
+    font-size: 12px;
+  }
+  .point {
+    align-self: flex-start;
+    gap: 4px;
+  }
+  .title-group {
+    gap: 6px;
+  }
+  .card-header {
+    gap: 12px;
+  }
+}

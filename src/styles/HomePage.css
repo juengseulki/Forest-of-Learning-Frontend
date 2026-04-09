@@ -6,6 +6,9 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .recent-lookup {
@@ -25,6 +28,10 @@ input:focus {
   color: #414141;
 }
 
+.recent-scroll {
+  width: 100%;
+}
+
 .study-list {
   display: flex;
   flex-direction: column;
@@ -33,6 +40,7 @@ input:focus {
   padding: 40px;
   gap: 60px;
 }
+
 .list-top {
   display: flex;
   gap: 24px;
@@ -96,4 +104,55 @@ select::-ms-expand {
   letter-spacing: 0%;
   white-space: nowrap;
   cursor: pointer;
+}
+
+@media (max-width: 744px) {
+  .recent-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .recent-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .recent-lookup {
+    padding: 25px;
+    width: 697px;
+  }
+
+  .study-list {
+    padding: 25px;
+    width: 697px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 375px) {
+  .recent-lookup {
+    padding: 20px;
+    width: 344px;
+  }
+
+  .study-list {
+    padding: 20px;
+    width: 344px;
+  }
+
+  .filter {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .search-container {
+    width: auto;
+  }
+
+  .select-container {
+    margin-left: auto;
+  }
+  .home-title {
+    font-size: 16px;
+  }
 }

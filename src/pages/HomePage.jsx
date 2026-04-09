@@ -30,7 +30,9 @@ function HomePage() {
     <div className="main-container">
       <section className="recent-lookup">
         <p className="home-title">최근 조회한 스터디</p>
-        <StudyList study={recentStudy} point={point} />
+        <div className="recent-scroll">
+          <StudyList study={recentStudy} point={point} />
+        </div>
       </section>
       <section className="study-list">
         <div className="list-top">
