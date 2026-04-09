@@ -3,13 +3,13 @@ import pointIcon from '../../../shared/images/icons/ic_point.png';
 import { pointMockResponse } from '../../../mocks/point/pointMockData';
 import '../../../styles/StudyDetailPage.css';
 
-function StudyInfoSection({ study, id }) {
+function StudyInfoSection({ study, studyId }) {
   const [point, setPoint] = useState(0);
 
   useEffect(() => {
     const loadPoint = async () => {
       try {
-        // const res = await fetchPoint(`http://localhost:4000/point/:${id}`);
+        // const res = await fetchPoint(`http://localhost:4000/point/:${studyId}`);
         //const data = await res.json()
         setPoint(pointMockResponse.data.totalPoint);
       } catch (error) {
@@ -18,7 +18,7 @@ function StudyInfoSection({ study, id }) {
     };
 
     loadPoint();
-  }, [id]);
+  }, [studyId]);
   return (
     <div className="detail-left">
       <section className="detail-info">

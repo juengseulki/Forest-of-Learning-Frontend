@@ -35,6 +35,12 @@
   flex-direction: column;
   gap: 100px;
 }
+.detail-bottom-section h2 {
+  color: var(--black-black_414141, #414141);
+  font-family: Pretendard;
+  font-size: 24px;
+  font-weight: 800;
+}
 .detail-left {
   display: flex;
   flex-direction: column;

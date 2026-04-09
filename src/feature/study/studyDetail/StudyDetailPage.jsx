@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '../../../styles/StudyDetailPage.css';
 import '../../../styles/global.css';
 import { studiesMockResponse } from '../../../mocks/study/studyMockData';
-import { pointMockResponse } from '../../../mocks/point/pointMockData';
-import { Link, useParams } from 'react-router-dom';
-import smileIcon from '../../../images/icon/ic_smile.svg';
-import allowRight from '../../../images/icon/ic_arrow_right.svg';
-import StudyInfoSection from './StudyInfoSection';
+import { useParams } from 'react-router-dom';
+import StudyInfoSection from './StudyInfoSection.jsx';
+import StudyActionButtonGroup from './actionSection/StudyActionButtonGroup';
+import StudyLinkGroup from './actionSection/StudyLinkGroup';
+import EmojiSection from './EmojiSection.jsx';
 
 function StudyDetailPage() {
   const { id } = useParams();
@@ -39,40 +39,15 @@ function StudyDetailPage() {
       <div className="detail-container">
         <section className="detail-top-section">
           <div className="detail-left">
-            <span className="emoji">
-              <div className="emoji-wrap">
-                <button className="emoji-btn">🔥 9</button>
-                <button className="emoji-btn">🤩 9</button>
-              </div>
-              <button className="emoji-add-btn">
-                <img src={smileIcon} alt="이모지 추가" />
-                추가
-              </button>
-            </span>
-            <StudyInfoSection study={study} id={id} />
+            <EmojiSection />
+            <StudyInfoSection study={study} studyId={id} />
           </div>
           <div className="detail-right">
-            <div className="detail-action-group">
-              <button className="action-item ">공유하기 </button>
-              <button className="action-item">수정하기 </button>
-              <button className="action-item detail-delete">
-                스터디 삭제하기
-              </button>
-            </div>
-            <div className="detail-link-group">
-              <Link to="" className="link-btn">
-                오늘의 습관 <img src={allowRight} alt="오른쪽 이미지" />
-              </Link>
-              <Link to="" className="link-btn">
-                오늘의 집중 <img src={allowRight} alt="오른쪽 이미지" />
-              </Link>
-            </div>
+            <StudyActionButtonGroup />
+            <StudyLinkGroup />
           </div>
         </section>
-        <section className="detail-bottom-section">
-          <h2>습관 기록표</h2>
-          <div>아직 습관이 없어요.</div>
-        </section>
+        <HabitRecord />
       </div>
     </div>
   );
