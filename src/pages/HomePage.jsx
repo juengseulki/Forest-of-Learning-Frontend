@@ -1,13 +1,31 @@
 import StudyList from '../feature/study/components/StudyList';
 import '../styles/HomePage.css';
 import ic_search from '../shared/images/icons/ic_search.png';
+import { studiesMockResponse } from '../mocks/study/studyMockData.js';
+import { pointMockResponse } from '../mocks/point/pointMockData.js';
+import { useState } from 'react';
 
 function HomePage() {
+  const study = studiesMockResponse.data.items;
+  const point = pointMockResponse.data;
+
+  const recentLimit = 3;
+  const recentPage = 1;
+  const recentStartIndex = (recentPage - 1) * recentLimit;
+  const recentEndIndex = recentStartIndex + recentLimit;
+  const recentStudy = study.slice(recentStartIndex, recentEndIndex);
+
+  const listLimit = 6;
+  const listPage = 1;
+  const listStartIndex = (listPage - 1) * listLimit;
+  const listEndIndex = listStartIndex + listLimit;
+  const listStudy = study.slice(listStartIndex, listEndIndex);
+
   return (
     <div className="main-container">
       <section className="recent-lookup">
         <p className="home-title">최근 조회한 스터디</p>
-        <StudyList />
+        <StudyList study={recentStudy} point={point} />
       </section>
       <section className="study-list">
         <div className="list-top">
@@ -24,8 +42,7 @@ function HomePage() {
               <option>적은 포인트 순</option>
             </select>
           </div>
-          <StudyList />
-          <StudyList />
+          <StudyList study={listStudy} point={point} />
         </div>
         <div className="button-container">
           <button className="see-more">더보기</button>

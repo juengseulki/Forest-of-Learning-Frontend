@@ -4,9 +4,7 @@ import { studiesMockResponse } from '../../../mocks/study/studyMockData.js';
 import { pointMockResponse } from '../../../mocks/point/pointMockData.js';
 import '../../../styles/StudyList.css';
 
-function StudyList() {
-  const study = studiesMockResponse.data.items;
-  const point = pointMockResponse.data;
+function StudyList({ study, point }) {
   return (
     <div className="card-list">
       {study.map((studys) => {
