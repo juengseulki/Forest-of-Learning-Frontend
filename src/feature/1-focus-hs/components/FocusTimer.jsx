@@ -245,19 +245,21 @@ export default function FocusTimerTest() {
 
     let next = { ...session };
 
-    if (
-      !session.firstSaved &&
-      Date.now() >= new Date(session.plannedEndAt).getTime()
-    ) {
-      const reward = calculateFirstReward(session.durationMinutes);
+    if (!session.firstSaved) {
+      const realElapsedMs =
+        endTime - new Date(session.startedAt).getTime() - totalPausedMs;
+      const realElapsedMinutes = Math.floor(realElapsedMs / 60000);
 
-      next = {
-        ...next,
-        firstSaved: true,
-        basePoint: reward.basePoint,
-        targetBonusPoint: reward.targetBonusPoint,
-        totalPoint: reward.basePoint + reward.targetBonusPoint,
-      };
+      if (realElapsedMinutes >= session.durationMinutes) {
+        const reward = calculateFirstReward(session.durationMinutes);
+        next = {
+          ...next,
+          firstSaved: true,
+          basePoint: reward.basePoint,
+          targetBonusPoint: reward.targetBonusPoint,
+          totalPoint: reward.basePoint + reward.targetBonusPoint,
+        };
+      }
     }
 
     const finalReward = calculateFinalReward(
