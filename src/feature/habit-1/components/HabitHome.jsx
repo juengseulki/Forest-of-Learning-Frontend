@@ -3,30 +3,62 @@ import '../../../styles/habit.css';
 import arrowRightIcon from '../../../shared/images/icons/ic_arrow_right.svg';
 import trashIcon from '../../../images/icon/ic_trash.svg';
 import { habitsMockResponse } from '../../../mocks/habit/habitMockData';
-import { formatHabitTime } from '../../../utils/formatHabitTime';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function HabitHome() {
-  // 처음 보여줄 데이터
-  const { currentTime, items = [] } = habitsMockResponse.data;
-
-  // 시간 포맷
-  const formattedTime = formatHabitTime(currentTime);
-
   const navigate = useNavigate();
 
-  // 실제 반영된 리스트
+  // 목데이터
+  const { currentTime, items = [] } = habitsMockResponse.data;
+
+  // 현재 시간 포맷
+  const formatHabitTime = (time) => {
+    if (!time) return '';
+
+    const now = new Date(time);
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const date = String(now.getDate()).padStart(2, '0');
+    const isPm = now.getHours() >= 12;
+    const period = isPm ? '오후' : '오전';
+    const hour = ((now.getHours() + 11) % 12) + 1;
+    const minute = String(now.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${date} ${period} ${hour}:${minute}`;
+  };
+
+  const formattedTime = formatHabitTime(currentTime);
+
+  // 실제 반영되는 리스트
   const [habitList, setHabitList] = useState(items);
 
-  // 모달용 임시 리스트
+  // 모달에서만 쓰는 임시 리스트
   const [draftHabitList, setDraftHabitList] = useState([]);
 
-  // 새로 추가 중인 입력 row 목록
+  // 새로 추가하는 입력 row
   const [draftInputs, setDraftInputs] = useState([]);
 
-  // 모달 상태
+  // 모달 열림 여부
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 오늘의 습관 클릭 시 완료 상태 토글
+  const handleToggleHabit = (id) => {
+    setHabitList((prevHabitList) =>
+      prevHabitList.map((habit) =>
+        habit.id === id
+          ? {
+              ...habit,
+              todayRecord: {
+                ...habit.todayRecord,
+                completed: !habit.todayRecord?.completed,
+              },
+            }
+          : habit
+      )
+    );
+  };
 
   // 모달 열기
   const handleOpenModal = () => {
@@ -42,9 +74,11 @@ function HabitHome() {
     setIsModalOpen(false);
   };
 
-  // 기존 항목 삭제
+  // 기존 리스트 삭제
   const handleDeleteDraftHabit = (id) => {
-    setDraftHabitList(draftHabitList.filter((habit) => habit.id !== id));
+    setDraftHabitList((prevDraftHabitList) =>
+      prevDraftHabitList.filter((habit) => habit.id !== id)
+    );
   };
 
   // 입력 row 추가
@@ -54,13 +88,13 @@ function HabitHome() {
       name: '',
     };
 
-    setDraftInputs([...draftInputs, newInput]);
+    setDraftInputs((prevDraftInputs) => [...prevDraftInputs, newInput]);
   };
 
-  // 입력값 변경
+  // 입력 row 값 변경
   const handleChangeInputRow = (id, value) => {
-    setDraftInputs(
-      draftInputs.map((input) =>
+    setDraftInputs((prevDraftInputs) =>
+      prevDraftInputs.map((input) =>
         input.id === id ? { ...input, name: value } : input
       )
     );
@@ -68,44 +102,42 @@ function HabitHome() {
 
   // 입력 row 삭제
   const handleDeleteInputRow = (id) => {
-    setDraftInputs(draftInputs.filter((input) => input.id !== id));
+    setDraftInputs((prevDraftInputs) =>
+      prevDraftInputs.filter((input) => input.id !== id)
+    );
   };
 
   // 수정 완료
-  const handleSubmitHabitList = async () => {
-    try {
-      const newHabits = draftInputs
-        .map((input) => input.name.trim())
-        .filter(Boolean)
-        .map((name, index) => ({
-          id: Date.now() + index,
-          name,
-          todayRecord: {
-            completed: false,
-          },
-        }));
+  const handleSubmitHabitList = () => {
+    const now = new Date().toISOString();
 
-      const nextHabitList = [...draftHabitList, ...newHabits];
+    const newHabits = draftInputs
+      .map((input) => input.name.trim())
+      .filter(Boolean)
+      .map((name, index) => ({
+        id: Date.now() + index,
+        name,
+        isEnded: false,
+        createdAt: now,
+        updatedAt: now,
+        todayRecord: {
+          date: currentTime,
+          completed: false,
+        },
+      }));
 
-      // 나중에 여기서 API 호출
-      // await updateHabitList(nextHabitList);
+    const nextHabitList = [...draftHabitList, ...newHabits];
 
-      // 지금은 목데이터라 실제 리스트에 반영만 함
-      setHabitList(nextHabitList);
-
-      setDraftHabitList([]);
-      setDraftInputs([]);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('습관 목록 저장 실패:', error);
-    }
+    setHabitList(nextHabitList);
+    setDraftHabitList([]);
+    setDraftInputs([]);
+    setIsModalOpen(false);
   };
 
   return (
     <section className="habit-page">
       <main className="habit-home">
         <header className="habit-home__header">
-          {/* 타이틀 + 네비 */}
           <div className="habit-home__top">
             <h1 className="habit-home__title">연우의 개발공장</h1>
 
@@ -138,7 +170,6 @@ function HabitHome() {
             </div>
           </div>
 
-          {/* 현재 시간 */}
           <div className="habit-home__time">
             <span className="habit-home__time-label">현재 시간</span>
             <span className="habit-home__time-value">{formattedTime}</span>
@@ -168,14 +199,16 @@ function HabitHome() {
               </div>
             ) : (
               habitList.map((habit) => (
-                <div
+                <button
                   key={habit.id}
+                  type="button"
                   className={`habit-item ${
                     habit.todayRecord?.completed ? 'habit-item--done' : ''
                   }`}
+                  onClick={() => handleToggleHabit(habit.id)}
                 >
                   {habit.name}
-                </div>
+                </button>
               ))
             )}
           </div>
@@ -213,7 +246,7 @@ function HabitHome() {
                     <input
                       type="text"
                       className="habit-form__input"
-                      placeholder="새로운 습관"
+                      placeholder="__________________"
                       value={input.name}
                       onChange={(e) =>
                         handleChangeInputRow(input.id, e.target.value)
