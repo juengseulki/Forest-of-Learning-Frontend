@@ -3,6 +3,7 @@ import MainLayout from '../shared/layouts/MainLayout/MainLayout';
 import HomePage from '../pages/HomePage';
 //import StudyDetailPage from '../pages/StudyDetailPage';
 import CreateStudyPage from '../pages/CreateStudyPage';
+import FocusTest from '../feature/1-focus-hs/components/FocusTimer';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'study/create',
         element: <CreateStudyPage />,
+      },
+      {
+        path: '/focus',
+        element: <FocusTest />,
       },
     ],
   },
