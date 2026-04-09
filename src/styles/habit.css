@@ -4,10 +4,13 @@ body {
   font-family: Pretendard, sans-serif;
 }
 
+/* =========================
+   PAGE
+   ========================= */
+
 .habit-page {
   width: 100%;
-  min-height: 100vh;
-  padding: 40px;
+  padding: 40px 40px;
   background: #ffffff;
   border-radius: 20px;
   box-sizing: border-box;
@@ -18,6 +21,10 @@ body {
   max-width: 1168px;
   margin: 0 auto;
 }
+
+/* =========================
+   HEADER
+   ========================= */
 
 .habit-home__header {
   display: flex;
@@ -39,6 +46,7 @@ body {
   font-weight: 800;
   line-height: 1.2;
   color: #414141;
+  word-break: keep-all;
 }
 
 .habit-home__nav {
@@ -46,6 +54,7 @@ body {
   align-items: center;
   gap: 12px;
   flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .habit-home__nav-btn {
@@ -108,9 +117,12 @@ body {
   box-sizing: border-box;
 }
 
+/* =========================
+   CARD
+   ========================= */
+
 .habit-card {
   width: 100%;
-  min-height: 620px;
   padding: 24px 20px;
   border-radius: 20px;
   border: 1px solid #dddddd;
@@ -118,36 +130,34 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  margin-bottom: 40px;
 }
 
 .habit-card__header {
   width: 100%;
-  display: grid;
-  grid-template-columns: 92px 1fr 92px;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 92px;
   margin-bottom: 24px;
-}
-
-.habit-card__header-left {
-  width: 92px;
 }
 
 .habit-card__title {
   margin: 0;
-  text-align: center;
   font-size: 22px;
   font-weight: 800;
+  line-height: 29px;
   color: #414141;
+  white-space: nowrap;
 }
 
 .habit-card__edit {
-  width: 92px;
   border: none;
   background: transparent;
   padding: 0;
-  text-align: right;
   font-size: 14px;
   font-weight: 400;
+  line-height: 1;
   color: #818181;
   cursor: pointer;
   white-space: nowrap;
@@ -155,7 +165,6 @@ body {
 
 .habit-list {
   width: 100%;
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -163,20 +172,26 @@ body {
 
 .habit-item {
   width: 100%;
-  max-width: 330px;
-  min-height: 44px;
-  margin-bottom: 16px;
+  max-width: 390px;
+  min-height: 52px;
+  margin-bottom: 20px;
   padding: 0 16px;
-  border-radius: 14px;
+  border: none;
+  border-radius: 18px;
   background: #ececec;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: #666666;
+  font-size: 16px;
+  font-weight: 600;
+  color: #818181;
   box-sizing: border-box;
+  cursor: pointer;
+}
+
+.habit-item:last-child {
+  margin-bottom: 0;
 }
 
 .habit-item--done {
@@ -184,9 +199,12 @@ body {
   color: #ffffff;
 }
 
+/* =========================
+   EMPTY
+   ========================= */
+
 .habit-empty {
   width: 100%;
-  flex: 1;
   min-height: 420px;
   display: flex;
   flex-direction: column;
@@ -206,6 +224,10 @@ body {
   color: #818181;
   line-height: 1.4;
 }
+
+/* =========================
+   MODAL
+   ========================= */
 
 .habit-modal {
   position: fixed;
@@ -281,6 +303,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  text-decoration: underline;
 }
 
 .habit-form__action-btn {
@@ -368,9 +391,13 @@ body {
   justify-content: center;
 }
 
+/* =========================
+   TABLET
+   ========================= */
+
 @media (max-width: 1024px) {
   .habit-page {
-    padding: 32px 24px 64px;
+    padding: 32px 24px;
   }
 
   .habit-home {
@@ -410,20 +437,17 @@ body {
   }
 
   .habit-card {
-    min-height: 580px;
+    margin-bottom: 24px;
   }
 
   .habit-card__header {
-    grid-template-columns: 80px 1fr 80px;
-  }
-
-  .habit-card__header-left,
-  .habit-card__edit {
-    width: 80px;
+    gap: 56px;
+    margin-bottom: 24px;
   }
 
   .habit-card__title {
     font-size: 20px;
+    line-height: 26px;
   }
 
   .habit-card__edit {
@@ -431,9 +455,10 @@ body {
   }
 
   .habit-item {
-    max-width: 280px;
-    min-height: 40px;
-    font-size: 13px;
+    max-width: 320px;
+    min-height: 44px;
+    margin-bottom: 16px;
+    font-size: 14px;
   }
 
   .habit-empty {
@@ -486,9 +511,13 @@ body {
   }
 }
 
+/* =========================
+   MOBILE
+   ========================= */
+
 @media (max-width: 767px) {
   .habit-page {
-    padding: 20px 15px 0;
+    padding: 20px 15px;
   }
 
   .habit-home {
@@ -558,29 +587,30 @@ body {
   }
 
   .habit-card {
-    width: 100%;
-    min-height: 781px;
     padding: 20px;
     border-radius: 20px;
+    margin-bottom: 25px;
   }
 
   .habit-card__header {
-    grid-template-columns: 60px 1fr 60px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 20px;
-  }
-
-  .habit-card__header-left,
-  .habit-card__edit {
-    width: 60px;
+    gap: 0;
   }
 
   .habit-card__title {
     font-size: 14px;
+    line-height: 20px;
+    text-align: center;
   }
 
   .habit-card__edit {
+    position: absolute;
+    right: 0;
     font-size: 10px;
-    text-align: right;
   }
 
   .habit-item {
