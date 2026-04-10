@@ -6,7 +6,11 @@ import { backgroundsMockResponse } from '../../../mocks/background/backgroundMoc
 import { emojiMockResponse } from '../../../mocks/emoji/emojiMockData.js';
 import '../../../styles/StudyList.css';
 
-function StudyList({ study, point }) {
+function StudyList({ visibleCount }) {
+  const study = studiesMockResponse.data.items;
+  const point = pointMockResponse.data;
+  const backgrounds = backgroundsMockResponse.data.items;
+
   const backgroundThemeMap = {
     1: {
       nickname: '#3A8CA3',
@@ -80,11 +84,11 @@ function StudyList({ study, point }) {
     );
   }
 
-  const backgrounds = backgroundsMockResponse.data.items;
+  const visibleStudy = study.slice(0, visibleCount);
 
   return (
     <div className="card-list">
-      {study.map((item) => {
+      {visibleStudy.map((item) => {
         const emoji = emojiMockResponse.data.items.find(
           (emojiItem) => emojiItem.studyId === item.id
         );
