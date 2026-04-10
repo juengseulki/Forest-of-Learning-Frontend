@@ -86,6 +86,16 @@ export function useFocusTimer() {
     return () => clearInterval(timer);
   }, [session?.status]);
 
+  const effectiveNow = useMemo(() => {
+    if (!session) return now;
+
+    if (session.status === TIMER_STATUS.PAUSED && session.pausedAt) {
+      return new Date(session.pausedAt).getTime();
+    }
+
+    return now;
+  }, [session, now]);
+
   const plannedEnd = useMemo(() => {
     if (!session) return null;
     return new Date(session.plannedEndAt).getTime();
@@ -98,21 +108,22 @@ export function useFocusTimer() {
 
   const diffSeconds = useMemo(() => {
     if (!plannedEnd) return 0;
-    return Math.floor((plannedEnd - now) / 1000);
-  }, [plannedEnd, now]);
+    return Math.round((plannedEnd - effectiveNow) / 1000);
+  }, [plannedEnd, effectiveNow]);
 
   const actualMinutes = useMemo(() => {
     if (!startedTime) return 0;
-    return Math.floor(
-      (now - startedTime - (session?.totalPausedMs ?? 0)) / 60000
+
+    return Math.round(
+      (effectiveNow - startedTime - (session?.totalPausedMs ?? 0)) / 60000
     );
-  }, [startedTime, now, session]);
+  }, [startedTime, effectiveNow, session]);
 
   const mode = diffSeconds >= 0 ? 'COUNTDOWN' : 'OVERTIME';
   const displayTime = formatSeconds(Math.abs(diffSeconds));
 
   const handleStart = () => {
-    const start = new Date();
+    const start = new Date(Math.floor(Date.now() / 1000) * 1000);
     const end = new Date(start.getTime() + durationMinutes * 60000);
 
     const newSession = {
@@ -129,6 +140,7 @@ export function useFocusTimer() {
       pausedAt: null,
     };
 
+    setNow(start.getTime());
     saveSession(newSession);
     setSession(newSession);
     setMessage('시작!');
@@ -141,6 +153,7 @@ export function useFocusTimer() {
       pausedAt: new Date().toISOString(),
     };
 
+    setNow(Date.now());
     saveSession(updated);
     setSession(updated);
   };
@@ -159,6 +172,7 @@ export function useFocusTimer() {
       ).toISOString(),
     };
 
+    setNow(currentNow);
     saveSession(updated);
     setSession(updated);
   };
