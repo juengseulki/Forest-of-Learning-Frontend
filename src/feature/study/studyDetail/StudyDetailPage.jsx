@@ -7,7 +7,7 @@ import StudyInfoSection from './StudyInfoSection.jsx';
 import StudyActionButtonGroup from './actionSection/StudyActionButtonGroup';
 import StudyLinkGroup from './actionSection/StudyLinkGroup';
 import EmojiSection from './EmojiSection.jsx';
-
+import HabitRecord from './HabitRecord';
 function StudyDetailPage() {
   const { id } = useParams();
 
@@ -39,7 +39,7 @@ function StudyDetailPage() {
       <div className="detail-container">
         <section className="detail-top-section">
           <div className="detail-left">
-            <EmojiSection />
+            <EmojiSection studyId={id} />
             <StudyInfoSection study={study} studyId={id} />
           </div>
           <div className="detail-right">

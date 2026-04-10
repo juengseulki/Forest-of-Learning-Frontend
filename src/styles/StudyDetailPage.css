@@ -64,8 +64,8 @@
   cursor: pointer;
 
   font-size: 15px;
-  border-radius: 30px;
-  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50px;
+  background: rgba(0, 0, 0, 0.5);
 }
 .emoji-add-btn {
   background: none;
@@ -78,6 +78,19 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
+}
+
+.picker {
+  position: absolute;
+  top: 220px;
+  left: 208px;
+  z-index: 100;
+}
+
+em-emoji-picker {
+  height: 380px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
 }
 
 .detail-info {
