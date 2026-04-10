@@ -5,78 +5,12 @@ import { pointMockResponse } from '../../../mocks/point/pointMockData.js';
 import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
 import { emojiMockResponse } from '../../../mocks/emoji/emojiMockData.js';
 import '../../../styles/StudyList.css';
+import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
 
 function StudyList({ visibleCount }) {
   const study = studiesMockResponse.data.items;
   const point = pointMockResponse.data;
   const backgrounds = backgroundsMockResponse.data.items;
-
-  const backgroundThemeMap = {
-    1: {
-      nickname: '#3A8CA3',
-      title: '#414141',
-      pointBg: '#FFFFFF4D',
-      pointText: '#414141',
-      duration: '#818181',
-      description: '#414141',
-    },
-    2: {
-      nickname: '#578246',
-      title: '#414141',
-      pointBg: '#FFFFFF4D',
-      pointText: '#414141',
-      duration: '#818181',
-      description: '#414141',
-    },
-    3: {
-      nickname: '#C25578',
-      title: '#414141',
-      pointBg: '#FFFFFF4D',
-      pointText: '#414141',
-      duration: '#818181',
-      description: '#414141',
-    },
-    4: {
-      nickname: '#C18E1B',
-      title: '#414141',
-      pointBg: '#FFFFFF4D',
-      pointText: '#414141',
-      duration: '#818181',
-      description: '#414141',
-    },
-    5: {
-      nickname: '#FFFFFF',
-      title: '#FFFFFF',
-      pointBg: '#00000080',
-      pointText: '#FFFFFF',
-      duration: '#EEEEEE',
-      description: '#FFFFFF',
-    },
-    6: {
-      nickname: '#FFFFFF',
-      title: '#FFFFFF',
-      pointBg: '#00000080',
-      pointText: '#FFFFFF',
-      duration: '#EEEEEE',
-      description: '#FFFFFF',
-    },
-    7: {
-      nickname: '#FFFFFF',
-      title: '#FFFFFF',
-      pointBg: '#00000080',
-      pointText: '#FFFFFF',
-      duration: '#EEEEEE',
-      description: '#FFFFFF',
-    },
-    8: {
-      nickname: '#FFFFFF',
-      title: '#FFFFFF',
-      pointBg: '#00000080',
-      pointText: '#FFFFFF',
-      duration: '#EEEEEE',
-      description: '#FFFFFF',
-    },
-  };
 
   function getDaysFrom(createdAt) {
     return (
@@ -97,7 +31,7 @@ function StudyList({ visibleCount }) {
           (bg) => bg.id === item.background.id
         );
 
-        const theme = backgroundThemeMap[item.background.id];
+        const theme = getBackgroundTheme(item.background?.id);
 
         return (
           <StudyCard
