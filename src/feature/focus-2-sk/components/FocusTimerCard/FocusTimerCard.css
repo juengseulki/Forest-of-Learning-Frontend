@@ -194,3 +194,106 @@
     height: 24px;
   }
 }
+
+.focus-timer-card__time-display {
+  text-align: center;
+  font-size: 150px;
+  font-weight: 800;
+  line-height: 1;
+  color: #414141;
+}
+
+.focus-timer-card__time-display.is-running {
+  color: #ff5050;
+}
+
+.focus-timer-card__time-display.is-overtime {
+  color: #818181;
+}
+
+@media (max-width: 1024px) {
+  .focus-timer-card__time-display {
+    font-size: 120px;
+  }
+}
+
+@media (max-width: 767px) {
+  .focus-timer-card__time-display {
+    font-size: 81px;
+  }
+}
+
+.focus-timer-card__control-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.focus-timer-card__icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.focus-timer-card__control-icon {
+  display: block;
+  object-fit: contain;
+}
+
+.focus-timer-card__control-icon--desktop {
+  width: 44px;
+  height: 44px;
+}
+
+.focus-timer-card__control-icon--mobile {
+  display: none;
+}
+
+.focus-timer-card__button--stop {
+  width: 90px;
+  height: 44px;
+  border-radius: 999px;
+  background: #818181;
+}
+
+.focus-timer-card__button--stop .focus-timer-card__button-content {
+  gap: 0;
+  font-size: 16px;
+}
+
+@media (max-width: 767px) {
+  .focus-timer-card__control-wrap {
+    gap: 8px;
+  }
+
+  .focus-timer-card__icon-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .focus-timer-card__control-icon--desktop {
+    display: none;
+  }
+
+  .focus-timer-card__control-icon--mobile {
+    display: block;
+    width: 28px;
+    height: 28px;
+  }
+
+  .focus-timer-card__button--stop {
+    width: 72px;
+    height: 28px;
+  }
+
+  .focus-timer-card__button--stop .focus-timer-card__button-content {
+    font-size: 10px;
+  }
+}
