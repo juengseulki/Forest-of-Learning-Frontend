@@ -1,37 +1,28 @@
 import StudyList from '../feature/study/components/StudyList';
 import '../styles/HomePage.css';
 import ic_search from '../shared/images/icons/ic_search.png';
-import { studiesMockResponse } from '../mocks/study/studyMockData.js';
-import { pointMockResponse } from '../mocks/point/pointMockData.js';
+
 import { useState } from 'react';
 
 function HomePage() {
-  const study = studiesMockResponse.data.items;
-  const point = pointMockResponse.data;
-
-  // API 연동 이후 삭제
-  const recentLimit = 3;
-  const recentPage = 1;
-  const recentStartIndex = (recentPage - 1) * recentLimit;
-  const recentEndIndex = recentStartIndex + recentLimit;
-  const recentStudy = study.slice(recentStartIndex, recentEndIndex);
-
-  const listLimit = 6;
+  //page 상태관리
   const [listPage, setListPage] = useState(1);
-  const listStudy = study.slice(0, listPage * listLimit);
 
+  //최근 조회한 스터디와 스터디 분리
+  const listLimit = 6;
+  const recentLimit = 3;
+
+  //page + 1
   function moreSee() {
-    setListPage((t) => t + 1);
-    console.log('클릭됨');
+    setListPage((prev) => prev + 1);
   }
-  console.log(listStudy);
 
   return (
     <div className="main-container">
       <section className="recent-lookup">
         <p className="home-title">최근 조회한 스터디</p>
         <div className="recent-scroll">
-          <StudyList study={recentStudy} point={point} />
+          <StudyList visibleCount={recentLimit} />
         </div>
       </section>
       <section className="study-list">
@@ -49,7 +40,7 @@ function HomePage() {
               <option>적은 포인트 순</option>
             </select>
           </div>
-          <StudyList study={listStudy} point={point} />
+          <StudyList visibleCount={listPage * listLimit} />
         </div>
         <div className="button-container">
           <button className="see-more" onClick={moreSee}>
