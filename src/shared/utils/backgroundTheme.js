@@ -1,35 +1,27 @@
+const COMMON_THEME = {
+  title: '#414141',
+  pointBg: '#FFFFFF4D',
+  pointText: '#414141',
+  duration: '#818181',
+  description: '#414141',
+};
+
 const BACKGROUND_THEME = {
   1: {
+    ...COMMON_THEME,
     nickname: '#3A8CA3',
-    title: '#414141',
-    pointBg: '#FFFFFF4D',
-    pointText: '#414141',
-    duration: '#818181',
-    description: '#414141',
   },
   2: {
+    ...COMMON_THEME,
     nickname: '#578246',
-    title: '#414141',
-    pointBg: '#FFFFFF4D',
-    pointText: '#414141',
-    duration: '#818181',
-    description: '#414141',
   },
   3: {
+    ...COMMON_THEME,
     nickname: '#C25578',
-    title: '#414141',
-    pointBg: '#FFFFFF4D',
-    pointText: '#414141',
-    duration: '#818181',
-    description: '#414141',
   },
   4: {
+    ...COMMON_THEME,
     nickname: '#C18E1B',
-    title: '#414141',
-    pointBg: '#FFFFFF4D',
-    pointText: '#414141',
-    duration: '#818181',
-    description: '#414141',
   },
   default: {
     nickname: '#FFFFFF',
