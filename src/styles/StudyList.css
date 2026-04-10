@@ -1,0 +1,32 @@
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 744px) {
+  .recent-scroll .card-list {
+    display: flex;
+    gap: 16px;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 375px) {
+  .card-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .title-group {
+    flex-direction: column;
+  }
+  .point {
+    order: 1;
+  }
+
+  .title {
+    order: 2;
+  }
+}
