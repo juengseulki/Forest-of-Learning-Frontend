@@ -8,6 +8,7 @@ import StudyActionButtonGroup from './actionSection/StudyActionButtonGroup';
 import StudyLinkGroup from './actionSection/StudyLinkGroup';
 import EmojiSection from './EmojiSection.jsx';
 import HabitRecord from './HabitRecord';
+
 function StudyDetailPage() {
   const { id } = useParams();
 

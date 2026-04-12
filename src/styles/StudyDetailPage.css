@@ -57,16 +57,67 @@
   gap: 4px;
 }
 
-.emoji-btn {
-  padding: 4px 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
+.emoji-btn,
+.emoji-more-btn {
+  height: 34px;
 
-  font-size: 15px;
+  padding: 0 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 16px;
+  line-height: 1;
+
   border-radius: 50px;
   background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
 }
+
+.emoji-more-btn {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.more-emoji-wrapper {
+  position: relative;
+}
+.emoji-popup {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  z-index: 10;
+
+  border-radius: 20px;
+  height: auto;
+
+  padding: 12px;
+  width: 256px;
+  background-color: var(--color-white);
+  border: 1px solid var(--gray-200);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.picker {
+  position: absolute;
+  top: 220px;
+  left: 350px;
+  z-index: 100;
+}
+
+em-emoji-picker {
+  height: 380px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
 .emoji-add-btn {
   background: none;
   border: none;
@@ -80,19 +131,7 @@
   gap: 5px;
 }
 
-.picker {
-  position: absolute;
-  top: 220px;
-  left: 208px;
-  z-index: 100;
-}
-
-em-emoji-picker {
-  height: 380px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-}
-
+/* 상세 info 섹션 */
 .detail-info {
   display: flex;
   flex-direction: column;
