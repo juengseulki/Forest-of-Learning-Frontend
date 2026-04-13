@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/Input.css';
-import btn_visibility_off from '../../images/focus/button/btn_visibility_off.svg';
-import btn_visibility_on from '../../images/focus/button/btn_visibility_on.svg';
+import btn_visibility_off from '../../images/button/btn_visibility_off.svg';
+import btn_visibility_on from '../../images/button/btn_visibility_on.svg';
 
 function Input({ labelName, placeholder, password, value, onChange }) {
   const [visible, setVisible] = useState(false);
