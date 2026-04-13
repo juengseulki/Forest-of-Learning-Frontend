@@ -17,12 +17,12 @@ export function showPauseToast() {
   );
 }
 
-export function showPointToast(point) {
+export function showPointToast(firstPoint, secondPoint, totalPoint) {
   toast(
     <FocusToast
       type="success"
       icon="🎉"
-      message={`${point}포인트를 획득했습니다!`}
+      message={`기본 ${firstPoint}P + 초과 집중 ${secondPoint}P = 총 ${totalPoint}P 획득!`}
     />,
     toastOptions
   );
