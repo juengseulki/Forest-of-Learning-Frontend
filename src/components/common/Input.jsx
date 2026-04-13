@@ -3,7 +3,7 @@ import '../../styles/Input.css';
 import btn_visibility_off from '../../images/button/btn_visibility_off.svg';
 import btn_visibility_on from '../../images/button/btn_visibility_on.svg';
 
-function Input({ labelName, placeholder, password, value, onChange }) {
+function Input({ labelName, placeholder, password, value, onChange, error }) {
   const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -13,8 +13,7 @@ function Input({ labelName, placeholder, password, value, onChange }) {
   return (
     <div className="input-container">
       <label className="input-label">{labelName}</label>
-
-      <div className="input-wrapper">
+      <div className={error ? 'input-wrapper-error' : 'input-wrapper'}>
         <input
           type={password ? (visible ? 'text' : 'password') : 'text'}
           className="input-field"
@@ -30,6 +29,7 @@ function Input({ labelName, placeholder, password, value, onChange }) {
           />
         )}
       </div>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

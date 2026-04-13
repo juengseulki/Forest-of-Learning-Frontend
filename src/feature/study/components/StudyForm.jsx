@@ -13,14 +13,55 @@ function StudyForm() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [errors, setErrors] = useState({
+    nickname: '',
+    name: '',
+    description: '',
+    password: '',
+    passwordCheck: '',
+  });
 
   const submitButtonClink = () => {
-    //api에 보낼 값
+    const newErrors = {};
+
+    // 닉네임
+    if (!nickname.trim()) {
+      newErrors.nickname = '*닉네임을 입력해주세요.';
+    } else if (nickname.length > 10) {
+      newErrors.nickname = '*닉네임은 10자 이내입니다.';
+    }
+
+    // 스터디 이름
+    if (!name.trim()) {
+      newErrors.name = '*스터디 이름을 입력해주세요.';
+    } else if (name.length > 20) {
+      newErrors.name = '*스터디 이름은 20자 이내입니다.';
+    }
+
+    // 비밀번호
+    if (!password) {
+      newErrors.password = '*비밀번호를 입력해주세요.';
+    } else if (password.length < 5) {
+      newErrors.password = '*비밀번호는 5자 이상입니다.';
+    }
+
+    // 비밀번호 확인
+    if (!passwordCheck) {
+      newErrors.passwordCheck = '*비밀번호를 확인해주세요.';
+    } else if (password !== passwordCheck) {
+      newErrors.passwordCheck = '*비밀번호가 일치하지 않습니다.';
+    }
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    //서버 전송 데이터
     const newData = {
       nickname,
       name,
       description,
-      selectedBackground,
+      background: selectedBackground,
       password,
     };
   };
@@ -37,6 +78,7 @@ function StudyForm() {
           onChange={(e) => {
             setNickname(e.target.value);
           }}
+          error={errors.nickname}
         />
         <Input
           labelName="스터디 이름"
@@ -46,6 +88,7 @@ function StudyForm() {
           onChange={(e) => {
             setName(e.target.value);
           }}
+          error={errors.name}
         />
         <div className="form-wrapper">
           <label className="input-label">소개</label>
@@ -56,6 +99,7 @@ function StudyForm() {
             onChange={(e) => {
               setDescription(e.target.value);
             }}
+            error={errors.description}
           />
         </div>
         <div className="form-wrapper">
@@ -91,11 +135,17 @@ function StudyForm() {
           onChange={(e) => {
             setPassword(e.target.value);
           }}
+          error={errors.password}
         />
         <Input
           labelName="비밀번호 확인"
           placeholder="비밀번호를 다시입력해주세요"
           password={true}
+          value={passwordCheck}
+          onChange={(e) => {
+            setPasswordCheck(e.target.value);
+          }}
+          error={errors.passwordCheck}
         />
       </div>
       <button className="create-button" onClick={submitButtonClink}>
