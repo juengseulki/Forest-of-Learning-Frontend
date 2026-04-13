@@ -1,0 +1,469 @@
+.focus-timer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 546px;
+  padding: 35px;
+  border-radius: 20px;
+  border: 1px solid var(--gray-200);
+  background: #fff;
+}
+
+.focus-timer-card__label {
+  display: flex;
+  width: 100%;
+  height: 29px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  font-family: Pretendard, sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: normal;
+  color: #414141;
+}
+
+/* ===== 표시 전체 영역 ===== */
+.focus-timer-card__display-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* 작은 설정 시간 영역 자리를 항상 고정 */
+.focus-timer-card__duration-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  margin-bottom: 16px;
+}
+
+.focus-timer-card__duration-wrap,
+.focus-timer-card__duration-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 2px 8px;
+  border: 1px solid var(--gray-200);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.focus-timer-card__duration-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.focus-timer-card__duration-text {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  color: #414141;
+}
+
+/* 큰 타이머 / 입력 영역 자리를 항상 고정 */
+.focus-timer-card__timer-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 230px;
+  margin-bottom: 48px;
+}
+
+.focus-timer-card__time-display-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.focus-timer-card__time-input-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 437px;
+  height: 179px;
+}
+
+.focus-timer-card__time-input {
+  width: 200px;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 150px;
+  font-weight: 800;
+  line-height: normal;
+  color: #414141;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.focus-timer-card__time-input::placeholder {
+  color: #414141;
+  opacity: 1;
+}
+
+.focus-timer-card__time-input:focus {
+  outline: none;
+}
+
+.focus-timer-card__colon {
+  margin: 0 30px 28px;
+  font-size: 150px;
+  font-weight: 800;
+  line-height: normal;
+  color: #414141;
+}
+
+.focus-timer-card__time-display {
+  text-align: center;
+  font-size: 150px;
+  font-weight: 800;
+  line-height: 1;
+  color: #414141;
+}
+
+.focus-timer-card__time-display.is-running {
+  color: #ff5050;
+}
+
+.focus-timer-card__time-display.is-overtime {
+  color: #818181;
+}
+
+/* ===== 버튼 영역 ===== */
+.focus-timer-card__controls-slot,
+.focus-timer-card__button-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 88px;
+}
+
+.focus-timer-card__button {
+  width: 333px;
+  height: 66px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.focus-timer-card__button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.focus-timer-card__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.focus-timer-card__button-content {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: Pretendard, sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.focus-timer-card__button--stop .focus-timer-card__button-content {
+  font-size: 28px; /* 필요하면 */
+}
+
+.focus-timer-card__button-icon {
+  width: 44px;
+  height: 44px;
+  margin-left: 0;
+  object-fit: contain;
+  margin-left: -13px;
+}
+
+.focus-timer-card__button--start,
+.focus-timer-card__button--stop,
+.focus-timer-card__button--start-disabled {
+  width: 333px;
+  height: 66px;
+}
+
+.focus-timer-card__button--stop {
+  background: #818181;
+  color: #fff;
+}
+
+.focus-timer-card__button--start-disabled {
+  background: #d9d9d9;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.focus-timer-card__button--start-disabled:hover {
+  background: #d9d9d9;
+}
+
+.focus-timer-card__control-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* ===== 아이콘 버튼 ===== */
+.focus-timer-card__icon-button {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.focus-timer-card__icon-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.focus-timer-card__control-icon {
+  display: block;
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.focus-timer-card__control-icon--desktop,
+.focus-timer-card__control-icon--mobile {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.focus-timer-card__control-icon--desktop {
+  width: 64px;
+  height: 64px;
+}
+
+.focus-timer-card__control-icon--mobile {
+  display: none;
+}
+
+.icon-inactive {
+  opacity: 1;
+}
+
+.icon-active {
+  opacity: 0;
+}
+
+.focus-timer-card__icon-button:not(:disabled):hover .icon-inactive {
+  opacity: 0;
+}
+
+.focus-timer-card__icon-button:not(:disabled):hover .icon-active {
+  opacity: 1;
+}
+
+.focus-timer-card__icon-button:disabled:hover .icon-inactive {
+  opacity: 1;
+}
+
+.focus-timer-card__icon-button:disabled:hover .icon-active {
+  opacity: 0;
+}
+
+/* ===== 태블릿 ===== */
+@media (max-width: 1024px) {
+  .focus-timer-card {
+    height: 460px;
+    padding: 28px 24px;
+  }
+
+  .focus-timer-card__label {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .focus-timer-card__duration-slot {
+    height: 36px;
+    margin-bottom: 12px;
+  }
+
+  .focus-timer-card__duration-wrap,
+  .focus-timer-card__duration-badge {
+    gap: 8px;
+    min-height: 24px;
+    padding: 2px 8px;
+  }
+
+  .focus-timer-card__duration-icon {
+    width: 19px;
+    height: 19px;
+  }
+
+  .focus-timer-card__duration-text {
+    font-size: 16px;
+  }
+
+  .focus-timer-card__timer-slot {
+    min-height: 180px;
+    margin-bottom: 36px;
+  }
+
+  .focus-timer-card__time-input {
+    width: 160px;
+    font-size: 120px;
+  }
+
+  .focus-timer-card__colon {
+    margin: 0 10px;
+    font-size: 120px;
+  }
+
+  .focus-timer-card__time-display {
+    font-size: 120px;
+  }
+
+  .focus-timer-card__controls-slot,
+  .focus-timer-card__button-wrap {
+    min-height: 72px;
+  }
+
+  .focus-timer-card__button {
+    width: 260px;
+    height: 56px;
+  }
+
+  .focus-timer-card__button--start,
+  .focus-timer-card__button--stop,
+  .focus-timer-card__button--start-disabled {
+    width: 260px;
+    height: 56px;
+  }
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 767px) {
+  .focus-timer-card {
+    height: 342px;
+    padding: 24px 16px;
+    border-radius: 14px;
+  }
+
+  .focus-timer-card__label {
+    margin-bottom: 16px;
+    font-size: 24px;
+  }
+
+  .focus-timer-card__duration-slot {
+    height: 28px;
+    margin-bottom: 10px;
+  }
+
+  .focus-timer-card__duration-wrap,
+  .focus-timer-card__duration-badge {
+    gap: 4px;
+    min-height: 20px;
+    padding: 3px 7px;
+  }
+
+  .focus-timer-card__duration-icon {
+    width: 19px;
+    height: 19px;
+  }
+
+  .focus-timer-card__duration-text {
+    font-size: 16px;
+  }
+
+  .focus-timer-card__timer-slot {
+    min-height: 120px;
+    margin-bottom: 28px;
+  }
+
+  .focus-timer-card__time-input {
+    width: 110px;
+    font-size: 80px;
+  }
+
+  .focus-timer-card__colon {
+    margin: 0 6px;
+    font-size: 80px;
+  }
+
+  .focus-timer-card__time-display {
+    white-space: nowrap;
+    font-size: 80px;
+  }
+
+  .focus-timer-card__controls-slot,
+  .focus-timer-card__button-wrap {
+    min-height: 44px;
+  }
+
+  .focus-timer-card__control-wrap {
+    gap: 8px;
+  }
+
+  .focus-timer-card__icon-button {
+    width: 48px;
+    height: 48px;
+  }
+
+  .focus-timer-card__control-icon--desktop {
+    display: none;
+  }
+
+  .focus-timer-card__control-icon--mobile {
+    display: block;
+    width: 48px;
+    height: 48px;
+  }
+
+  .focus-timer-card__button {
+    width: 190px;
+    height: 44px;
+  }
+
+  .focus-timer-card__button--start,
+  .focus-timer-card__button--start-disabled {
+    width: 140px;
+    height: 45px;
+  }
+
+  .focus-timer-card__button--stop {
+    width: 72px;
+    height: 28px;
+  }
+
+  .focus-timer-card__button-content {
+    gap: 8px;
+    font-size: 16px;
+  }
+
+  .focus-timer-card__button-icon {
+    width: 24px;
+    height: 24px;
+  }
+}

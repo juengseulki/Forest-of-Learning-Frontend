@@ -1,71 +1,77 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
-
-const TIMER_STATUS = {
-  RUNNING: 1,
-  PAUSED: 2,
-  COMPLETED: 3,
-};
+import { TIMER_STATUS } from '../utils/focusConstants';
+import {
+  clearStoredSession,
+  getStoredSession,
+  saveStoredSession,
+} from '../utils/focusSessionStorage';
+import {
+  createSessionTimes,
+  formatSeconds,
+  getActualMinutes,
+  getDiffSeconds,
+} from '../utils/focusTime';
 
 export function useFocusTimer() {
-  const STORAGE_KEY = 'focus-session-test';
-
   const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 
-  function getStoredSession() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const parsed = raw ? JSON.parse(raw) : null;
+  // 현재 UI에서 사용하는 입력값
+  const [minutes, setMinutes] = useState('00');
+  const [seconds, setSeconds] = useState('00');
 
-      if (!parsed) return null;
-
-      // 수정: 완료된 세션은 다시 불러오지 않도록 정리
-      if (parsed.status === TIMER_STATUS.COMPLETED) {
-        localStorage.removeItem(STORAGE_KEY);
-        return null;
-      }
-
-      // 수정: 너무 오래된 세션은 비정상 복원 방지를 위해 제거
-      const startedAt = new Date(parsed.startedAt).getTime();
-      const now = Date.now();
-      const diffHours = (now - startedAt) / (1000 * 60 * 60);
-
-      if (diffHours > 6) {
-        localStorage.removeItem(STORAGE_KEY);
-        return null;
-      }
-
-      return parsed;
-    } catch {
-      // 수정: 파싱 에러가 나면 저장값 자체를 정리
-      localStorage.removeItem(STORAGE_KEY);
-      return null;
-    }
-  }
-
-  function saveSession(session) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  }
-
-  function clearSession() {
-    localStorage.removeItem(STORAGE_KEY);
-  }
-
-  function formatSeconds(totalSeconds) {
-    const safe = Math.max(0, totalSeconds);
-    const minutes = String(Math.floor(safe / 60)).padStart(2, '0');
-    const seconds = String(safe % 60).padStart(2, '0');
-    return `${minutes}:${seconds}`;
-  }
-
-  const [durationMinutes, setDurationMinutes] = useState(1);
+  // 저장된 세션이 있으면 복원
   const [session, setSession] = useState(() => getStoredSession());
+
+  // 토스트나 상태 메시지용
   const [message, setMessage] = useState('');
-  // 수정: 현재 시각은 초기 렌더에서 한 번만 계산되도록 함수 형태로 전달
+
+  // 현재 시각은 lazy initializer로 한 번만 계산
   const [now, setNow] = useState(() => Date.now());
 
+  // 1차 보상 중복 저장 방지
   const savingRef = useRef(false);
 
+  // 입력값 총 초
+  const totalSeconds = useMemo(() => {
+    return Number(minutes || 0) * 60 + Number(seconds || 0);
+  }, [minutes, seconds]);
+
+  // 입력값 변경
+  const handleMinutesChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 2);
+    setMinutes(value);
+  };
+
+  const handleSecondsChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 2);
+
+    if (Number(value) > 59) {
+      setSeconds('59');
+      return;
+    }
+
+    setSeconds(value);
+  };
+
+  // blur 시 2자리 포맷
+  const handleBlurMinutes = () => {
+    setMinutes((prev) => String(Number(prev || 0)).padStart(2, '0'));
+  };
+
+  const handleBlurSeconds = () => {
+    setSeconds((prev) => {
+      const safe = Math.min(Number(prev || 0), 59);
+      return String(safe).padStart(2, '0');
+    });
+  };
+
+  const displayDuration = useMemo(() => {
+    if (!session?.durationSeconds) return '';
+    return formatSeconds(session.durationSeconds);
+  }, [session]);
+
+  // 타이머가 RUNNING일 때 현재 시각 갱신 + 기준 시간 도달 보상 저장
   useEffect(() => {
     if (!session || session.status !== TIMER_STATUS.RUNNING) return;
 
@@ -97,11 +103,10 @@ export function useFocusTimer() {
           totalPoint: reward.basePoint + reward.targetBonusPoint,
         };
 
-        saveSession(updated);
+        saveStoredSession(updated);
         setMessage('기준 시간 도달!');
 
         savingRef.current = false;
-
         return updated;
       });
     }, 1000);
@@ -109,6 +114,7 @@ export function useFocusTimer() {
     return () => clearInterval(timer);
   }, [session?.status, calculateFirstReward]);
 
+  // PAUSED일 때는 멈춘 시점 시간 유지
   const effectiveNow = useMemo(() => {
     if (!session) return now;
 
@@ -130,30 +136,38 @@ export function useFocusTimer() {
   }, [session]);
 
   const diffSeconds = useMemo(() => {
-    if (!plannedEnd) return 0;
-    return Math.round((plannedEnd - effectiveNow) / 1000);
+    return getDiffSeconds(plannedEnd, effectiveNow);
   }, [plannedEnd, effectiveNow]);
 
   const actualMinutes = useMemo(() => {
-    if (!startedTime) return 0;
-
-    return Math.round(
-      (effectiveNow - startedTime - (session?.totalPausedMs ?? 0)) / 60000
+    return getActualMinutes(
+      startedTime,
+      effectiveNow,
+      session?.totalPausedMs ?? 0
     );
   }, [startedTime, effectiveNow, session]);
 
   const mode = diffSeconds >= 0 ? 'COUNTDOWN' : 'OVERTIME';
   const displayTime = formatSeconds(Math.abs(diffSeconds));
 
-  const handleStart = () => {
-    // 수정: 새로 시작할 때 이전 테스트 세션 흔적을 먼저 정리
-    clearSession();
+  // 현재 UI 분기용 상태
+  const isRunning = session?.status === TIMER_STATUS.RUNNING;
+  const isPaused = session?.status === TIMER_STATUS.PAUSED;
+  const isCompleted = session?.status === TIMER_STATUS.COMPLETED;
+  const isOvertime = isRunning && mode === 'OVERTIME';
 
-    const start = new Date(Math.floor(Date.now() / 1000) * 1000);
-    const end = new Date(start.getTime() + durationMinutes * 60000);
+  // 시작
+  const handleStart = () => {
+    if (totalSeconds === 0) return;
+
+    // 새로 시작할 때 이전 테스트 세션 흔적 제거
+    clearStoredSession();
+
+    const { start, end } = createSessionTimes(totalSeconds);
 
     const newSession = {
-      durationMinutes,
+      durationMinutes: Math.floor(totalSeconds / 60),
+      durationSeconds: totalSeconds,
       startedAt: start.toISOString(),
       plannedEndAt: end.toISOString(),
       status: TIMER_STATUS.RUNNING,
@@ -167,11 +181,12 @@ export function useFocusTimer() {
     };
 
     setNow(start.getTime());
-    saveSession(newSession);
+    saveStoredSession(newSession);
     setSession(newSession);
     setMessage('시작!');
   };
 
+  // 일시정지
   const handlePause = () => {
     if (!session) return;
 
@@ -182,10 +197,11 @@ export function useFocusTimer() {
     };
 
     setNow(Date.now());
-    saveSession(updated);
+    saveStoredSession(updated);
     setSession(updated);
   };
 
+  // 재개
   const handleResume = () => {
     if (!session || !session.pausedAt) return;
 
@@ -203,15 +219,18 @@ export function useFocusTimer() {
     };
 
     setNow(currentNow);
-    saveSession(updated);
+    saveStoredSession(updated);
     setSession(updated);
   };
 
+  // 종료
   const handleFinish = () => {
     if (!session) return;
 
-    const actual = actualMinutes;
-    const finalReward = calculateFinalReward(session.durationMinutes, actual);
+    const finalReward = calculateFinalReward(
+      session.durationMinutes,
+      actualMinutes
+    );
 
     const updated = {
       ...session,
@@ -223,31 +242,51 @@ export function useFocusTimer() {
         finalReward.overtimePoint,
     };
 
-    saveSession(updated);
+    saveStoredSession(updated);
     setSession(updated);
+    setMessage('집중 종료!');
   };
 
+  // 초기화
   const handleReset = () => {
-    clearSession();
+    clearStoredSession();
     setSession(null);
     setMessage('');
-    // 수정: reset 직후 타이머 기준 시각도 현재로 다시 맞춤
     setNow(Date.now());
+    setMinutes('00');
+    setSeconds('00');
   };
 
   return {
+    // 입력값
+    minutes,
+    seconds,
+    totalSeconds,
+    handleMinutesChange,
+    handleSecondsChange,
+    handleBlurMinutes,
+    handleBlurSeconds,
+
+    // 세션/표시값
     session,
     message,
-    durationMinutes,
-    setDurationMinutes,
-    displayTime,
     mode,
+    displayTime,
+    displayDuration,
     actualMinutes,
+    isRunning,
+    isPaused,
+    isCompleted,
+    isOvertime,
+
+    // 액션
     handleStart,
     handlePause,
     handleResume,
     handleFinish,
     handleReset,
+
+    // 상수
     TIMER_STATUS,
   };
 }
