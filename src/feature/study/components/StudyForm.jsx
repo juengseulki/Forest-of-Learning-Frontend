@@ -67,7 +67,7 @@ function StudyForm() {
           password={true}
         />
       </div>
-      <div>버튼</div>
+      <button className="create-button">만들기</button>
     </div>
   );
 }
