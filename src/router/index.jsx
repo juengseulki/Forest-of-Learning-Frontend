@@ -16,25 +16,20 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'study/create',
+        path: 'studies/create',
         element: <CreateStudyPage />,
       },
       {
-        path: 'studies/:id',
-        children: [
-          {
-            index: true,
-            element: <StudyDetailPage />,
-          },
-          {
-            path: 'habit',
-            element: <HabitList />,
-          },
-          {
-            path: 'focus',
-            element: <FocusTimer />,
-          },
-        ],
+        path: 'studies/:studyId',
+        element: <StudyDetailPage />,
+      },
+      {
+        path: 'studies/:studyId/habit',
+        element: <HabitList />,
+      },
+      {
+        path: 'studies/:studyId/focus',
+        element: <FocusPage />,
       },
     ],
   },
