@@ -34,3 +34,7 @@
   letter-spacing: 0%;
   color: var(--gray-300);
 }
+
+.visibility-icon {
+  cursor: pointer;
+}
