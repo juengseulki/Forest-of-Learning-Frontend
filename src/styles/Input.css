@@ -28,6 +28,7 @@
   align-items: center;
   padding: 14px 16px;
 }
+
 .input-wrapper-error {
   width: 648px;
   height: 48px;
@@ -64,6 +65,9 @@
 
 @media (max-width: 375px) {
   .input-wrapper {
+    width: 312px;
+  }
+  .input-wrapper-error {
     width: 312px;
   }
 }
