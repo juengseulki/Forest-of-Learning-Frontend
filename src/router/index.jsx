@@ -5,7 +5,7 @@ import HomePage from '../pages/HomePage';
 import CreateStudyPage from '../pages/CreateStudyPage';
 import FocusTimer from '../feature/1-focus-hs/components/FocusTimer';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
-import HabitHome from '../feature/habit-1/components/HabitHome';
+import HabitList from '../feature/habit-1/components/HabitList';
 
 const router = createBrowserRouter([
   {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'habit',
-            element: <HabitHome />,
+            element: <HabitList />,
           },
           {
             path: 'focus',
