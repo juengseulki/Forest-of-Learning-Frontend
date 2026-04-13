@@ -1,5 +1,5 @@
 import React from 'react';
-import allowRight from '../../../../images/icon/ic_arrow_right.svg';
+import allowRight from '../../../../../images/icon/ic_arrow_right.svg';
 import { Link } from 'react-router-dom';
 function StudyLinkGroup({ studyId }) {
   return (

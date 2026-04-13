@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import pointIcon from '../../../shared/images/icons/ic_point.png';
-import { pointMockResponse } from '../../../mocks/point/pointMockData';
-import '../../../styles/StudyDetailPage.css';
+import pointIcon from '../../../../shared/images/icons/ic_point.png';
+import { pointMockResponse } from '../../../../mocks/point/pointMockData';
+import '../../../../styles/StudyDetailPage.css';
 
 function StudyInfoSection({ study, studyId }) {
   const [point, setPoint] = useState(0);
