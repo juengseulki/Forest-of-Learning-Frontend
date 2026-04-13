@@ -1,0 +1,36 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-label {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #414141;
+}
+
+.input-wrapper {
+  width: 648px;
+  height: 48px;
+  border-radius: 15px;
+  border: 1px solid var(--gray-200);
+  background-color: var(--color-white);
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.input-field {
+  width: 100%;
+}
+
+.input-field::placeholder {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--gray-300);
+}
