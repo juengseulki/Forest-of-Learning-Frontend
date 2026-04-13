@@ -1,5 +1,11 @@
 import client from './client.js';
 
+// 스터디 상세 조회
+export async function getStudyDetail(studyId) {
+  const response = await client.get(`/studies/${studyId}`);
+  return response.data;
+}
+
 // 습관 목록 조회
 export async function getHabitList(studyId) {
   const response = await client.get('/habits', { params: { studyId } });
@@ -26,7 +32,10 @@ export async function deleteHabit(habitId) {
 
 // 습관 체크 / 해제 (날짜 기반 upsert)
 export async function toggleHabitCheck(habitId, date, completed) {
-  const response = await client.post(`/habits/${habitId}/records`, { date, completed });
+  const response = await client.post(`/habits/${habitId}/records`, {
+    date,
+    completed,
+  });
   return response.data;
 }
 
