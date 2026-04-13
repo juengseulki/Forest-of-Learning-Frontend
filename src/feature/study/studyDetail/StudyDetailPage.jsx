@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../../../styles/StudyDetailPage.css';
 import '../../../styles/global.css';
-import { studiesMockResponse } from '../../../mocks/study/studyMockData';
+import { studiesMockResponse } from '../../../mocks/study/studyMockData.js';
 import { useParams } from 'react-router-dom';
-import StudyInfoSection from './StudyInfoSection.jsx';
-import StudyActionButtonGroup from './actionSection/StudyActionButtonGroup';
-import StudyLinkGroup from './actionSection/StudyLinkGroup';
-import EmojiSection from './EmojiSection.jsx';
-import HabitRecord from './HabitRecord';
+import StudyInfoSection from './components/StudyInfoSection.jsx';
+import StudyActionButtonGroup from './components/actionSection/StudyActionButtonGroup.jsx';
+import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
+import EmojiSection from './components/EmojiSection.jsx';
+import HabitRecord from './components/HabitRecord.jsx';
 
 function StudyDetailPage() {
   const { id } = useParams();

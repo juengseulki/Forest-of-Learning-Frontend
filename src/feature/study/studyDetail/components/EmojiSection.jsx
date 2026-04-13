@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import smileIcon from '../../../images/icon/ic_smile.svg';
+import smileIcon from '../../../../images/icon/ic_smile.svg';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { emojiMockResponse } from '../../../mocks/emoji/emojiMockData';
-import plusIcon from '../../../images/icon/ic_plus.svg';
+import { emojiMockResponse } from '../../../../mocks/emoji/emojiMockData';
+import plusIcon from '../../../../images/icon/ic_plus.svg';
 function EmojiSection({ studyId }) {
   //렌더링시 4개 이상인 경우 하나로 묶어서 팝업으로 보이게
   const [isPickerVisible, setPickerVisible] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { habitRecordMockResponse } from '../../../mocks/habit/habitMockData';
-import { HABIT_ICONS } from './habitIcons.js';
+import { habitRecordMockResponse } from '../../../../mocks/habit/habitMockData.js';
+import HabitRow from './HabitRow.jsx';
 
 function HabitRecord({ studyId }) {
   const [habits, setHabits] = useState([]);
@@ -42,35 +42,7 @@ function HabitRecord({ studyId }) {
             <span>토</span>
             <span>일</span>
           </div>
-          {habits.map((habit, index) => {
-            const currentCompletedIcon =
-              HABIT_ICONS.COMPLETED_LIST[
-                index % HABIT_ICONS.COMPLETED_LIST.length
-              ];
-
-            return (
-              <div key={habit.habitId} className="habit-row">
-                <div className="habit-name">{habit.habitName}</div>
-
-                <div className="day-cells-container">
-                  {weekDays.map((day) => {
-                    const status = habit.dates[day];
-                    return (
-                      <div key={day} className="day-cell">
-                        {status === true ? (
-                          <img src={currentCompletedIcon} alt="완료" />
-                        ) : status === false ? (
-                          <img src={HABIT_ICONS.EMPTY} alt="미완료" />
-                        ) : (
-                          <img src={HABIT_ICONS.BLACK} alt="습관 없음" />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+          <HabitRow habits={habits} weekDays={weekDays} />
         </div>
       )}
     </section>
