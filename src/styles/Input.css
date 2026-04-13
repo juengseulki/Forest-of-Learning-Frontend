@@ -4,6 +4,12 @@
   gap: 16px;
 }
 
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .input-label {
   font-weight: 600;
   font-size: 18px;
