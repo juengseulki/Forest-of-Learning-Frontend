@@ -38,3 +38,9 @@
 .visibility-icon {
   cursor: pointer;
 }
+
+@media (max-width: 375px) {
+  .input-wrapper {
+    width: 312px;
+  }
+}
