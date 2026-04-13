@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Input = () => {
+function Input() {
   return <div>Input</div>;
-};
+}
 
 export default Input;
