@@ -10,8 +10,21 @@ function StudyForm() {
     backgroundsMockResponse.data.items
   );
   const [selectedBackground, setSelectedBackground] = useState(null);
+  const [nickname, setNickname] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [password, setPassword] = useState('');
 
-  console.log(background);
+  const submitButtonClink = () => {
+    //api에 보낼 값
+    const newData = {
+      nickname,
+      name,
+      description,
+      selectedBackground,
+      password,
+    };
+  };
 
   return (
     <div className="form-container">
@@ -21,15 +34,30 @@ function StudyForm() {
           labelName="닉네임"
           placeholder="닉네임을 입력해주세요"
           password={false}
+          value={nickname}
+          onChange={(e) => {
+            setNickname(e.target.value);
+          }}
         />
         <Input
           labelName="스터디 이름"
           placeholder="스터디 이름을 입력해주세요"
           password={false}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
         />
         <div className="form-wrapper">
           <label className="input-label">소개</label>
-          <textarea className="textarea-wrapper" />
+          <textarea
+            className="textarea-wrapper"
+            placeholder="소개 멘트를 작성해주세요"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
         </div>
         <div className="form-wrapper">
           <label className="input-label">배경을 선택해주세요</label>
@@ -60,6 +88,10 @@ function StudyForm() {
           labelName="비밀번호"
           placeholder="비밀번호를 입력해주세요"
           password={true}
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
         />
         <Input
           labelName="비밀번호 확인"
@@ -67,7 +99,9 @@ function StudyForm() {
           password={true}
         />
       </div>
-      <button className="create-button">만들기</button>
+      <button className="create-button" onClick={submitButtonClink}>
+        만들기
+      </button>
     </div>
   );
 }

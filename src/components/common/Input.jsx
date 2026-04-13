@@ -3,7 +3,7 @@ import '../../styles/Input.css';
 import btn_visibility_off from '../../images/focus/button/btn_visibility_off.svg';
 import btn_visibility_on from '../../images/focus/button/btn_visibility_on.svg';
 
-function Input({ labelName, placeholder, password }) {
+function Input({ labelName, placeholder, password, value, onChange }) {
   const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -19,6 +19,8 @@ function Input({ labelName, placeholder, password }) {
           type={password ? (visible ? 'text' : 'password') : 'text'}
           className="input-field"
           placeholder={placeholder}
+          value={value}
+          onChange={onChange}
         />
         {password && (
           <img
