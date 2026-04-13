@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import StudyInfoSection from './components/StudyInfoSection.jsx';
 import StudyActionButtonGroup from './components/actionSection/StudyActionButtonGroup.jsx';
 import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
-import EmojiSection from './components/EmojiSection.jsx';
+import EmojiSection from './components/emoji/EmojiSection.jsx';
 import HabitRecord from './components/HabitRecord.jsx';
 
 function StudyDetailPage() {
