@@ -23,6 +23,7 @@ function FocusTimerCard() {
     session,
     displayTime,
     displayDuration,
+    actualMinutes,
     isRunning,
     isPaused,
     isCompleted,
@@ -55,20 +56,20 @@ function FocusTimerCard() {
 
   // 🎉 종료 + 포인트
   function handleFinishWithToast() {
-    const durationMinutes = Math.floor(totalSeconds / 60);
-    const actualMinutes = session;
+    if (!session) return;
 
-    if (actualMinutes >= durationMinutes) {
-      const firstReward = calculateFirstReward(durationMinutes);
-      const finalReward = calculateFinalReward(durationMinutes, actualMinutes);
+    const durationMinutes = session.durationMinutes;
 
-      const totalPoint =
-        firstReward.basePoint +
-        firstReward.targetBonusPoint +
-        finalReward.overtimePoint;
+    const firstReward = calculateFirstReward(durationMinutes);
+    const finalReward = calculateFinalReward(durationMinutes, actualMinutes);
 
-      showPointToast(totalPoint);
-    }
+    const firstPoint = firstReward.basePoint + firstReward.targetBonusPoint;
+
+    const secondPoint = finalReward.overtimePoint;
+
+    const totalPoint = firstPoint + secondPoint;
+
+    showPointToast(firstPoint, secondPoint, totalPoint);
 
     handleFinish();
   }
