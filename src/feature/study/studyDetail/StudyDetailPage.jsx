@@ -48,7 +48,7 @@ function StudyDetailPage() {
             <StudyLinkGroup />
           </div>
         </section>
-        <HabitRecord />
+        <HabitRecord studyId={id} />
       </div>
     </div>
   );
