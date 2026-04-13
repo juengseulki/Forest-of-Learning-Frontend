@@ -10,22 +10,23 @@ import {
   deleteHabit,
   toggleHabitCheck,
 } from '../../../api/habitApi.js';
+import { getStudyDetail } from '../../../api/studyApi.js';
 import HabitItem from './HabitItem';
 import HabitForm from './HabitForm';
 
 function HabitList() {
   const navigate = useNavigate();
-  const { studyId, habitId } = useParams();
+  const { id, habitId } = useParams();
 
-  const numericStudyId = Number(studyId);
+  const numericStudyId = Number(id);
   const isValidStudyId = Number.isInteger(numericStudyId) && numericStudyId > 0;
 
   const [now, setNow] = useState(new Date());
+  const [studyTitle, setStudyTitle] = useState('');
   const [habitList, setHabitList] = useState([]);
   const [draftHabitList, setDraftHabitList] = useState([]);
   const [draftInputs, setDraftInputs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +40,22 @@ function HabitList() {
 
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const fetchStudyDetail = async () => {
+      if (!isValidStudyId) return;
+
+      try {
+        const data = await getStudyDetail(numericStudyId);
+        setStudyTitle(data.title ?? '');
+      } catch (error) {
+        console.error('스터디 상세 조회 실패:', error);
+        setStudyTitle('');
+      }
+    };
+
+    fetchStudyDetail();
+  }, [id, isValidStudyId, numericStudyId]);
 
   const fetchHabitList = async () => {
     if (!isValidStudyId) {
@@ -71,7 +88,7 @@ function HabitList() {
 
   useEffect(() => {
     fetchHabitList();
-  }, [studyId]);
+  }, [id]);
 
   useEffect(() => {
     if (!habitId || habitList.length === 0) return;
@@ -211,7 +228,7 @@ function HabitList() {
       <main className="habit-home">
         <header className="habit-home__header">
           <div className="habit-home__top">
-            <h1 className="habit-home__title">연우의 개발공장</h1>
+            <h1 className="habit-home__title">{studyTitle || '스터디'}</h1>
 
             <div className="habit-home__nav">
               <button
@@ -219,7 +236,7 @@ function HabitList() {
                 className="habit-home__nav-btn"
                 onClick={() => {
                   if (!isValidStudyId || habitList.length === 0) return;
-                  navigate(`/study/${numericStudyId}/focus`);
+                  navigate(`/studies/${numericStudyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">오늘의 집중</span>
