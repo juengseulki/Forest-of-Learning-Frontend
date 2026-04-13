@@ -5,11 +5,10 @@ import { backgroundsMockResponse } from '../../../mocks/background/backgroundMoc
 import ic_pow from '../../../images/icon/ic_pow.svg';
 
 function StudyForm() {
-  console.log(backgroundsMockResponse);
   const [background, setBackground] = useState(
     backgroundsMockResponse.data.items
   );
-  const [selectedBackground, setSelectedBackground] = useState(null);
+  const [selectedBackground, setSelectedBackground] = useState(1);
   const [nickname, setNickname] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
