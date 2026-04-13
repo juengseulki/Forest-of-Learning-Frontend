@@ -7,7 +7,7 @@ export function useFocusPoint() {
     };
   }
 
-  // 1차 보상 계산 2차 보상 계산
+  // 최종 보상 계산
   function calculateFinalReward(durationMinutes, actualMinutes) {
     const overtimeMinutes = Math.max(actualMinutes - durationMinutes, 0);
 

@@ -1,41 +1,46 @@
-import client from './client';
+import client from './client.js';
 
-const BASE = (studyId) => `/studies/${studyId}/habits`;
+// 스터디 상세 조회
+export async function getStudyDetail(studyId) {
+  const response = await client.get(`/studies/${studyId}`);
+  return response.data;
+}
 
 // 습관 목록 조회
 export async function getHabitList(studyId) {
-  const response = await client.get(BASE(studyId));
+  const response = await client.get('/habits', { params: { studyId } });
   return response.data;
 }
 
 // 습관 생성
 export async function createHabit(studyId, habitData) {
-  const response = await client.post(BASE(studyId), habitData);
+  const response = await client.post('/habits', { studyId, ...habitData });
   return response.data;
 }
 
 // 습관 수정
-export async function updateHabit(studyId, habitId, habitData) {
-  const response = await client.patch(`${BASE(studyId)}/${habitId}`, habitData);
+export async function updateHabit(habitId, habitData) {
+  const response = await client.patch(`/habits/${habitId}`, habitData);
   return response.data;
 }
 
 // 습관 삭제
-export async function deleteHabit(studyId, habitId) {
-  const response = await client.delete(`${BASE(studyId)}/${habitId}`);
+export async function deleteHabit(habitId) {
+  const response = await client.delete(`/habits/${habitId}`);
   return response.data;
 }
 
-// 습관 체크 / 해제 (날짜 기반)
-export async function toggleHabitCheck(studyId, habitId, date) {
-  const response = await client.patch(`${BASE(studyId)}/${habitId}/check`, { date });
-  return response.data;
-}
-
-// 날짜별 습관 기록 조회 (기록표용)
-export async function getHabitRecords(studyId, { startDate, endDate } = {}) {
-  const response = await client.get(`${BASE(studyId)}/records`, {
-    params: { startDate, endDate },
+// 습관 체크 / 해제 (날짜 기반 upsert)
+export async function toggleHabitCheck(habitId, date, completed) {
+  const response = await client.post(`/habits/${habitId}/records`, {
+    date,
+    completed,
   });
+  return response.data;
+}
+
+// 습관별 기록 조회
+export async function getHabitRecords(habitId) {
+  const response = await client.get(`/habits/${habitId}/records`);
   return response.data;
 }
