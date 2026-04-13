@@ -26,10 +26,6 @@ const router = createBrowserRouter([
         element: <CreateStudyPage />,
       },
       {
-        path: '/focus',
-        element: <FocusTest />,
-      },
-      {
         path: '/habit',
         element: <HabitHome />,
       },

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getFocus, getPoint, getStudyById } from '../../../api/focus/focusApi';
-import FocusTimerCard from '../components/FocusTimerCard/FocusTimerCard.jsx';
+import FocusTimerCard from '../components/FocusTimerCard.jsx';
 import pointIcon from '../../../shared/images/icons/ic_point.png';
 import arrowRightIcon from '../../../images/icon/ic_arrow_right.svg';
 import './FocusPage.css';
@@ -68,23 +68,23 @@ function FocusPage() {
             </h1>
 
             <div className="focus-page__actions">
-              <button type="button" className="focus-page__action-btn">
+              <Link to="/habit" className="focus-page__action-btn">
                 <span>오늘의 습관</span>
                 <img
                   src={arrowRightIcon}
                   alt=""
                   className="focus-page__action-icon"
                 />
-              </button>
+              </Link>
 
-              <button type="button" className="focus-page__action-btn">
+              <Link to="/" className="focus-page__action-btn">
                 <span>홈</span>
                 <img
                   src={arrowRightIcon}
                   alt=""
                   className="focus-page__action-icon"
                 />
-              </button>
+              </Link>
             </div>
 
             <div className="focus-page__point-group">

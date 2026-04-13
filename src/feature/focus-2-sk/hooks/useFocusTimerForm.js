@@ -6,11 +6,10 @@ function useFocusTimerForm() {
 
   const [isEditing, setIsEditing] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const [initialSeconds, setInitialSeconds] = useState(0);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
-
-  const [toast, setToast] = useState(null);
 
   const intervalRef = useRef(null);
 
@@ -45,21 +44,36 @@ function useFocusTimerForm() {
     });
   };
 
-  const handleStart = async () => {
+  const handleStart = () => {
     if (totalSeconds === 0) return;
 
-    setInitialSeconds(totalSeconds);
-    setRemainingSeconds(totalSeconds);
+    // 👉 처음 시작
+    if (!isRunning && !isPaused) {
+      setInitialSeconds(totalSeconds);
+      setRemainingSeconds(totalSeconds);
+    }
+
+    // 👉 재시작 (resume)
+    setIsPaused(false);
     setIsEditing(false);
     setIsRunning(true);
-
-    setToast({
-      message: '집중이 시작되었어요.',
-      type: 'warning',
-    });
   };
 
-  const handleStop = async () => {
+  const handlePause = () => {
+    setIsPaused(true);
+    setIsRunning(false);
+  };
+
+  const handleStop = () => {
+    setIsRunning(false);
+    setIsEditing(true);
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const handleReset = () => {
     setIsRunning(false);
     setIsEditing(true);
 
@@ -67,27 +81,29 @@ function useFocusTimerForm() {
       clearInterval(intervalRef.current);
     }
 
-    setToast({
-      message: '집중이 종료되었어요.',
-      type: 'success',
-    });
+    setRemainingSeconds(0);
+    setMinutes('00');
+    setSeconds('00');
+    setInitialSeconds(0);
   };
 
   useEffect(() => {
-    if (!isRunning) return;
+    if (!isRunning || isPaused) return;
 
     intervalRef.current = setInterval(() => {
       setRemainingSeconds((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(intervalRef.current);
-  }, [isRunning]);
+  }, [isRunning, isPaused]);
 
   const timerStatus = !isRunning
     ? 'idle'
     : remainingSeconds < 0
       ? 'overtime'
       : 'running';
+
+  const isOvertime = timerStatus === 'overtime';
 
   const absSeconds = Math.abs(remainingSeconds);
   const displayMinutes = String(Math.floor(absSeconds / 60)).padStart(2, '0');
@@ -99,6 +115,8 @@ function useFocusTimerForm() {
     isEditing,
     isRunning,
     timerStatus,
+    isOvertime,
+    isPaused,
     totalSeconds,
     initialSeconds,
     remainingSeconds,
@@ -108,10 +126,10 @@ function useFocusTimerForm() {
     handleBlurSeconds,
     handleStart,
     handleStop,
+    handleReset,
+    handlePause,
     displayMinutes,
     displaySec,
-    toast,
-    setToast,
   };
 }
 
