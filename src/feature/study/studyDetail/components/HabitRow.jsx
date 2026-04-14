@@ -1,5 +1,5 @@
 import React from 'react';
-import { HABIT_ICONS } from '../habitIcons.js';
+import { HABIT_ICONS } from '../utils/habitIcons.js';
 
 function HabitRow({ habits, weekDays }) {
   return (

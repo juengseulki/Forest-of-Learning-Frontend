@@ -2,9 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../shared/layouts/MainLayout/MainLayout';
 import HomePage from '../pages/HomePage';
 import CreateStudyPage from '../pages/CreateStudyPage';
+import FocusPage from '../pages/FocusPage';
+import HabitPage from '../pages/HabitPage';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
-import FocusPage from '../feature/focus-2-sk/pages/FocusPage';
-import HabitList from '../feature/habit-1/components/HabitList';
 
 const router = createBrowserRouter([
   {
@@ -16,16 +16,16 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'studies/create',
+        path: 'study/create',
         element: <CreateStudyPage />,
       },
       {
-        path: 'studies/:studyId',
+        path: 'studies/:id',
         element: <StudyDetailPage />,
       },
       {
-        path: 'studies/:studyId/habit',
-        element: <HabitList />,
+        path: 'studies/:id/habit',
+        element: <HabitPage />,
       },
       {
         path: 'studies/:studyId/focus',

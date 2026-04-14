@@ -7,7 +7,7 @@ import {
   showPauseToast,
   showTargetToast,
   showPointToast,
-} from '../utils/focusToast.jsx';
+} from '../utils/focusToastUtils.jsx';
 import './FocusTimerCard.css';
 
 function FocusTimerCard() {
