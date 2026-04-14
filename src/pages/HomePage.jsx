@@ -1,18 +1,16 @@
-import StudyList from '../feature/study/components/StudyList';
-import '../styles/HomePage.css';
-import ic_search from '../shared/images/icons/ic_search.png';
-
 import { useState } from 'react';
 
+import StudyList from '../feature/study/components/StudyList';
+import ic_search from '../shared/images/icons/ic_search.png';
+
+import '../styles/HomePage.css';
+
 function HomePage() {
-  //page 상태관리
   const [listPage, setListPage] = useState(1);
 
-  //최근 조회한 스터디와 스터디 분리
   const listLimit = 6;
   const recentLimit = 3;
 
-  //page + 1
   function moreSee() {
     setListPage((prev) => prev + 1);
   }
@@ -25,14 +23,17 @@ function HomePage() {
           <StudyList visibleCount={recentLimit} />
         </div>
       </section>
+
       <section className="study-list">
         <div className="list-top">
           <p className="home-title">스터디 둘러보기</p>
+
           <div className="filter">
             <div className="search-container">
               <img src={ic_search} alt="검색 아이콘" />
               <input placeholder="검색" />
             </div>
+
             <select className="select-container">
               <option>최근순</option>
               <option>오래된 순</option>
@@ -40,8 +41,10 @@ function HomePage() {
               <option>적은 포인트 순</option>
             </select>
           </div>
+
           <StudyList visibleCount={listPage * listLimit} />
         </div>
+
         <div className="button-container">
           <button className="see-more" onClick={moreSee}>
             더보기
