@@ -1,94 +1,55 @@
 import '../../../styles/reset.css';
 import '../../../styles/habit.css';
 import arrowRightIcon from '../../../shared/images/icons/ic_arrow_right.svg';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { formatHabitTime } from '../../../utils/formatHabitTime';
-import {
-  getHabitList,
-  createHabit,
-  deleteHabit,
-  toggleHabitCheck,
-} from '../../../api/habitApi.js';
-import { getStudyDetail } from '../../../api/studyApi.js';
 import HabitItem from './HabitItem';
 import HabitForm from './HabitForm';
+import { useCurrentTime } from '../hooks/useCurrentTime';
+import { useStudyTitle } from '../hooks/useStudyTitle';
+import { useHabitList } from '../hooks/useHabitList';
+import { useHabitForm } from '../hooks/useHabitForm';
+import { toStudyId } from '../utils/habitUtils';
 
 function HabitList() {
   const navigate = useNavigate();
   const { id, habitId } = useParams();
 
-  const numericStudyId = Number(id);
-  const isValidStudyId = Number.isInteger(numericStudyId) && numericStudyId > 0;
+  const studyId = toStudyId(id);
 
-  const [now, setNow] = useState(new Date());
-  const [studyTitle, setStudyTitle] = useState('');
-  const [habitList, setHabitList] = useState([]);
-  const [draftHabitList, setDraftHabitList] = useState([]);
-  const [draftInputs, setDraftInputs] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNow(new Date());
-    }, 1000);
+  const studyTitle = useStudyTitle(studyId);
 
-    return () => clearInterval(timer);
-  }, []);
+  const {
+    habitList,
+    isLoading,
+    errorMessage,
+    fetchHabitList,
+    toggleHabit,
+    removeHabitLocally,
+  } = useHabitList(studyId);
 
-  useEffect(() => {
-    const fetchStudyDetail = async () => {
-      if (!isValidStudyId) return;
-
-      try {
-        const data = await getStudyDetail(numericStudyId);
-        setStudyTitle(data.title ?? '');
-      } catch (error) {
-        console.error('스터디 상세 조회 실패:', error);
-        setStudyTitle('');
-      }
-    };
-
-    fetchStudyDetail();
-  }, [id, isValidStudyId, numericStudyId]);
-
-  const fetchHabitList = async () => {
-    if (!isValidStudyId) {
-      setHabitList([]);
-      setErrorMessage('유효한 스터디 정보가 없어요.');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setErrorMessage('');
-
-      const data = await getHabitList(numericStudyId);
-
-      if (Array.isArray(data?.items)) {
-        setHabitList(data.items);
-      } else if (Array.isArray(data)) {
-        setHabitList(data);
-      } else {
-        setHabitList([]);
-      }
-    } catch (error) {
-      console.error('습관 목록 조회 실패:', error);
-      setHabitList([]);
-      setErrorMessage('습관 목록을 불러오지 못했어요.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchHabitList();
-  }, [id]);
+  const {
+    draftHabitList,
+    draftInputs,
+    isModalOpen,
+    isSubmitting,
+    openModal,
+    closeModal,
+    addInputRow,
+    changeInputRow,
+    deleteInputRow,
+    deleteDraftHabit,
+    submitHabitList,
+  } = useHabitForm({
+    studyId,
+    habitList,
+    onAfterCreate: fetchHabitList,
+    onAfterDelete: removeHabitLocally,
+  });
 
   useEffect(() => {
     if (!habitId || habitList.length === 0) return;
@@ -104,125 +65,6 @@ function HabitList() {
     return () => clearTimeout(timer);
   }, [habitId, habitList]);
 
-  const handleToggleHabit = async (habit) => {
-    const nextCompleted = !habit.todayRecord?.completed;
-    const today = new Date().toISOString().split('T')[0];
-
-    try {
-      await toggleHabitCheck(habit.id, today, nextCompleted);
-
-      setHabitList((prevHabitList) =>
-        prevHabitList.map((item) =>
-          item.id === habit.id
-            ? {
-                ...item,
-                todayRecord: {
-                  ...item.todayRecord,
-                  date: today,
-                  completed: nextCompleted,
-                },
-              }
-            : item
-        )
-      );
-    } catch (error) {
-      console.error('습관 체크 변경 실패:', error);
-      alert('습관 체크 변경에 실패했어요.');
-    }
-  };
-
-  const handleOpenModal = () => {
-    setDraftHabitList(habitList);
-    setDraftInputs([]);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    if (isSubmitting) return;
-
-    setDraftHabitList([]);
-    setDraftInputs([]);
-    setIsModalOpen(false);
-  };
-
-  const handleDeleteDraftHabit = async (id) => {
-    try {
-      await deleteHabit(id);
-
-      setDraftHabitList((prevDraftHabitList) =>
-        prevDraftHabitList.filter((habit) => habit.id !== id)
-      );
-
-      setHabitList((prevHabitList) =>
-        prevHabitList.filter((habit) => habit.id !== id)
-      );
-    } catch (error) {
-      console.error('습관 삭제 실패:', error);
-      alert('습관 삭제에 실패했어요.');
-    }
-  };
-
-  const handleAddInputRow = () => {
-    const newInput = {
-      id: Date.now(),
-      name: '',
-    };
-
-    setDraftInputs((prevDraftInputs) => [...prevDraftInputs, newInput]);
-  };
-
-  const handleChangeInputRow = (id, value) => {
-    setDraftInputs((prevDraftInputs) =>
-      prevDraftInputs.map((input) =>
-        input.id === id ? { ...input, name: value } : input
-      )
-    );
-  };
-
-  const handleDeleteInputRow = (id) => {
-    setDraftInputs((prevDraftInputs) =>
-      prevDraftInputs.filter((input) => input.id !== id)
-    );
-  };
-
-  const handleSubmitHabitList = async () => {
-    const habitNames = draftInputs
-      .map((input) => input.name.trim())
-      .filter(Boolean);
-
-    if (habitNames.length === 0) {
-      setHabitList(draftHabitList);
-      setDraftHabitList([]);
-      setDraftInputs([]);
-      setIsModalOpen(false);
-      return;
-    }
-
-    if (!isValidStudyId) {
-      alert('유효한 studyId가 없어요.');
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-
-      for (const name of habitNames) {
-        await createHabit(numericStudyId, { name });
-      }
-
-      await fetchHabitList();
-
-      setDraftHabitList([]);
-      setDraftInputs([]);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('습관 생성 실패:', error);
-      alert('습관 생성에 실패했어요.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <section className="habit-page">
       <main className="habit-home">
@@ -235,8 +77,8 @@ function HabitList() {
                 type="button"
                 className="habit-home__nav-btn"
                 onClick={() => {
-                  if (!isValidStudyId || habitList.length === 0) return;
-                  navigate(`/studies/${numericStudyId}/focus`);
+                  if (!studyId || habitList.length === 0) return;
+                  navigate(`/studies/${studyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">오늘의 집중</span>
@@ -275,7 +117,7 @@ function HabitList() {
             <button
               type="button"
               className="habit-card__edit"
-              onClick={handleOpenModal}
+              onClick={openModal}
             >
               목록 수정
             </button>
@@ -302,7 +144,7 @@ function HabitList() {
                 <HabitItem
                   key={habit.id}
                   habit={habit}
-                  onToggle={handleToggleHabit}
+                  onToggle={toggleHabit}
                 />
               ))
             )}
@@ -315,12 +157,12 @@ function HabitList() {
         draftHabitList={draftHabitList}
         draftInputs={draftInputs}
         isSubmitting={isSubmitting}
-        onClose={handleCloseModal}
-        onDeleteDraftHabit={handleDeleteDraftHabit}
-        onAddInputRow={handleAddInputRow}
-        onChangeInputRow={handleChangeInputRow}
-        onDeleteInputRow={handleDeleteInputRow}
-        onSubmit={handleSubmitHabitList}
+        onClose={closeModal}
+        onDeleteDraftHabit={deleteDraftHabit}
+        onAddInputRow={addInputRow}
+        onChangeInputRow={changeInputRow}
+        onDeleteInputRow={deleteInputRow}
+        onSubmit={submitHabitList}
       />
     </section>
   );
