@@ -109,7 +109,7 @@ function FocusPage() {
             </div>
           </div>
 
-          <FocusTimerCard latestSession={focusData.latestSession} />
+          <FocusTimerCard />
         </div>
       </div>
     </section>
