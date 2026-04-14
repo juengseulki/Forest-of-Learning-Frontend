@@ -1,18 +1,21 @@
-import '../../../styles/reset.css';
-import '../../../styles/habit.css';
-import arrowRightIcon from '../../../shared/images/icons/ic_arrow_right.svg';
+import '../styles/reset.css';
+import '../styles/habit.css';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { formatHabitTime } from '../../../utils/formatHabitTime';
-import HabitItem from './HabitItem';
-import HabitForm from './HabitForm';
-import { useCurrentTime } from '../hooks/useCurrentTime';
-import { useStudyTitle } from '../hooks/useStudyTitle';
-import { useHabitList } from '../hooks/useHabitList';
-import { useHabitForm } from '../hooks/useHabitForm';
-import { toStudyId } from '../utils/habitUtils';
+import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
 
-function HabitList() {
+import HabitItem from '../feature/habit/components/HabitItem';
+import HabitForm from '../feature/habit/components/HabitForm';
+
+import { useCurrentTime } from '../feature/habit/hooks/useCurrentTime';
+import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle';
+import { useHabitList } from '../feature/habit/hooks/useHabitList';
+import { useHabitForm } from '../feature/habit/hooks/useHabitForm';
+
+import { formatHabitTime } from '../feature/habit/utils/formatHabitTime';
+import { toStudyId } from '../feature/habit/utils/habitUtils';
+
+function HabitPage() {
   const navigate = useNavigate();
   const { id, habitId } = useParams();
 
@@ -168,4 +171,4 @@ function HabitList() {
   );
 }
 
-export default HabitList;
+export default HabitPage;

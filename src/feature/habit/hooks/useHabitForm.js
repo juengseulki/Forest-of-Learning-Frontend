@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createHabit, deleteHabit } from '../../../api/habitApi.js';
-import { createDraftInput } from '../utils/habitUtils';
+import { createDraftInput } from '../utils/habitUtils.js';
 
 export function useHabitForm({
   studyId,
