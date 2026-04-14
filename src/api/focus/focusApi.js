@@ -16,5 +16,5 @@ export async function getPoint(studyId) {
 }
 
 export async function getStudyById(studyId) {
-  return client.get(`/focuses/${studyId}`);
+  return client.get(`/studies/${studyId}`);
 }
