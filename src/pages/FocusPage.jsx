@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { getFocus, getPoint, getStudyById } from '../../../api/focus/focusApi';
-import FocusTimerCard from '../components/FocusTimerCard.jsx';
-import pointIcon from '../../../shared/images/icons/ic_point.png';
-import arrowRightIcon from '../../../images/icon/ic_arrow_right.svg';
-import './FocusPage.css';
+import { Link, useParams } from 'react-router-dom';
+
+import { getFocus, getPoint, getStudyById } from '../api/focus/focusApi';
+import FocusTimerCard from '../feature/focus/components/FocusTimerCard';
+
+import pointIcon from '../shared/images/icons/ic_point.png';
+import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
+
+import '../styles/FocusPage.css';
 
 function FocusPage() {
   const { studyId } = useParams();
@@ -68,11 +71,14 @@ function FocusPage() {
             </h1>
 
             <div className="focus-page__actions">
-              <Link to="/habit" className="focus-page__action-btn">
+              <Link
+                to={`/studies/${currentStudyId}/habit`}
+                className="focus-page__action-btn"
+              >
                 <span>오늘의 습관</span>
                 <img
                   src={arrowRightIcon}
-                  alt=""
+                  alt="오른쪽 화살표"
                   className="focus-page__action-icon"
                 />
               </Link>
@@ -81,7 +87,7 @@ function FocusPage() {
                 <span>홈</span>
                 <img
                   src={arrowRightIcon}
-                  alt=""
+                  alt="오른쪽 화살표"
                   className="focus-page__action-icon"
                 />
               </Link>
@@ -93,7 +99,7 @@ function FocusPage() {
               <div className="focus-page__point-box">
                 <img
                   src={pointIcon}
-                  alt=""
+                  alt="포인트 아이콘"
                   className="focus-page__point-icon"
                 />
                 <span className="focus-page__point-text">

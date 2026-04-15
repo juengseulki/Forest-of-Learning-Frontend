@@ -1,10 +1,11 @@
 import StudyForm from '../feature/study/components/StudyForm';
+import '../styles/CreateStudyPage.css';
 
 function StudyDetailPage() {
   return (
-    <section>
+    <div className="studyForm-container">
       <StudyForm />
-    </section>
+    </div>
   );
 }
 

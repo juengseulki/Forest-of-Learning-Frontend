@@ -30,9 +30,9 @@ export async function deleteHabit(habitId) {
   return response.data;
 }
 
-// 습관 체크 / 해제 (날짜 기반 upsert)
+// 습관 체크 / 해제
 export async function toggleHabitCheck(habitId, date, completed) {
-  const response = await client.post(`/habits/${habitId}/records`, {
+  const response = await client.patch(`/habits/${habitId}/records`, {
     date,
     completed,
   });

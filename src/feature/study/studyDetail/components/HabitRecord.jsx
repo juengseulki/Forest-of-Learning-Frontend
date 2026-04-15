@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { habitRecordMockResponse } from '../../../../mocks/habit/habitMockData.js';
 import HabitRow from './HabitRow.jsx';
+import { getWeekDays } from '../utils/getWeekDays';
 
 function HabitRecord({ studyId }) {
   const [habits, setHabits] = useState([]);
@@ -11,16 +13,11 @@ function HabitRecord({ studyId }) {
       setHabits(habitRecordMockResponse.data.records);
       setWeekStart(habitRecordMockResponse.data.weekStart);
     }, 0);
+
     return () => clearTimeout(timer);
   }, [studyId]);
-  //일주일 날짜 배열
-  const weekDays = weekStart
-    ? Array.from({ length: 7 }, (_, i) => {
-        const date = new Date(weekStart);
-        date.setDate(date.getDate() + i);
-        return date.toISOString().split('T')[0];
-      })
-    : [];
+
+  const weekDays = getWeekDays(weekStart);
 
   return (
     <section className="detail-habit-section">

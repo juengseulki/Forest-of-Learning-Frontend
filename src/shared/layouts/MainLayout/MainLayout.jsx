@@ -16,7 +16,7 @@ function MainLayout() {
       <Header
         rightContent={
           isHomePage ? (
-            <Button onClick={() => navigate('/study/create')}>
+            <Button onClick={() => navigate('/studies/create')}>
               스터디 만들기
             </Button>
           ) : null
