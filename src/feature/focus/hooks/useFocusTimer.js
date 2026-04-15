@@ -227,23 +227,17 @@ export function useFocusTimer(studyId, onSessionComplete) {
   const handleFinish = async () => {
     if (!session) return;
 
-    const completedAt = new Date().toISOString();
-
-    const finalReward = calculateFinalReward(
-      session.durationMinutes,
-      actualMinutes
-    );
-
-    const totalPoint =
-      (session.basePoint ?? 0) +
-      (session.targetBonusPoint ?? 0) +
-      finalReward.overtimePoint;
+    // 백단 계산에 필요한 데이터만 추출
+    const sessionPayload = {
+      durationMinutes: session.durationMinutes,
+      durationSeconds: session.durationSeconds,
+      startedAt: session.startedAt,
+      totalPausedMs: session.totalPausedMs || 0,
+    };
 
     const updated = {
       ...session,
       status: TIMER_STATUS.COMPLETED,
-      overtimePoint: finalReward.overtimePoint,
-      totalPoint,
     };
 
     saveStoredSession(updated);
@@ -252,15 +246,17 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
     if (studyId) {
       try {
-        await completeFocus(studyId, {
-          duration: session.durationSeconds,
-          earnedPoint: totalPoint,
-          startedAt: session.startedAt,
-          completedAt,
+        const result = await completeFocus(studyId, {
+          sessionData: sessionPayload,  // 필요한 데이터만 전송
         });
-        onSessionComplete?.();
+
+        setMessage('포인트가 추가되었습니다!');
+        
+        // 콜백 함수에 result 객체 전달 (포인트 업데이트)
+        onSessionComplete?.(result);
       } catch (err) {
         console.error('집중 세션 저장 실패:', err);
+        setMessage('포인트 반영 실패');
       }
     }
   };
