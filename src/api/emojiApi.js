@@ -7,7 +7,7 @@ export async function getEmojiReactions(studyId) {
 }
 
 // 이모지 반응 추가
-export async function createEmojiReaction(studyId, emoji) {
+export async function addEmojiReaction(studyId, emoji) {
   const response = await client.post('/emojis', { studyId, emoji });
   return response.data;
 }

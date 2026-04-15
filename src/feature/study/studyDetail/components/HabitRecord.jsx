@@ -1,20 +1,46 @@
 import { useEffect, useState } from 'react';
-
 import { habitRecordMockResponse } from '../../../../mocks/habit/habitMockData.js';
 import HabitRow from './HabitRow.jsx';
 import { getWeekDays } from '../utils/getWeekDays';
+import { getHabitRecords } from '../../../../api/habitApi.js';
 
 function HabitRecord({ studyId }) {
   const [habits, setHabits] = useState([]);
   const [weekStart, setWeekStart] = useState('');
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setHabits(habitRecordMockResponse.data.records);
-      setWeekStart(habitRecordMockResponse.data.weekStart);
-    }, 0);
+  const getThisWeekRange = () => {
+    const now = new Date();
+    const day = now.getDay(); // 오늘 요일 (0:일, 1:월...)
 
-    return () => clearTimeout(timer);
+    // 1. 월요일까지 며칠 차이나는지 계산
+    // (오늘 요일이 일요일(0)이면 6일 전으로, 아니면 요일-1 만큼 전으로)
+    const daysToMonday = day === 0 ? 6 : day - 1;
+
+    // 2. 월요일 구하기
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - daysToMonday);
+    monday.setHours(0, 0, 0, 0); // 월요일 00:00:00
+
+    // 3. 일요일 구하기 (월요일에서 6일 뒤)
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999); // 일요일 23:59:59
+
+    setWeekStart(monday);
+    return {
+      startDate: monday.toISOString(),
+      endDate: sunday.toISOString(),
+    };
+  };
+
+  useEffect(() => {
+    const featchHabits = async () => {
+      const { startDate, endDate } = getThisWeekRange();
+      const habitData = await getHabitRecords(studyId, startDate, endDate);
+      console.log('habitData => ', habitData);
+      setHabits(habitData.items);
+    };
+    featchHabits();
   }, [studyId]);
 
   const weekDays = getWeekDays(weekStart);
