@@ -51,6 +51,19 @@ function FocusPage() {
     }
   }, [currentStudyId]);
 
+  // 세션 완료 후 포인트 즉시 업데이트
+  const handleSessionComplete = useCallback((result) => {
+    // result: { focusSession, totalPoint } 또는 { totalPoint }
+    if (result && result.totalPoint !== undefined) {
+      setPointData({
+        totalPoint: result.totalPoint,
+      });
+    } else {
+      // 응답 형식이 다를 경우 서버에서 최신 포인트 조회
+      refreshPoint();
+    }
+  }, [refreshPoint]);
+
   return (
     <section className="focus-page">
       <div className="focus-page__content">
@@ -104,7 +117,7 @@ function FocusPage() {
 
           <FocusTimerCard
             studyId={currentStudyId}
-            onSessionComplete={refreshPoint}
+            onSessionComplete={handleSessionComplete}
           />
         </div>
       </div>
