@@ -10,7 +10,7 @@ import {
 } from '../utils/focusToastUtils.jsx';
 import './FocusTimerCard.css';
 
-function FocusTimerCard() {
+function FocusTimerCard({ studyId }) {
   const {
     minutes,
     seconds,
@@ -34,7 +34,7 @@ function FocusTimerCard() {
     handleResume,
     handleFinish,
     handleReset,
-  } = useFocusTimer();
+  } = useFocusTimer(studyId);
 
   const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 

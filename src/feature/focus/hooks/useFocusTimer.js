@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
+import { completeFocus } from '../../../api/focus/focusApi';
 import {
   clearStoredSession,
   getStoredSession,
@@ -13,7 +14,7 @@ import {
   getDiffSeconds,
 } from '../utils/focusTime';
 
-export function useFocusTimer() {
+export function useFocusTimer(studyId) {
   const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 
   // 현재 UI에서 사용하는 입력값
@@ -224,27 +225,44 @@ export function useFocusTimer() {
   };
 
   // 종료
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (!session) return;
+
+    const completedAt = new Date().toISOString();
 
     const finalReward = calculateFinalReward(
       session.durationMinutes,
       actualMinutes
     );
 
+    const totalPoint =
+      session.basePoint +
+      session.targetBonusPoint +
+      finalReward.overtimePoint;
+
     const updated = {
       ...session,
       status: TIMER_STATUS.COMPLETED,
       overtimePoint: finalReward.overtimePoint,
-      totalPoint:
-        session.basePoint +
-        session.targetBonusPoint +
-        finalReward.overtimePoint,
+      totalPoint,
     };
 
     saveStoredSession(updated);
     setSession(updated);
     setMessage('집중 종료!');
+
+    if (studyId) {
+      try {
+        await completeFocus(studyId, {
+          duration: session.durationSeconds,
+          earnedPoint: totalPoint,
+          startedAt: session.startedAt,
+          completedAt,
+        });
+      } catch (err) {
+        console.error('집중 세션 저장 실패:', err);
+      }
+    }
   };
 
   // 초기화
