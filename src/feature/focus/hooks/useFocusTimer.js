@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
 import { completeFocus } from '../../../api/focus/focusApi';
@@ -15,7 +15,7 @@ import {
 } from '../utils/focusTime';
 
 export function useFocusTimer(studyId, onSessionComplete) {
-  const { calculateFinalReward } = useFocusPoint();
+  const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 
   // 현재 UI에서 사용하는 입력값
   const [minutes, setMinutes] = useState('00');
@@ -29,6 +29,9 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
   // 현재 시각은 lazy initializer로 한 번만 계산
   const [now, setNow] = useState(() => Date.now());
+
+  // 1차 보상 중복 저장 방지
+  const savingRef = useRef(false);
 
   // 입력값 총 초
   const totalSeconds = useMemo(() => {
@@ -69,16 +72,48 @@ export function useFocusTimer(studyId, onSessionComplete) {
     return formatSeconds(session.durationSeconds);
   }, [session]);
 
-  // 타이머가 RUNNING일 때 현재 시각 갱신
+  // 타이머가 RUNNING일 때 현재 시각 갱신 + 기준 시간 도달 보상 저장
   useEffect(() => {
     if (!session || session.status !== TIMER_STATUS.RUNNING) return;
 
     const timer = setInterval(() => {
-      setNow(Date.now());
+      const currentNow = Date.now();
+      setNow(currentNow);
+
+      setSession((prev) => {
+        if (!prev || prev.status !== TIMER_STATUS.RUNNING) return prev;
+        if (prev.firstSaved || savingRef.current) return prev;
+
+        const totalPausedMs = prev.totalPausedMs ?? 0;
+        const realElapsedMinutes = Math.floor(
+          (currentNow - new Date(prev.startedAt).getTime() - totalPausedMs) /
+            60000
+        );
+
+        if (realElapsedMinutes < prev.durationMinutes) return prev;
+
+        savingRef.current = true;
+
+        const reward = calculateFirstReward(prev.durationMinutes);
+
+        const updated = {
+          ...prev,
+          firstSaved: true,
+          basePoint: reward.basePoint,
+          targetBonusPoint: reward.targetBonusPoint,
+          totalPoint: reward.basePoint + reward.targetBonusPoint,
+        };
+
+        saveStoredSession(updated);
+        setMessage('기준 시간 도달!');
+
+        savingRef.current = false;
+        return updated;
+      });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [session]);
+  }, [session?.status, calculateFirstReward]);
 
   // PAUSED일 때는 멈춘 시점 시간 유지
   const effectiveNow = useMemo(() => {

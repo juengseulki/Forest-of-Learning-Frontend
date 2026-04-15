@@ -27,5 +27,5 @@ export function getDiffSeconds(plannedEndAt, effectiveNow) {
 export function getActualMinutes(startedTime, effectiveNow, totalPausedMs = 0) {
   if (!startedTime) return 0;
 
-  return Math.round((effectiveNow - startedTime - totalPausedMs) / 60000);
+  return Math.floor((effectiveNow - startedTime - totalPausedMs) / 60000);
 }
