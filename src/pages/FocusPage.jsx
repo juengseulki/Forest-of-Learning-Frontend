@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { getFocus, getPoint, getStudyById } from '../api/focus/focusApi';
@@ -45,6 +45,15 @@ function FocusPage() {
     }
 
     fetchFocusPageData();
+  }, [currentStudyId]);
+
+  const refreshPoint = useCallback(async () => {
+    try {
+      const pointResponse = await getPoint(currentStudyId);
+      setPointData(pointResponse.data);
+    } catch (err) {
+      console.error('포인트 갱신 실패:', err);
+    }
   }, [currentStudyId]);
 
   if (isLoading) {
@@ -109,7 +118,7 @@ function FocusPage() {
             </div>
           </div>
 
-          <FocusTimerCard studyId={currentStudyId} />
+          <FocusTimerCard studyId={currentStudyId} onSessionComplete={refreshPoint} />
         </div>
       </div>
     </section>
