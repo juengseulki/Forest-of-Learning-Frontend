@@ -73,7 +73,15 @@ function HabitPage() {
       <main className="habit-home">
         <header className="habit-home__header">
           <div className="habit-home__top">
-            <h1 className="habit-home__title">{studyTitle || '스터디'}</h1>
+            <h1
+              className="habit-home__title"
+              onClick={() => {
+                if (!studyId || habitList.length === 0) return;
+                navigate(`/studies/${studyId}`);
+              }}
+            >
+              {studyTitle || '스터디'}
+            </h1>
 
             <div className="habit-home__nav">
               <button
