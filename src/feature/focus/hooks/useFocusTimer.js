@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
-import { addPoints } from '../../../api/pointApi';
-
+import { completeFocus } from '../../../api/focus/focusApi';
 import {
   clearStoredSession,
   getStoredSession,
@@ -15,7 +14,7 @@ import {
   getDiffSeconds,
 } from '../utils/focusTime';
 
-export function useFocusTimer(studyId, setPointData) {
+export function useFocusTimer(studyId, onSessionComplete) {
   const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 
   // 현재 UI에서 사용하는 입력값
@@ -30,6 +29,9 @@ export function useFocusTimer(studyId, setPointData) {
 
   // 현재 시각은 lazy initializer로 한 번만 계산
   const [now, setNow] = useState(() => Date.now());
+
+  // 1차 보상 중복 저장 방지
+  const savingRef = useRef(false);
 
   // 입력값 총 초
   const totalSeconds = useMemo(() => {
@@ -80,12 +82,38 @@ export function useFocusTimer(studyId, setPointData) {
 
       setSession((prev) => {
         if (!prev || prev.status !== TIMER_STATUS.RUNNING) return prev;
-        return prev;
+        if (prev.firstSaved || savingRef.current) return prev;
+
+        const totalPausedMs = prev.totalPausedMs ?? 0;
+        const realElapsedMinutes = Math.floor(
+          (currentNow - new Date(prev.startedAt).getTime() - totalPausedMs) /
+            60000
+        );
+
+        if (realElapsedMinutes < prev.durationMinutes) return prev;
+
+        savingRef.current = true;
+
+        const reward = calculateFirstReward(prev.durationMinutes);
+
+        const updated = {
+          ...prev,
+          firstSaved: true,
+          basePoint: reward.basePoint,
+          targetBonusPoint: reward.targetBonusPoint,
+          totalPoint: reward.basePoint + reward.targetBonusPoint,
+        };
+
+        saveStoredSession(updated);
+        setMessage('기준 시간 도달!');
+
+        savingRef.current = false;
+        return updated;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [session?.status, studyId, calculateFirstReward, setPointData]);
+  }, [session?.status, calculateFirstReward]);
 
   // PAUSED일 때는 멈춘 시점 시간 유지
   const effectiveNow = useMemo(() => {
@@ -133,7 +161,6 @@ export function useFocusTimer(studyId, setPointData) {
   const handleStart = () => {
     if (totalSeconds === 0) return;
 
-    // 새로 시작할 때 이전 테스트 세션 흔적 제거
     clearStoredSession();
 
     const { start, end } = createSessionTimes(totalSeconds);
@@ -144,7 +171,9 @@ export function useFocusTimer(studyId, setPointData) {
       startedAt: start.toISOString(),
       plannedEndAt: end.toISOString(),
       status: TIMER_STATUS.RUNNING,
+      firstSaved: false,
       basePoint: 0,
+      targetBonusPoint: 0,
       overtimePoint: 0,
       totalPoint: 0,
       totalPausedMs: 0,
@@ -195,45 +224,41 @@ export function useFocusTimer(studyId, setPointData) {
   };
 
   // 종료
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (!session) return;
 
-    const finalReward = calculateFinalReward(
-      session.durationMinutes,
-      actualMinutes
-    );
-    const overtimePoint = finalReward.overtimePoint;
-
-    // 1차 보상: 설정 시간이 끝나면 3점
-    const firstRewardPoint = actualMinutes >= session.durationMinutes ? 3 : 0;
-
-    const totalEarned = firstRewardPoint + overtimePoint;
+    // 백단 계산에 필요한 데이터만 추출
+    const sessionPayload = {
+      durationMinutes: session.durationMinutes,
+      durationSeconds: session.durationSeconds,
+      startedAt: session.startedAt,
+      totalPausedMs: session.totalPausedMs || 0,
+    };
 
     const updated = {
       ...session,
       status: TIMER_STATUS.COMPLETED,
-      basePoint: firstRewardPoint,
-      overtimePoint: overtimePoint,
-      totalPoint: totalEarned,
     };
 
-    // API로 포인트 지급
-    addPoints(studyId, totalEarned)
-      .then((data) => {
-        saveStoredSession(updated);
-        setSession(updated);
-        if (setPointData && updated) {
-          setPointData(data);
-        }
-        saveStoredSession(updated);
-        setMessage('포인트가 추가되었습니다!');
-      })
-      .catch((err) => {
-        console.error('포인트 추가 실패:', err);
-        setMessage('포인트 반영 실패');
-      });
-
+    saveStoredSession(updated);
     setSession(updated);
+    setMessage('집중 종료!');
+
+    if (studyId) {
+      try {
+        const result = await completeFocus(studyId, {
+          sessionData: sessionPayload,  // 필요한 데이터만 전송
+        });
+
+        setMessage('포인트가 추가되었습니다!');
+        
+        // 콜백 함수에 result 객체 전달 (포인트 업데이트)
+        onSessionComplete?.(result);
+      } catch (err) {
+        console.error('집중 세션 저장 실패:', err);
+        setMessage('포인트 반영 실패');
+      }
+    }
   };
 
   // 초기화

@@ -17,15 +17,40 @@ async function request(method, url, { data, params } = {}) {
     body: data !== undefined ? JSON.stringify(data) : undefined,
   });
 
-  const json = await res.json();
+  const contentType = res.headers.get('content-type') || '';
+  const isJson = contentType.includes('application/json');
 
   if (!res.ok) {
-    const err = new Error(json.error?.message || '요청에 실패했습니다.');
+    let errorMessage = '요청에 실패했습니다.';
+    let errorCode;
+
+    if (isJson) {
+      try {
+        const json = await res.json();
+        errorMessage = json.error?.message || errorMessage;
+        errorCode = json.error?.code;
+      } catch (_) {
+        // JSON 파싱 실패 시 기본 메시지.
+      }
+    } else if (res.status === 404) {
+      errorMessage = '요청한 경로를 찾을 수 없습니다.';
+      errorCode = 'NOT_FOUND';
+    } else if (res.status >= 500) {
+      errorMessage = '서버 오류가 발생했습니다.';
+      errorCode = 'INTERNAL_ERROR';
+    }
+
+    const err = new Error(errorMessage);
     err.status = res.status;
-    err.code = json.error?.code;
+    err.code = errorCode;
     throw err;
   }
 
+  if (!isJson) {
+    return { data: null };
+  }
+
+  const json = await res.json();
   return { data: json.data };
 }
 

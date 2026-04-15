@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { getHabitList, toggleHabitCheck } from '../../../api/habitApi.js';
 import {
   getTodayDateString,
@@ -61,7 +62,7 @@ export function useHabitList(studyId) {
       );
     } catch (error) {
       console.error('습관 체크 변경 실패:', error);
-      alert('습관 체크 변경에 실패했어요.');
+      toast.error('습관 체크 변경에 실패했어요.');
     }
   }, []);
 
