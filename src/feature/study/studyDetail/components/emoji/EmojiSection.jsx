@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import smileIcon from '../../../../../images/icon/ic_smile.svg';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { emojiMockResponse } from '../../../../../mocks/emoji/emojiMockData';
 import EmojiList from './EmojiList';
+import {
+  getEmojiReactions,
+  addEmojiReaction,
+} from '../../../../../api/emojiApi';
 
 function EmojiSection({ studyId }) {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [emojis, setEmojis] = useState([]);
-  useEffect(() => {
-    const getEmoji = async () => {
-      //const res = await fetch(BASE_URL)
-      setEmojis(emojiMockResponse);
 
-      const targetStudy = emojiMockResponse.data.items.find(
-        (item) => item.studyId === 2
-      );
-
-      if (targetStudy && targetStudy.emojis) {
-        setEmojis(targetStudy.emojis);
-      }
-    };
-    getEmoji();
+  const getEmoji = useCallback(async () => {
+    try {
+      const emojiData = await getEmojiReactions(studyId);
+      setEmojis(emojiData?.items || []);
+    } catch (error) {
+      console.error('이모지 로딩 실패!', error);
+    }
   }, [studyId]);
 
-  const handleAddEmoji = (emojiData) => {
-    const emojiValue = emojiData.native ? emojiData.native : emojiData;
-    //const addEmoji = fetch(BASE_URL, method:"POST")
-    //중복검사 후 카운트 변경 로직은 백엔드에서 구현 예정
-    const newEmoji = {
-      emoji: emojiValue,
-      count: 1,
+  useEffect(() => {
+    const fetchEmojis = async () => {
+      await getEmoji();
     };
-    setEmojis((prev) => [...prev, newEmoji]);
+    fetchEmojis();
+  }, [getEmoji]);
+
+  const handleAddEmoji = async (emojiData) => {
+    const emojiValue = emojiData.native ? emojiData.native : emojiData;
+    const addEmoji = await addEmojiReaction(studyId, emojiValue);
+    getEmoji();
     setPickerVisible(false);
   };
 
