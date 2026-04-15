@@ -1,34 +1,20 @@
-import {
-  focusMockResponse,
-  focusStartMockResponse,
-  focusCompleteMockResponse,
-} from '../../mocks/focus/focusMockData';
-import { pointMockResponse } from '../../mocks/point/pointMockData';
-import { studiesMockResponse } from '../../mocks/study/studyMockData';
+import client from '../client.js';
 
 export async function getFocus(studyId) {
-  return Promise.resolve(focusMockResponse);
+  return client.get(`/focuses/${studyId}`);
 }
 
 export async function startFocus(studyId) {
-  return Promise.resolve(focusStartMockResponse);
+  return client.post(`/focuses/${studyId}/start`);
 }
 
 export async function completeFocus(studyId, payload) {
-  return Promise.resolve(focusCompleteMockResponse);
+  return client.post(`/focuses/${studyId}`, payload);
 }
-
 export async function getPoint(studyId) {
-  return Promise.resolve(pointMockResponse);
+  return client.get(`/points/${studyId}`);
 }
 
 export async function getStudyById(studyId) {
-  const study = studiesMockResponse.data.items.find(
-    (item) => item.id === Number(studyId)
-  );
-
-  return Promise.resolve({
-    data: study || null,
-    message: study ? 'success' : '스터디를 찾을 수 없습니다.',
-  });
+  return client.get(`/studies/${studyId}`);
 }
