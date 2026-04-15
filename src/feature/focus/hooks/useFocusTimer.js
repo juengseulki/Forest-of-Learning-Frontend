@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
-import { addPoints } from '../../../api/pointApi';
-
+import { completeFocus } from '../../../api/focus/focusApi';
 import {
   clearStoredSession,
   getStoredSession,
@@ -15,7 +14,7 @@ import {
   getDiffSeconds,
 } from '../utils/focusTime';
 
-export function useFocusTimer(studyId, setPointData) {
+export function useFocusTimer(studyId) {
   const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 
   // 현재 UI에서 사용하는 입력값
@@ -195,8 +194,10 @@ export function useFocusTimer(studyId, setPointData) {
   };
 
   // 종료
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (!session) return;
+
+    const completedAt = new Date().toISOString();
 
     const finalReward = calculateFinalReward(
       session.durationMinutes,
@@ -209,12 +210,16 @@ export function useFocusTimer(studyId, setPointData) {
 
     const totalEarned = firstRewardPoint + overtimePoint;
 
+    const totalPoint =
+      session.basePoint +
+      session.targetBonusPoint +
+      finalReward.overtimePoint;
+
     const updated = {
       ...session,
       status: TIMER_STATUS.COMPLETED,
-      basePoint: firstRewardPoint,
-      overtimePoint: overtimePoint,
-      totalPoint: totalEarned,
+      overtimePoint: finalReward.overtimePoint,
+      totalPoint,
     };
 
     // API로 포인트 지급
@@ -234,6 +239,20 @@ export function useFocusTimer(studyId, setPointData) {
       });
 
     setSession(updated);
+    setMessage('집중 종료!');
+
+    if (studyId) {
+      try {
+        await completeFocus(studyId, {
+          duration: session.durationSeconds,
+          earnedPoint: totalPoint,
+          startedAt: session.startedAt,
+          completedAt,
+        });
+      } catch (err) {
+        console.error('집중 세션 저장 실패:', err);
+      }
+    }
   };
 
   // 초기화
