@@ -109,7 +109,7 @@ function FocusPage() {
             </div>
           </div>
 
-          <FocusTimerCard />
+          <FocusTimerCard studyId={studyId} setPointData={setPointData} />
         </div>
       </div>
     </section>

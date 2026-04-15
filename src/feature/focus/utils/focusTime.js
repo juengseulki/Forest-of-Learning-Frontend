@@ -8,7 +8,7 @@ export function formatSeconds(totalSeconds) {
 
 // 시작 시각과 종료 시각 생성
 export function createSessionTimes(durationSeconds) {
-  const start = new Date(Math.floor(Date.now() / 1000) * 1000);
+  const start = new Date();
   const end = new Date(start.getTime() + durationSeconds * 1000);
 
   return {
