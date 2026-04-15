@@ -30,9 +30,6 @@ export function useFocusTimer(studyId) {
   // 현재 시각은 lazy initializer로 한 번만 계산
   const [now, setNow] = useState(() => Date.now());
 
-  // 1차 보상 중복 저장 방지
-  const savingRef = useRef(false);
-
   // 입력값 총 초
   const totalSeconds = useMemo(() => {
     return Number(minutes || 0) * 60 + Number(seconds || 0);
@@ -82,38 +79,12 @@ export function useFocusTimer(studyId) {
 
       setSession((prev) => {
         if (!prev || prev.status !== TIMER_STATUS.RUNNING) return prev;
-        if (prev.firstSaved || savingRef.current) return prev;
-
-        const totalPausedMs = prev.totalPausedMs ?? 0;
-        const realElapsedMinutes = Math.floor(
-          (currentNow - new Date(prev.startedAt).getTime() - totalPausedMs) /
-            60000
-        );
-
-        if (realElapsedMinutes < prev.durationMinutes) return prev;
-
-        savingRef.current = true;
-
-        const reward = calculateFirstReward(prev.durationMinutes);
-
-        const updated = {
-          ...prev,
-          firstSaved: true,
-          basePoint: reward.basePoint,
-          targetBonusPoint: reward.targetBonusPoint,
-          totalPoint: reward.basePoint + reward.targetBonusPoint,
-        };
-
-        saveStoredSession(updated);
-        setMessage('기준 시간 도달!');
-
-        savingRef.current = false;
-        return updated;
+        return prev;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [session?.status, calculateFirstReward]);
+  }, [session?.status, studyId, calculateFirstReward, setPointData]);
 
   // PAUSED일 때는 멈춘 시점 시간 유지
   const effectiveNow = useMemo(() => {
@@ -172,9 +143,7 @@ export function useFocusTimer(studyId) {
       startedAt: start.toISOString(),
       plannedEndAt: end.toISOString(),
       status: TIMER_STATUS.RUNNING,
-      firstSaved: false,
       basePoint: 0,
-      targetBonusPoint: 0,
       overtimePoint: 0,
       totalPoint: 0,
       totalPausedMs: 0,
@@ -234,6 +203,12 @@ export function useFocusTimer(studyId) {
       session.durationMinutes,
       actualMinutes
     );
+    const overtimePoint = finalReward.overtimePoint;
+
+    // 1차 보상: 설정 시간이 끝나면 3점
+    const firstRewardPoint = actualMinutes >= session.durationMinutes ? 3 : 0;
+
+    const totalEarned = firstRewardPoint + overtimePoint;
 
     const totalPoint =
       session.basePoint +
@@ -247,7 +222,22 @@ export function useFocusTimer(studyId) {
       totalPoint,
     };
 
-    saveStoredSession(updated);
+    // API로 포인트 지급
+    addPoints(studyId, totalEarned)
+      .then((data) => {
+        saveStoredSession(updated);
+        setSession(updated);
+        if (setPointData && updated) {
+          setPointData(data);
+        }
+        saveStoredSession(updated);
+        setMessage('포인트가 추가되었습니다!');
+      })
+      .catch((err) => {
+        console.error('포인트 추가 실패:', err);
+        setMessage('포인트 반영 실패');
+      });
+
     setSession(updated);
     setMessage('집중 종료!');
 
