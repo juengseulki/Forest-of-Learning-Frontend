@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
 import { pointMockResponse } from '../../../../mocks/point/pointMockData';
 import '../../../../styles/StudyDetailPage.css';
+import { getPoint } from '../../../../api/pointApi';
 
 function StudyInfoSection({ study, studyId }) {
   const [point, setPoint] = useState(0);
@@ -9,9 +10,9 @@ function StudyInfoSection({ study, studyId }) {
   useEffect(() => {
     const loadPoint = async () => {
       try {
-        // const res = await fetchPoint(`http://localhost:4000/point/:${studyId}`);
-        //const data = await res.json()
-        setPoint(pointMockResponse.data.totalPoint);
+        const studyPoint = await getPoint(studyId);
+        console.log('studyPoint => ', studyPoint);
+        setPoint(studyPoint.totalPoint);
       } catch (error) {
         console.error('포인트 로딩 실패!', error);
       }
