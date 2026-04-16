@@ -1,5 +1,5 @@
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { getStudies } from '../../src/api/studyApi';
 import StudyList from '../feature/study/components/StudyList';
 import ic_search from '../shared/images/icons/ic_search.png';
 
@@ -7,7 +7,7 @@ import '../styles/HomePage.css';
 
 function HomePage() {
   const [listPage, setListPage] = useState(1);
-
+  const [studies, setStudies] = useState([]);
   const listLimit = 6;
   const recentLimit = 3;
 
@@ -15,19 +15,39 @@ function HomePage() {
     setListPage((prev) => prev + 1);
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getStudies();
+        setStudies(data.items);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const a = 0;
+
   return (
     <div className="main-container">
       <section className="recent-lookup">
         <p className="home-title">최근 조회한 스터디</p>
         <div className="recent-scroll">
-          <StudyList visibleCount={recentLimit} />
+          {studies.length == 0 ? (
+            <div className="look-study">
+              <p className="null-text">아직 조회한 스터디가 없어요</p>
+            </div>
+          ) : (
+            <StudyList visibleCount={recentLimit} />
+          )}
         </div>
       </section>
 
       <section className="study-list">
         <div className="list-top">
           <p className="home-title">스터디 둘러보기</p>
-
           <div className="filter">
             <div className="search-container">
               <img src={ic_search} alt="검색 아이콘" />
@@ -41,10 +61,14 @@ function HomePage() {
               <option>적은 포인트 순</option>
             </select>
           </div>
-
-          <StudyList visibleCount={listPage * listLimit} />
+          {studies.length == 0 ? (
+            <div className="look-study">
+              <p className="null-text">아직 둘러 볼 스터디가 없어요</p>
+            </div>
+          ) : (
+            <StudyList visibleCount={listPage * listLimit} />
+          )}
         </div>
-
         <div className="button-container">
           <button className="see-more" onClick={moreSee}>
             더보기
