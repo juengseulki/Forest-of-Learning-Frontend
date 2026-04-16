@@ -16,7 +16,7 @@ import {
 } from '../utils/focusTime';
 
 export function useFocusTimer(studyId, onSessionComplete) {
-  const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
+  const { calculateFirstReward } = useFocusPoint();
 
   // 현재 UI에서 사용하는 입력값
   const [minutes, setMinutes] = useState('00');
@@ -248,11 +248,11 @@ export function useFocusTimer(studyId, onSessionComplete) {
     if (studyId) {
       try {
         const result = await completeFocus(studyId, {
-          sessionData: sessionPayload,  // 필요한 데이터만 전송
+          sessionData: sessionPayload, // 필요한 데이터만 전송
         });
 
         setMessage('포인트가 추가되었습니다!');
-        
+
         // 콜백 함수에 result 객체 전달 (포인트 업데이트)
         onSessionComplete?.(result);
       } catch (err) {

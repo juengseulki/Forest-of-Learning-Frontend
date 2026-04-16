@@ -1,7 +1,9 @@
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function StudyCard({
+  id,
   nickname,
   name,
   description,
@@ -11,6 +13,12 @@ export default function StudyCard({
   backgroundImage,
   theme,
 }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/studies/${id}`);
+  };
+
   return (
     <>
       <div
@@ -18,6 +26,7 @@ export default function StudyCard({
         style={{
           backgroundImage: `url(${backgroundImage})`,
         }}
+        onClick={handleClick}
       >
         <section className="card-header">
           <div className="header-top">
