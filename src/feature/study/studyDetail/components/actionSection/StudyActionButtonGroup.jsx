@@ -9,13 +9,25 @@ function StudyActionButtonGroup({ onEditClick, onDeleteClick }) {
 
       toast(
         <Toast type="success" icon="🔗" message="링크가 복사되었습니다!" />,
-        { position: 'bottom-center' }
+        {
+          position: 'bottom-center',
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeButton: false,
+          pauseOnHover: false,
+          draggable: false,
+        }
       );
     } catch (error) {
       console.error('복사 실패', error);
 
       toast(<Toast type="danger" icon="❗" message="복사에 실패했습니다." />, {
         position: 'bottom-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeButton: false,
+        pauseOnHover: false,
+        draggable: false,
       });
     }
   };
