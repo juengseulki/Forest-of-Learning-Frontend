@@ -1,30 +1,42 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Toast from '../shared/components/toast/Toast';
 import StudyForm from '../feature/study/components/StudyForm';
 import StudyUnsavedChangesModal from '../feature/study/shared/modal/StudyUnsavedChangesModal';
 import StudyConfirmModal from '../feature/study/shared/modal/StudyConfirmModal';
-import { updateStudy } from '../api/studyApi';
+import { updateStudy, getStudy } from '../api/studyApi';
 
 function StudyEditPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { studyId } = useParams();
   const { setHeaderAction } = useOutletContext();
 
+  // 변수는 한 번씩만 선언해야 합니다!
+  const [initialData, setInitialData] = useState(location.state?.study || null);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [pendingFormData, setPendingFormData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleOpenLeaveModal = () => {
-    setIsLeaveModalOpen(true);
-  };
+  // 데이터가 없을 경우 서버에서 불러오는 로직
+  useEffect(() => {
+    if (!initialData && studyId) {
+      const fetchStudy = async () => {
+        try {
+          const data = await getStudy(studyId);
+          setInitialData(data);
+        } catch (error) {
+          console.error('데이터 로드 실패', error);
+        }
+      };
+      fetchStudy();
+    }
+  }, [studyId, initialData]);
 
-  const handleCloseLeaveModal = () => {
-    setIsLeaveModalOpen(false);
-  };
-
+  const handleOpenLeaveModal = () => setIsLeaveModalOpen(true);
+  const handleCloseLeaveModal = () => setIsLeaveModalOpen(false);
   const handleLeavePage = () => {
     setIsLeaveModalOpen(false);
     navigate(-1);
@@ -35,46 +47,29 @@ function StudyEditPage() {
     setIsConfirmModalOpen(true);
   };
 
-  const handleCloseConfirmModal = () => {
-    setIsConfirmModalOpen(false);
-  };
+  const handleCloseConfirmModal = () => setIsConfirmModalOpen(false);
 
   const handleConfirmEdit = async () => {
     if (!pendingFormData) return;
-
     try {
       setIsSubmitting(true);
-
       await updateStudy(studyId, pendingFormData);
-
       setIsConfirmModalOpen(false);
 
-      toast(
-        <Toast type="success" icon="✅" message="스터디가 수정되었습니다." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
+      toast(<Toast type="success" icon="✅" message="스터디가 수정되었습니다." />, {
+        position: 'bottom-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
 
       navigate(`/studies/${studyId}`);
     } catch (error) {
       console.error('스터디 수정 실패', error);
-      toast(
-        <Toast type="danger" icon="❗" message="스터디 수정에 실패했습니다." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
+      toast(<Toast type="danger" icon="❗" message="스터디 수정에 실패했습니다." />, {
+        position: 'bottom-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -82,15 +77,22 @@ function StudyEditPage() {
 
   useEffect(() => {
     setHeaderAction(() => handleOpenLeaveModal);
-
-    return () => {
-      setHeaderAction(null);
-    };
+    return () => setHeaderAction(null);
   }, [setHeaderAction]);
 
   return (
     <div className="study-edit-page">
-      <StudyForm isEditMode={true} onValidSubmit={handleValidSubmit} />
+      {initialData ? (
+        <StudyForm 
+          isEditMode={true} 
+          initialData={initialData} 
+          onValidSubmit={handleValidSubmit} 
+        />
+      ) : (
+        <div className="loading-container">
+          <p>스터디 정보를 불러오고 있습니다...</p>
+        </div>
+      )}
 
       <StudyUnsavedChangesModal
         isOpen={isLeaveModalOpen}
