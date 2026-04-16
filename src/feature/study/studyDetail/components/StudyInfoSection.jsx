@@ -9,6 +9,8 @@ function StudyInfoSection({ study, studyId }) {
   const [point, setPoint] = useState(0);
 
   useEffect(() => {
+    if (!studyId) return;
+
     const loadPoint = async () => {
       try {
         const studyPoint = await getPoint(studyId);

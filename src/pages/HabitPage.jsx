@@ -17,14 +17,14 @@ import { toStudyId } from '../feature/habit/utils/habitUtils';
 
 function HabitPage() {
   const navigate = useNavigate();
-  const { id, habitId } = useParams();
+  const { studyId, habitId } = useParams();
 
-  const studyId = toStudyId(id);
+  const parsedStudyId = toStudyId(studyId);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
 
-  const studyTitle = useStudyTitle(studyId);
+  const studyTitle = useStudyTitle(parsedStudyId);
 
   const {
     habitList,
@@ -33,7 +33,7 @@ function HabitPage() {
     fetchHabitList,
     toggleHabit,
     removeHabitLocally,
-  } = useHabitList(studyId);
+  } = useHabitList(parsedStudyId);
 
   const {
     draftHabitList,
@@ -48,7 +48,7 @@ function HabitPage() {
     deleteDraftHabit,
     submitHabitList,
   } = useHabitForm({
-    studyId,
+    studyId: parsedStudyId,
     habitList,
     onAfterCreate: fetchHabitList,
     onAfterDelete: removeHabitLocally,
@@ -76,8 +76,8 @@ function HabitPage() {
             <h1
               className="habit-home__title"
               onClick={() => {
-                if (!studyId || habitList.length === 0) return;
-                navigate(`/studies/${studyId}`);
+                if (!parsedStudyId) return;
+                navigate(`/studies/${parsedStudyId}`);
               }}
             >
               {studyTitle || '스터디'}
@@ -88,8 +88,8 @@ function HabitPage() {
                 type="button"
                 className="habit-home__nav-btn"
                 onClick={() => {
-                  if (!studyId || habitList.length === 0) return;
-                  navigate(`/studies/${studyId}/focus`);
+                  if (!parsedStudyId) return;
+                  navigate(`/studies/${parsedStudyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">오늘의 집중</span>

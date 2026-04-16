@@ -11,25 +11,32 @@ import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
 import EmojiSection from './components/emoji/EmojiSection.jsx';
 import HabitRecord from './components/HabitRecord.jsx';
 import handleApiError from '../../../utils/handleApiError.jsx';
-import { getStudy, deleteStudy } from '../../../api/studyApi.js';
+import {
+  getStudy,
+  verifyStudyPassword,
+  deleteStudy,
+} from '../../../api/studyApi.js';
 import StudyPasswordModal from '../../study/shared/modal/StudyPasswordModal.jsx';
-import StudyConfirmModal from '../../study/shared/modal/StudyConfirmModal.jsx';
 
 function StudyDetailPage() {
-  const { id } = useParams();
+  const { studyId } = useParams();
   const navigate = useNavigate();
+  const params = useParams();
+  console.log('params:', params);
 
+  console.log('studyId:', studyId);
   const [study, setStudy] = useState({});
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
 
   useEffect(() => {
+    if (!studyId) return;
+
     const fetchStudyData = async () => {
       try {
-        const targetStudy = await getStudy(id);
+        const targetStudy = await getStudy(studyId);
         setStudy(targetStudy);
       } catch (error) {
         handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
@@ -37,43 +44,23 @@ function StudyDetailPage() {
     };
 
     fetchStudyData();
-  }, [id]);
+  }, [studyId]);
 
-  const handleDeleteStudy = async () => {
-    try {
-      await deleteStudy(id);
-      setIsDeleteModalOpen(false);
-      toast(
-        <Toast type="success" icon="💚" message="스터디가 삭제되었습니다." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
-      navigate('/');
-    } catch (error) {
-      console.error('삭제 실패', error);
-      toast(
-        <Toast type="danger" icon="❗" message="스터디 삭제에 실패했습니다." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
-    }
+  const showToast = (type, icon, message) => {
+    toast(<Toast type={type} icon={icon} message={message} />, {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeButton: false,
+      pauseOnHover: false,
+      draggable: false,
+    });
   };
 
-  const handleOpenPasswordModal = () => {
-    setIsPasswordModalOpen(true);
+  const handleRequirePassword = (action) => {
+    setPendingAction(action);
     setPassword('');
+    setIsPasswordModalOpen(true);
   };
 
   const handleClosePasswordModal = () => {
@@ -82,99 +69,47 @@ function StudyDetailPage() {
     setPendingAction(null);
   };
 
-  const handleOpenDeleteModal = () => {
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleRequirePassword = (action) => {
-    setPendingAction(action);
-    handleOpenPasswordModal();
-  };
-
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
   };
 
   const handleSubmitPassword = async () => {
     if (!password.trim()) {
-      toast(
-        <Toast type="info" icon="💙" message="비밀번호를 입력해주세요." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
+      showToast('info', '💙', '비밀번호를 입력해주세요.');
       return;
     }
 
     try {
       setIsSubmitting(true);
 
-      // API 연결 전 임시 처리
-      if (password === study.password) {
-        toast(<Toast type="success" icon="✅" message="확인되었습니다." />, {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        });
-
-        const nextAction = pendingAction;
+      if (pendingAction === 'delete') {
+        await deleteStudy(studyId, password);
         handleClosePasswordModal();
-
-        if (nextAction === 'edit') {
-          navigate(`/studies/${id}/edit`);
-          return;
-        }
-
-        if (nextAction === 'habit') {
-          navigate(`/studies/${id}/habit`);
-          return;
-        }
-
-        if (nextAction === 'focus') {
-          navigate(`/studies/${id}/focus`);
-          return;
-        }
-
+        showToast('success', '💚', '스터디가 삭제되었습니다.');
+        navigate('/');
         return;
       }
 
-      toast(
-        <Toast
-          type="danger"
-          icon="❌"
-          message="비밀번호가 일치하지 않습니다."
-        />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
+      await verifyStudyPassword(studyId, password);
+
+      handleClosePasswordModal();
+      showToast('success', '✅', '확인되었습니다.');
+
+      if (pendingAction === 'edit') {
+        navigate(`/studies/${studyId}/edit`);
+        return;
+      }
+
+      if (pendingAction === 'habit') {
+        navigate(`/studies/${studyId}/habit`);
+        return;
+      }
+
+      if (pendingAction === 'focus') {
+        navigate(`/studies/${studyId}/focus`);
+      }
     } catch (error) {
-      console.error('비밀번호 확인 실패', error);
-      toast(<Toast type="danger" icon="❗" message="오류가 발생했습니다." />, {
-        position: 'bottom-center',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeButton: false,
-        pauseOnHover: false,
-        draggable: false,
-      });
+      showToast('danger', '❌', error.message || '오류가 발생했습니다.');
     } finally {
       setIsSubmitting(false);
     }
@@ -185,25 +120,25 @@ function StudyDetailPage() {
       <div className="detail-container">
         <section className="detail-top-section">
           <div className="detail-left">
-            <EmojiSection studyId={id} />
-            <StudyInfoSection study={study} studyId={id} />
+            <EmojiSection studyId={studyId} />
+            <StudyInfoSection study={study} studyId={studyId} />
           </div>
 
           <div className="detail-right">
             <StudyActionButtonGroup
               onEditClick={() => handleRequirePassword('edit')}
-              onDeleteClick={handleOpenDeleteModal}
+              onDeleteClick={() => handleRequirePassword('delete')}
             />
 
             <StudyLinkGroup
-              studyId={id}
+              studyId={studyId}
               onHabitClick={() => handleRequirePassword('habit')}
               onFocusClick={() => handleRequirePassword('focus')}
             />
           </div>
         </section>
 
-        <HabitRecord studyId={id} />
+        <HabitRecord studyId={studyId} />
       </div>
 
       <StudyPasswordModal
@@ -214,16 +149,6 @@ function StudyDetailPage() {
         onChangePassword={handleChangePassword}
         onClose={handleClosePasswordModal}
         onSubmit={handleSubmitPassword}
-      />
-
-      <StudyConfirmModal
-        isOpen={isDeleteModalOpen}
-        title="스터디를 삭제할까요?"
-        description="삭제하면 복구할 수 없습니다."
-        confirmText="삭제하기"
-        cancelText="취소"
-        onClose={handleCloseDeleteModal}
-        onConfirm={handleDeleteStudy}
       />
     </div>
   );

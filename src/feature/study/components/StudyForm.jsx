@@ -3,16 +3,20 @@ import Input from '../../../components/common/Input';
 import '../../../styles/StudyForm.css';
 import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
 import ic_pow from '../../../images/icon/ic_pow.svg';
-import { createStudy } from '../../../api/studyApi';
-import { useNavigate } from 'react-router-dom';
+import { createStudy, updateStudy } from '../../../api/studyApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function StudyForm({ isEditMode = false, onBackClick }) {
+function StudyForm({ isEditMode = false, initialData = {} }) {
   const navigate = useNavigate();
+  const { id } = useParams();
+
   const [background] = useState(backgroundsMockResponse.data.items);
-  const [selectedBackground, setSelectedBackground] = useState(1);
-  const [nickname, setNickname] = useState('');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [selectedBackground, setSelectedBackground] = useState(
+    initialData.background?.id ?? 1
+  );
+  const [nickname, setNickname] = useState(initialData.nickname ?? '');
+  const [name, setName] = useState(initialData.name ?? '');
+  const [description, setDescription] = useState(initialData.description ?? '');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [errors, setErrors] = useState({
@@ -23,11 +27,10 @@ function StudyForm({ isEditMode = false, onBackClick }) {
     passwordCheck: '',
   });
 
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/;
 
-
-  const submitButtonClink = async () => {
+  const submitButtonClick = async () => {
     const newErrors = {};
-
 
     if (!nickname.trim()) {
       newErrors.nickname = '*닉네임을 입력해주세요.';
@@ -44,8 +47,9 @@ function StudyForm({ isEditMode = false, onBackClick }) {
     if (!isEditMode) {
       if (!password) {
         newErrors.password = '*비밀번호를 입력해주세요.';
-      } else if (password.length < 5) {
-        newErrors.password = '*비밀번호는 5자 이상입니다.';
+      } else if (!passwordRegex.test(password)) {
+        newErrors.password =
+          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
       }
 
       if (!passwordCheck) {
@@ -58,28 +62,36 @@ function StudyForm({ isEditMode = false, onBackClick }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-   const newData = {
-      nickname,
-      name,
-      description,
-      backgroundId: selectedBackground, 
-      ...(isEditMode ? {} : { 
-      password: password, 
-      passwordConfirm: passwordCheck
-  }),
-    };
+    try {
+      if (isEditMode) {
+        await updateStudy(id, {
+          nickname,
+          name,
+          description,
+          backgroundId: selectedBackground,
+        });
 
-    console.log(newData);
+        navigate(`/studies/${id}`);
+        return;
+      }
 
-  try {
-      const result = await createStudy(newData); 
-      const newId = result.id; 
-      
-      navigate(`/studies/${newId}`); 
+      const result = await createStudy({
+        nickname,
+        name,
+        description,
+        backgroundId: selectedBackground,
+        password,
+        passwordConfirm: passwordCheck,
+      });
 
+      navigate(`/studies/${result.id}`);
     } catch (error) {
-      console.error("생성 에러:", error);
-      alert("스터디 생성에 실패했습니다.");
+      console.error(isEditMode ? '수정 에러:' : '생성 에러:', error);
+      alert(
+        isEditMode
+          ? '스터디 수정에 실패했습니다.'
+          : '스터디 생성에 실패했습니다.'
+      );
     }
   };
 
@@ -95,9 +107,7 @@ function StudyForm({ isEditMode = false, onBackClick }) {
           placeholder="닉네임을 입력해주세요"
           password={false}
           value={nickname}
-          onChange={(e) => {
-            setNickname(e.target.value);
-          }}
+          onChange={(e) => setNickname(e.target.value)}
           error={errors.nickname}
         />
 
@@ -106,9 +116,7 @@ function StudyForm({ isEditMode = false, onBackClick }) {
           placeholder="스터디 이름을 입력해주세요"
           password={false}
           value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
+          onChange={(e) => setName(e.target.value)}
           error={errors.name}
         />
 
@@ -118,9 +126,7 @@ function StudyForm({ isEditMode = false, onBackClick }) {
             className="textarea-wrapper"
             placeholder="소개 멘트를 작성해주세요"
             value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 
@@ -158,27 +164,23 @@ function StudyForm({ isEditMode = false, onBackClick }) {
               placeholder="비밀번호를 입력해주세요"
               password={true}
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              onChange={(e) => setPassword(e.target.value)}
               error={errors.password}
             />
 
             <Input
               labelName="비밀번호 확인"
-              placeholder="비밀번호를 다시입력해주세요"
+              placeholder="비밀번호를 다시 입력해주세요"
               password={true}
               value={passwordCheck}
-              onChange={(e) => {
-                setPasswordCheck(e.target.value);
-              }}
+              onChange={(e) => setPasswordCheck(e.target.value)}
               error={errors.passwordCheck}
             />
           </>
         )}
       </div>
 
-      <button className="create-button" onClick={submitButtonClink}>
+      <button className="create-button" onClick={submitButtonClick}>
         {isEditMode ? '수정하기' : '만들기'}
       </button>
     </div>
