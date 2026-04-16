@@ -8,6 +8,7 @@ import '../styles/HomePage.css';
 function HomePage() {
   const [listPage, setListPage] = useState(1);
   const [studies, setStudies] = useState([]);
+  const [keyword, setKeyword] = useState([]);
   const listLimit = 6;
   const recentLimit = 3;
 
@@ -27,8 +28,6 @@ function HomePage() {
 
     fetchData();
   }, []);
-
-  const a = 0;
 
   return (
     <div className="main-container">
@@ -51,7 +50,12 @@ function HomePage() {
           <div className="filter">
             <div className="search-container">
               <img src={ic_search} alt="검색 아이콘" />
-              <input placeholder="검색" />
+              <input
+                placeholder="검색"
+                onChange={(e) => {
+                  setKeyword(e.target.value);
+                }}
+              />
             </div>
 
             <select className="select-container">
@@ -66,7 +70,7 @@ function HomePage() {
               <p className="null-text">아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList visibleCount={listPage * listLimit} />
+            <StudyList visibleCount={listPage * listLimit} keyword={keyword} />
           )}
         </div>
         <div className="button-container">

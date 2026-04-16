@@ -11,7 +11,7 @@ import { getPoint } from '../../../api/pointApi.js';
 import { getEmojiReactions } from '../../../api/emojiApi.js';
 import { useEffect, useState } from 'react';
 
-function StudyList({ visibleCount }) {
+function StudyList({ visibleCount, keyword }) {
   // const studies = studiesMockResponse.data.items;
   // const point = pointMockResponse.data;
   const backgrounds = backgroundsMockResponse.data.items;
@@ -22,7 +22,7 @@ function StudyList({ visibleCount }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getStudies();
+        const data = await getStudies(keyword);
         const studiesWithPoint = await Promise.all(
           data.items.map(async (study) => {
             const pointData = await getPoint(study.id);
@@ -43,7 +43,7 @@ function StudyList({ visibleCount }) {
     };
 
     fetchData();
-  }, []);
+  }, [keyword]);
 
   return (
     <div className="card-list">
