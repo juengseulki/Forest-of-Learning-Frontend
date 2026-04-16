@@ -8,6 +8,7 @@ import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
 import { getStudyCardProps } from '../utils/studyUtils';
 import { getStudies } from '../../../api/studyApi.js';
 import { getPoint } from '../../../api/pointApi.js';
+import { getEmojiReactions } from '../../../api/emojiApi.js';
 import { useEffect, useState } from 'react';
 
 function StudyList({ visibleCount }) {
@@ -25,10 +26,12 @@ function StudyList({ visibleCount }) {
         const studiesWithPoint = await Promise.all(
           data.items.map(async (study) => {
             const pointData = await getPoint(study.id);
-            console.log(pointData);
+            const emojiData = await getEmojiReactions(study.id);
+            console.log(emojiData);
             return {
               ...study,
               point: pointData.totalPoint,
+              emojis: emojiData.items,
             };
           })
         );
@@ -49,7 +52,7 @@ function StudyList({ visibleCount }) {
           item,
           point: item.point,
           backgrounds,
-          emojiItems,
+          emojiItems: item.emojis,
           getBackgroundTheme,
         });
 
