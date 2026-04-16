@@ -13,7 +13,7 @@ function StudyEditPage() {
   const { studyId } = useParams();
   const { setHeaderAction } = useOutletContext();
 
-  // 변수는 한 번씩만 선언해야 합니다!
+  // 변수는 한 번씩만 선언
   const [initialData, setInitialData] = useState(location.state?.study || null);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
