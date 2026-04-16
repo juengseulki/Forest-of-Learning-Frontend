@@ -9,6 +9,7 @@ function HomePage() {
   const [listPage, setListPage] = useState(1);
   const [studies, setStudies] = useState([]);
   const [keyword, setKeyword] = useState([]);
+  const [order, setOrder] = useState('');
   const listLimit = 6;
   const recentLimit = 3;
 
@@ -58,11 +59,15 @@ function HomePage() {
               />
             </div>
 
-            <select className="select-container">
-              <option>최근순</option>
-              <option>오래된 순</option>
-              <option>많은 포인트 순</option>
-              <option>적은 포인트 순</option>
+            <select
+              className="select-container"
+              value={order}
+              onChange={(e) => setOrder(e.target.value)}
+            >
+              <option value="latest">최근순</option>
+              <option value="oldest">오래된 순</option>
+              <option value="pointDesc">많은 포인트 순</option>
+              <option value="pointAsc">적은 포인트 순</option>
             </select>
           </div>
           {studies.length == 0 ? (
@@ -70,7 +75,11 @@ function HomePage() {
               <p className="null-text">아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList visibleCount={listPage * listLimit} keyword={keyword} />
+            <StudyList
+              visibleCount={listPage * listLimit}
+              keyword={keyword}
+              order={order}
+            />
           )}
         </div>
         <div className="button-container">
