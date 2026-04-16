@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  useNavigate,
-  useOutletContext,
-  useParams,
-  useLocation,
-} from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Toast from '../shared/components/toast/Toast';
 import StudyForm from '../feature/study/components/StudyForm';
@@ -61,26 +56,20 @@ function StudyEditPage() {
       await updateStudy(studyId, pendingFormData);
       setIsConfirmModalOpen(false);
 
-      toast(
-        <Toast type="success" icon="✅" message="스터디가 수정되었습니다." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-        }
-      );
+      toast(<Toast type="success" icon="✅" message="스터디가 수정되었습니다." />, {
+        position: 'bottom-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
 
       navigate(`/studies/${studyId}`);
     } catch (error) {
       console.error('스터디 수정 실패', error);
-      toast(
-        <Toast type="danger" icon="❗" message="스터디 수정에 실패했습니다." />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-        }
-      );
+      toast(<Toast type="danger" icon="❗" message="스터디 수정에 실패했습니다." />, {
+        position: 'bottom-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -94,10 +83,10 @@ function StudyEditPage() {
   return (
     <div className="study-edit-page">
       {initialData ? (
-        <StudyForm
-          isEditMode={true}
-          initialData={initialData}
-          onValidSubmit={handleValidSubmit}
+        <StudyForm 
+          isEditMode={true} 
+          initialData={initialData} 
+          onValidSubmit={handleValidSubmit} 
         />
       ) : (
         <div className="loading-container">

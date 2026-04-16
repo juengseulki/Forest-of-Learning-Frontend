@@ -12,7 +12,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
 
   // 배경 이미지 데이터
   const [backgrounds] = useState(backgroundsMockResponse.data.items);
-
+  
   // Form 상태 관리
   const [selectedBackground, setSelectedBackground] = useState(1);
   const [nickname, setNickname] = useState('');
@@ -43,8 +43,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       if (!password) {
         newErrors.password = '*비밀번호를 입력해주세요.';
       } else if (!passwordRegex.test(password)) {
-        newErrors.password =
-          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
+        newErrors.password = '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
       }
 
       if (password !== passwordCheck) {
@@ -62,6 +61,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       backgroundId: selectedBackground,
     };
 
+  
     if (onValidSubmit) {
       onValidSubmit(formData);
       return;
@@ -81,6 +81,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       }
     } catch (error) {
       console.error(error);
+     
     }
   };
 
