@@ -1,9 +1,6 @@
 import '../../../styles/StudyList.css';
 import StudyCard from './StudyCard';
-import { studiesMockResponse } from '../../../mocks/study/studyMockData.js';
-// import { pointMockResponse } from '../../../mocks/point/pointMockData.js';
 import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
-import { emojiMockResponse } from '../../../mocks/emoji/emojiMockData.js';
 import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
 import { getStudyCardProps } from '../utils/studyUtils';
 import { getStudies } from '../../../api/studyApi.js';
@@ -12,10 +9,7 @@ import { getEmojiReactions } from '../../../api/emojiApi.js';
 import { useEffect, useState } from 'react';
 
 function StudyList({ visibleCount, keyword, order }) {
-  // const studies = studiesMockResponse.data.items;
-  // const point = pointMockResponse.data;
   const backgrounds = backgroundsMockResponse.data.items;
-  const emojiItems = emojiMockResponse.data.items;
   const [studies, setStudies] = useState([]);
   const visibleStudies = studies.slice(0, visibleCount);
 
