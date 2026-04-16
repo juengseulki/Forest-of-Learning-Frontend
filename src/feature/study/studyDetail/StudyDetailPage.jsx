@@ -8,6 +8,7 @@ import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
 import EmojiSection from './components/emoji/EmojiSection.jsx';
 import HabitRecord from './components/HabitRecord.jsx';
 import { getStudy } from '../../../api/studyApi.js';
+import handleApiError from '../../../utils/handleApiError.jsx';
 
 function StudyDetailPage() {
   const { id } = useParams();
@@ -19,7 +20,7 @@ function StudyDetailPage() {
         const targetStudy = await getStudy(id);
         setStudy(targetStudy);
       } catch (error) {
-        console.error('스터디 로딩 실패!', error);
+        handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
       }
     };
 

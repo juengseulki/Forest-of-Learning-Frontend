@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { habitRecordMockResponse } from '../../../../mocks/habit/habitMockData.js';
 import HabitRow from './HabitRow.jsx';
+import handleApiError from '../../../../utils/handleApiError.jsx';
 import { getWeekDays } from '../utils/getWeekDays';
 import { getHabitRecords } from '../../../../api/habitApi.js';
 
@@ -35,10 +36,13 @@ function HabitRecord({ studyId }) {
 
   useEffect(() => {
     const featchHabits = async () => {
-      const { startDate, endDate } = getThisWeekRange();
-      const habitData = await getHabitRecords(studyId, startDate, endDate);
-      console.log('habitData => ', habitData);
-      setHabits(habitData.items);
+      try {
+        const { startDate, endDate } = getThisWeekRange();
+        const habitData = await getHabitRecords(studyId, startDate, endDate);
+        setHabits(habitData.items);
+      } catch (error) {
+        handleApiError(error, '습관 기록을 불러오지 못했습니다.');
+      }
     };
     featchHabits();
   }, [studyId]);

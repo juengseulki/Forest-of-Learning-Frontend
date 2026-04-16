@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import { getPoint, getStudyById } from '../api/focus/focusApi';
 import FocusTimerCard from '../feature/focus/components/FocusTimerCard';
+import handleApiError from '../utils/handleApiError.jsx';
 
 import pointIcon from '../shared/images/icons/ic_point.png';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
@@ -32,7 +33,7 @@ function FocusPage() {
         setPointData(pointResponse.data);
         setStudyData(studyResponse.data);
       } catch (err) {
-        console.error('포커스 데이터를 불러오지 못했습니다.', err);
+        handleApiError(err, '데이터를 불러오지 못했습니다.');
         setError('데이터를 불러오지 못했습니다.');
       } finally {
         setIsLoading(false);
@@ -47,7 +48,7 @@ function FocusPage() {
       const pointResponse = await getPoint(currentStudyId);
       setPointData(pointResponse.data);
     } catch (err) {
-      console.error('포인트 갱신 실패:', err);
+      handleApiError(err, '포인트를 갱신하지 못했습니다.');
     }
   }, [currentStudyId]);
 

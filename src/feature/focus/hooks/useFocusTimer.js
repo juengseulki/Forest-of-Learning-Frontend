@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
 import { completeFocus } from '../../../api/focus/focusApi';
+import handleApiError from '../../../utils/handleApiError.jsx';
 import {
   clearStoredSession,
   getStoredSession,
@@ -255,7 +256,7 @@ export function useFocusTimer(studyId, onSessionComplete) {
         // 콜백 함수에 result 객체 전달 (포인트 업데이트)
         onSessionComplete?.(result);
       } catch (err) {
-        console.error('집중 세션 저장 실패:', err);
+        handleApiError(err, '집중 세션 저장에 실패했습니다.');
         setMessage('포인트 반영 실패');
       }
     }
