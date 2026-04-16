@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../shared/layouts/MainLayout/MainLayout';
 import HomePage from '../pages/HomePage';
 import CreateStudyPage from '../pages/CreateStudyPage';
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: 'studies/:studyId/focus',
         element: <FocusPage />,
+      },
+      {
+        path: '*',
+        element: <Navigate to="/" replace />,
       },
     ],
   },

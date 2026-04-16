@@ -32,7 +32,7 @@ export async function deleteHabit(habitId) {
 
 // 습관 체크 / 해제
 export async function toggleHabitCheck(habitId, date, completed) {
-  const response = await client.patch(`/habits/${habitId}/records`, {
+  const response = await client.post(`/habits/${habitId}/records`, {
     date,
     completed,
   });
@@ -40,7 +40,12 @@ export async function toggleHabitCheck(habitId, date, completed) {
 }
 
 // 습관별 기록 조회
-export async function getHabitRecords(habitId) {
-  const response = await client.get(`/habits/${habitId}/records`);
+export async function getHabitRecords(habitId, startDate, endDate) {
+  const response = await client.get(`/habits/${habitId}/records?`, {
+    params: {
+      weekStart: startDate,
+      weekEnd: endDate,
+    },
+  });
   return response.data;
 }

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { getFocus, getPoint, getStudyById } from '../api/focus/focusApi';
+import { getPoint, getStudyById } from '../api/focus/focusApi';
 import FocusTimerCard from '../feature/focus/components/FocusTimerCard';
+import handleApiError from '../utils/handleApiError.jsx';
 
 import pointIcon from '../shared/images/icons/ic_point.png';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
@@ -13,7 +14,6 @@ function FocusPage() {
   const { studyId } = useParams();
   const currentStudyId = Number(studyId) || 1;
 
-  const [focusData, setFocusData] = useState(null);
   const [pointData, setPointData] = useState(null);
   const [studyData, setStudyData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,19 +25,15 @@ function FocusPage() {
         setIsLoading(true);
         setError('');
 
-        const [focusResponse, pointResponse, studyResponse] = await Promise.all(
-          [
-            getFocus(currentStudyId),
-            getPoint(currentStudyId),
-            getStudyById(currentStudyId),
-          ]
-        );
+        const [pointResponse, studyResponse] = await Promise.all([
+          getPoint(currentStudyId),
+          getStudyById(currentStudyId),
+        ]);
 
-        setFocusData(focusResponse.data);
         setPointData(pointResponse.data);
         setStudyData(studyResponse.data);
       } catch (err) {
-        console.error('포커스 데이터를 불러오지 못했습니다.', err);
+        handleApiError(err, '데이터를 불러오지 못했습니다.');
         setError('데이터를 불러오지 못했습니다.');
       } finally {
         setIsLoading(false);
@@ -47,19 +43,27 @@ function FocusPage() {
     fetchFocusPageData();
   }, [currentStudyId]);
 
-  if (isLoading) {
-    return <div className="focus-page__status">로딩 중...</div>;
-  }
+  const refreshPoint = useCallback(async () => {
+    try {
+      const pointResponse = await getPoint(currentStudyId);
+      setPointData(pointResponse.data);
+    } catch (err) {
+      handleApiError(err, '포인트를 갱신하지 못했습니다.');
+    }
+  }, [currentStudyId]);
 
-  if (error) {
-    return <div className="focus-page__status">{error}</div>;
-  }
-
-  if (!focusData || !pointData) {
-    return (
-      <div className="focus-page__status">데이터를 불러오지 못했습니다.</div>
-    );
-  }
+  // 세션 완료 후 포인트 즉시 업데이트
+  const handleSessionComplete = useCallback((result) => {
+    // result: { focusSession, totalPoint } 또는 { totalPoint }
+    if (result && result.totalPoint !== undefined) {
+      setPointData({
+        totalPoint: result.totalPoint,
+      });
+    } else {
+      // 응답 형식이 다를 경우 서버에서 최신 포인트 조회
+      refreshPoint();
+    }
+  }, [refreshPoint]);
 
   return (
     <section className="focus-page">
@@ -95,7 +99,6 @@ function FocusPage() {
 
             <div className="focus-page__point-group">
               <p className="focus-page__study-desc">현재까지 획득한 포인트</p>
-
               <div className="focus-page__point-box">
                 <img
                   src={pointIcon}
@@ -103,13 +106,20 @@ function FocusPage() {
                   className="focus-page__point-icon"
                 />
                 <span className="focus-page__point-text">
-                  {pointData.totalPoint}P 획득
+                  {isLoading
+                    ? '...'
+                    : error
+                      ? '-'
+                      : `${pointData?.totalPoint ?? 0}P 획득`}
                 </span>
               </div>
             </div>
           </div>
 
-          <FocusTimerCard latestSession={focusData.latestSession} />
+          <FocusTimerCard
+            studyId={currentStudyId}
+            onSessionComplete={handleSessionComplete}
+          />
         </div>
       </div>
     </section>

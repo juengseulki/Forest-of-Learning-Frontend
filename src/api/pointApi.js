@@ -6,8 +6,8 @@ export async function getPoint(studyId) {
   return response.data;
 }
 
-// 포인트 추가
-export async function addPoints(studyId, amount) {
-  const response = await client.patch(`/points/${studyId}`, { amount });
-  return response.data;
-}
+// 포인트 추가 (백단 계산으로 변경되어 더 이상 사용되지 않음)
+// export async function addPoints(studyId, sessionData) {
+//   const response = await client.patch(`/points/${studyId}/calculate`, { sessionData });
+//   return response.data;
+// }

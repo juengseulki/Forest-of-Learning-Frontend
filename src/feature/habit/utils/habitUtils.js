@@ -8,9 +8,18 @@ export function getTodayDateString() {
 }
 
 export function normalizeHabitListResponse(data) {
-  if (Array.isArray(data?.items)) return data.items;
-  if (Array.isArray(data)) return data;
-  return [];
+  const today = getTodayDateString();
+  const items = Array.isArray(data?.items)
+    ? data.items
+    : Array.isArray(data)
+      ? data
+      : [];
+
+  return items.map((habit) => ({
+    ...habit,
+    todayRecord:
+      habit.habitRecords?.find((r) => r.date.startsWith(today)) ?? null,
+  }));
 }
 
 export function extractStudyTitle(data) {

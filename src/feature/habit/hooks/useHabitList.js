@@ -4,6 +4,7 @@ import {
   getTodayDateString,
   normalizeHabitListResponse,
 } from '../utils/habitUtils';
+import handleApiError from '../../../utils/handleApiError.jsx';
 
 export function useHabitList(studyId) {
   const [habitList, setHabitList] = useState([]);
@@ -26,7 +27,7 @@ export function useHabitList(studyId) {
 
       setHabitList(nextHabitList);
     } catch (error) {
-      console.error('습관 목록 조회 실패:', error);
+      handleApiError(error, '습관 목록을 불러오지 못했어요.');
       setHabitList([]);
       setErrorMessage('습관 목록을 불러오지 못했어요.');
     } finally {
@@ -60,8 +61,7 @@ export function useHabitList(studyId) {
         )
       );
     } catch (error) {
-      console.error('습관 체크 변경 실패:', error);
-      alert('습관 체크 변경에 실패했어요.');
+      handleApiError(error, '습관 체크 변경에 실패했어요.');
     }
   }, []);
 

@@ -10,7 +10,7 @@ import {
 } from '../utils/focusToastUtils.jsx';
 import './FocusTimerCard.css';
 
-function FocusTimerCard() {
+function FocusTimerCard({ studyId, onSessionComplete }) {
   const {
     minutes,
     seconds,
@@ -34,9 +34,9 @@ function FocusTimerCard() {
     handleResume,
     handleFinish,
     handleReset,
-  } = useFocusTimer();
+  } = useFocusTimer(studyId, onSessionComplete);
 
-  const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
+  const { calculateFinalReward } = useFocusPoint();
 
   const hasShownTargetToastRef = useRef(false);
 
@@ -58,15 +58,13 @@ function FocusTimerCard() {
   function handleFinishWithToast() {
     if (!session) return;
 
-    const durationMinutes = session.durationMinutes;
-
-    const firstReward = calculateFirstReward(durationMinutes);
-    const finalReward = calculateFinalReward(durationMinutes, actualMinutes);
-
-    const firstPoint = firstReward.basePoint + firstReward.targetBonusPoint;
-
+    const firstPoint =
+      (session.basePoint ?? 0) + (session.targetBonusPoint ?? 0);
+    const finalReward = calculateFinalReward(
+      session.durationMinutes,
+      actualMinutes
+    );
     const secondPoint = finalReward.overtimePoint;
-
     const totalPoint = firstPoint + secondPoint;
 
     showPointToast(firstPoint, secondPoint, totalPoint);

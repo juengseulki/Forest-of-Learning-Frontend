@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
+import { completeFocus } from '../../../api/focus/focusApi';
+import handleApiError from '../../../utils/handleApiError.jsx';
 import {
   clearStoredSession,
   getStoredSession,
@@ -13,7 +15,7 @@ import {
   getDiffSeconds,
 } from '../utils/focusTime';
 
-export function useFocusTimer() {
+export function useFocusTimer(studyId, onSessionComplete) {
   const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
 
   // 현재 UI에서 사용하는 입력값
@@ -160,7 +162,6 @@ export function useFocusTimer() {
   const handleStart = () => {
     if (totalSeconds === 0) return;
 
-    // 새로 시작할 때 이전 테스트 세션 흔적 제거
     clearStoredSession();
 
     const { start, end } = createSessionTimes(totalSeconds);
@@ -224,27 +225,41 @@ export function useFocusTimer() {
   };
 
   // 종료
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (!session) return;
 
-    const finalReward = calculateFinalReward(
-      session.durationMinutes,
-      actualMinutes
-    );
+    // 백단 계산에 필요한 데이터만 추출
+    const sessionPayload = {
+      durationMinutes: session.durationMinutes,
+      durationSeconds: session.durationSeconds,
+      startedAt: session.startedAt,
+      totalPausedMs: session.totalPausedMs || 0,
+    };
 
     const updated = {
       ...session,
       status: TIMER_STATUS.COMPLETED,
-      overtimePoint: finalReward.overtimePoint,
-      totalPoint:
-        session.basePoint +
-        session.targetBonusPoint +
-        finalReward.overtimePoint,
     };
 
     saveStoredSession(updated);
     setSession(updated);
     setMessage('집중 종료!');
+
+    if (studyId) {
+      try {
+        const result = await completeFocus(studyId, {
+          sessionData: sessionPayload,  // 필요한 데이터만 전송
+        });
+
+        setMessage('포인트가 추가되었습니다!');
+        
+        // 콜백 함수에 result 객체 전달 (포인트 업데이트)
+        onSessionComplete?.(result);
+      } catch (err) {
+        handleApiError(err, '집중 세션 저장에 실패했습니다.');
+        setMessage('포인트 반영 실패');
+      }
+    }
   };
 
   // 초기화

@@ -1,38 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import '../../../styles/StudyDetailPage.css';
 import '../../../styles/global.css';
-
-import { studiesMockResponse } from '../../../mocks/study/studyMockData.js';
-
 import StudyInfoSection from './components/StudyInfoSection.jsx';
 import StudyActionButtonGroup from './components/actionSection/StudyActionButtonGroup.jsx';
 import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
 import EmojiSection from './components/emoji/EmojiSection.jsx';
 import HabitRecord from './components/HabitRecord.jsx';
+import { getStudy } from '../../../api/studyApi.js';
+import handleApiError from '../../../utils/handleApiError.jsx';
 
 function StudyDetailPage() {
   const { id } = useParams();
   const [study, setStudy] = useState({});
 
   useEffect(() => {
-    const loadStudy = async () => {
+    const fetchStudyData = async () => {
       try {
-        const allItems = studiesMockResponse.data.items;
-        const targetStudy = allItems.find(
-          (item) => String(item.id) === String(id)
-        );
-
-        if (targetStudy) {
-          setStudy(targetStudy);
-        }
+        const targetStudy = await getStudy(id);
+        setStudy(targetStudy);
       } catch (error) {
-        console.error('스터디 로딩 실패!', error);
+        handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
       }
     };
 
-    loadStudy();
+    fetchStudyData();
   }, [id]);
 
   return (

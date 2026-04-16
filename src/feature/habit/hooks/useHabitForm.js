@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { createHabit, deleteHabit } from '../../../api/habitApi.js';
+import handleApiError from '../../../utils/handleApiError.jsx';
 import { createDraftInput } from '../utils/habitUtils.js';
 
 export function useHabitForm({
@@ -58,8 +60,7 @@ export function useHabitForm({
 
       onAfterDelete(habitId);
     } catch (error) {
-      console.error('습관 삭제 실패:', error);
-      alert('습관 삭제에 실패했어요.');
+      handleApiError(error, '습관 삭제에 실패했어요.');
     }
   };
 
@@ -74,7 +75,7 @@ export function useHabitForm({
     }
 
     if (!studyId) {
-      alert('유효한 studyId가 없어요.');
+      toast.error('유효한 studyId가 없어요.');
       return;
     }
 
@@ -88,8 +89,7 @@ export function useHabitForm({
       await onAfterCreate();
       closeModal();
     } catch (error) {
-      console.error('습관 생성 실패:', error);
-      alert('습관 생성에 실패했어요.');
+      handleApiError(error, '습관 생성에 실패했어요.');
     } finally {
       setIsSubmitting(false);
     }
