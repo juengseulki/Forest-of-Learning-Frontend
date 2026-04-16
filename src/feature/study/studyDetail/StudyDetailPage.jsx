@@ -17,16 +17,16 @@ import {
   deleteStudy,
 } from '../../../api/studyApi.js';
 import StudyPasswordModal from '../../study/shared/modal/StudyPasswordModal.jsx';
+import StudyConfirmModal from '../../study/shared/modal/StudyConfirmModal.jsx';
 
 function StudyDetailPage() {
   const { studyId } = useParams();
   const navigate = useNavigate();
-  const params = useParams();
-  console.log('params:', params);
 
-  console.log('studyId:', studyId);
   const [study, setStudy] = useState({});
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
+    useState(false);
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -69,8 +69,29 @@ function StudyDetailPage() {
     setPendingAction(null);
   };
 
+  const handleCloseDeleteConfirmModal = () => {
+    setIsDeleteConfirmModalOpen(false);
+    setPassword('');
+    setPendingAction(null);
+  };
+
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
+  };
+
+  const getActionLabel = () => {
+    switch (pendingAction) {
+      case 'edit':
+        return '수정하러 가기';
+      case 'delete':
+        return '삭제하기';
+      case 'habit':
+        return '오늘의 습관으로 가기';
+      case 'focus':
+        return '오늘의 집중으로 가기';
+      default:
+        return '확인';
+    }
   };
 
   const handleSubmitPassword = async () => {
@@ -83,10 +104,9 @@ function StudyDetailPage() {
       setIsSubmitting(true);
 
       if (pendingAction === 'delete') {
-        await deleteStudy(studyId, password);
-        handleClosePasswordModal();
-        showToast('success', '💚', '스터디가 삭제되었습니다.');
-        navigate('/');
+        await verifyStudyPassword(studyId, password);
+        setIsPasswordModalOpen(false);
+        setIsDeleteConfirmModalOpen(true);
         return;
       }
 
@@ -110,6 +130,28 @@ function StudyDetailPage() {
       }
     } catch (error) {
       showToast('danger', '❌', error.message || '오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      setIsSubmitting(true);
+      await deleteStudy(studyId, password);
+
+      setIsDeleteConfirmModalOpen(false);
+      setPassword('');
+      setPendingAction(null);
+
+      showToast('success', '💚', '스터디가 삭제되었습니다.');
+      navigate('/');
+    } catch (error) {
+      showToast(
+        'danger',
+        '❌',
+        error.message || '삭제 중 오류가 발생했습니다.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -149,6 +191,18 @@ function StudyDetailPage() {
         onChangePassword={handleChangePassword}
         onClose={handleClosePasswordModal}
         onSubmit={handleSubmitPassword}
+        actionLabel={getActionLabel()}
+        description="권한이 필요해요!"
+      />
+
+      <StudyConfirmModal
+        isOpen={isDeleteConfirmModalOpen}
+        title="스터디를 삭제할까요?"
+        description="삭제하면 복구할 수 없습니다."
+        confirmText="삭제하기"
+        cancelText="취소"
+        onClose={handleCloseDeleteConfirmModal}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );
