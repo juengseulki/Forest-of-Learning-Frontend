@@ -3,8 +3,11 @@ import Input from '../../../components/common/Input';
 import '../../../styles/StudyForm.css';
 import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
 import ic_pow from '../../../images/icon/ic_pow.svg';
+import { createStudy } from '../../../api/studyApi';
+import { useNavigate } from 'react-router-dom';
 
 function StudyForm({ isEditMode = false, onBackClick }) {
+  const navigate = useNavigate();
   const [background] = useState(backgroundsMockResponse.data.items);
   const [selectedBackground, setSelectedBackground] = useState(1);
   const [nickname, setNickname] = useState('');
@@ -20,8 +23,11 @@ function StudyForm({ isEditMode = false, onBackClick }) {
     passwordCheck: '',
   });
 
-  const submitButtonClink = () => {
+
+
+  const submitButtonClink = async () => {
     const newErrors = {};
+
 
     if (!nickname.trim()) {
       newErrors.nickname = '*닉네임을 입력해주세요.';
@@ -52,15 +58,29 @@ function StudyForm({ isEditMode = false, onBackClick }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    const newData = {
+   const newData = {
       nickname,
       name,
       description,
-      background: selectedBackground,
-      ...(isEditMode ? {} : { password }),
+      backgroundId: selectedBackground, 
+      ...(isEditMode ? {} : { 
+      password: password, 
+      passwordConfirm: passwordCheck
+  }),
     };
 
     console.log(newData);
+
+  try {
+      const result = await createStudy(newData); 
+      const newId = result.id; 
+      
+      navigate(`/studies/${newId}`); 
+
+    } catch (error) {
+      console.error("생성 에러:", error);
+      alert("스터디 생성에 실패했습니다.");
+    }
   };
 
   return (
