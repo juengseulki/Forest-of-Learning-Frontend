@@ -27,6 +27,7 @@
 .emoji {
   display: flex;
   gap: 8px;
+  height: 31px;
 }
 .emoji-wrap {
   display: inline-flex;
@@ -35,18 +36,14 @@
 
 .emoji-btn,
 .emoji-more-btn {
-  height: 34px;
-
-  padding: 0 12px;
-
+  height: 100%;
+  padding: 6px 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-
   font-size: 16px;
   line-height: 1;
-
   border-radius: 50px;
   background: rgba(0, 0, 0, 0.5);
   color: white;
@@ -71,7 +68,7 @@
   height: auto;
 
   padding: 12px;
-  width: 260px;
+  width: 245px;
   background-color: var(--color-white);
   border: 1px solid var(--gray-200);
 
@@ -104,10 +101,11 @@ em-emoji-picker {
   border-radius: 30px;
   border: 1px solid var(--gray-200);
   background: rgba(255, 255, 255, 0.3);
-  padding: 8px 12px;
+  padding: 6px 8px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  height: 100%;
 }
 
 /* 상세 info 섹션 */
@@ -124,7 +122,8 @@ em-emoji-picker {
   font-weight: 800;
 }
 
-.detail-field {
+.detail-field,
+.detail-point-title {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -135,7 +134,7 @@ em-emoji-picker {
   color: var(--gray-300);
 }
 .detail-field p {
-  color: var(--color-black);
+  color: #414141;
   line-height: 26px;
   font-weight: 500;
 }
@@ -147,10 +146,10 @@ em-emoji-picker {
   align-items: flex-start;
 }
 .detail-point {
-  border-radius: 30px;
+  border-radius: 50px;
   border: 1px solid var(--gray-200);
   background: rgba(255, 255, 255, 0.3);
-  padding: 10px 14px;
+  padding: 8px 12px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -205,7 +204,6 @@ em-emoji-picker {
   color: var(--gray-300);
   font-family: Pretendard;
   font-size: 16px;
-
   font-weight: 500;
 }
 
@@ -213,10 +211,10 @@ em-emoji-picker {
 
 .detail-habit-section {
   min-height: px;
-  margin-top: 50px;
+  margin-top: 40px;
   width: 100%;
   flex: 1;
-  border: 1px solid rgb(182, 179, 179);
+  border: 1px solid var(--gray-200);
   border-radius: 15px;
   padding: 24px;
   display: flex;
@@ -243,11 +241,11 @@ em-emoji-picker {
   padding: 12px 16px;
 }
 .habit-weeks {
-  padding-left: 216px;
+  padding-left: 187px;
 }
 
 .habit-name {
-  width: 200px;
+  width: 170px;
   flex-shrink: 0;
   font-size: 1rem;
 
@@ -256,6 +254,7 @@ em-emoji-picker {
   font-family: Pretendard;
   font-size: 18px;
   font-weight: 700;
+  padding: 0 24px;
 }
 
 .day-cells-container {
@@ -289,4 +288,181 @@ em-emoji-picker {
   gap: 8px;
   color: var(--gray-300);
   font-size: 16px;
+}
+
+/*테블릿*/
+@media (max-width: 1024px) {
+  .detail-container {
+    padding: 24px;
+  }
+
+  .detail-habit-section {
+    margin-top: 24px;
+  }
+
+  .habit-weeks {
+    padding-left: 187px;
+  }
+}
+/*///////////////////////////*/
+/*모바일 */
+@media (max-width: 768px) {
+  .detail-container {
+    padding: 16px;
+  }
+  .detail-top-section {
+    display: flex;
+    flex-direction: column;
+  }
+  .detail-left,
+  .detail-right,
+  .detail-info {
+    display: contents;
+  }
+
+  .detail-action-group {
+    order: 1;
+    display: flex;
+    justify-content: end;
+    margin-bottom: 20px;
+  }
+
+  .action-item {
+    font-size: 12px;
+  }
+  .emoji {
+    order: 2;
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .emoji-btn {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    padding: 7px 6px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .emoji-add-btn {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    height: 30px;
+    padding: 0 5px;
+  }
+  .emoji-more-btn {
+    width: 50px;
+
+    padding: 0;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .emoji-popup {
+    width: 225px;
+  }
+  .emoji-picker-container {
+    position: relative;
+  }
+  .picker {
+    right: 0;
+    position: absolute;
+    left: auto !important;
+  }
+
+  em-emoji-picker {
+    height: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    width: 238px;
+  }
+
+  .detail-top-section h1 {
+    order: 3;
+    text-align: left;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .detail-link-group {
+    order: 4;
+  }
+  .link-btn {
+    width: 120px;
+    height: 40px;
+    margin-bottom: 20px;
+  }
+
+  .detail-field {
+    order: 5;
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+  .detail-field p {
+    font-size: 14px;
+  }
+  .detail-point-group {
+    order: 6;
+    font-size: 16px;
+  }
+
+  .detail-habit-section {
+    padding: 16px;
+    display: flex;
+    gap: 0;
+  }
+  .detail-habit-section h2 {
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .habit-name {
+    font-size: 14px;
+  }
+  .habit-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    scrollbar-width: none;
+  }
+  .habit-wrapper {
+    width: fit-content;
+    padding-bottom: 10px;
+  }
+  .habit-name {
+    width: 80px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  .habit-weeks span,
+  .day-cell {
+    width: 30px;
+    flex: none;
+  }
+  .day-cells-container {
+    flex: none;
+    display: felx;
+    justify-content: flex-start;
+    gap: 25px;
+    padding-left: 20px;
+  }
+  .habit-weeks {
+    display: flex;
+    justify-content: flex-start;
+    gap: 25px;
+    padding-left: 115px;
+    padding-top: 2px;
+    padding-bottom: 0;
+  }
 }
