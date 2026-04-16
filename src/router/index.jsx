@@ -44,6 +44,10 @@ const router = createBrowserRouter([
         path: 'focus',
         element: <FocusPage />,
       },
+      {
+        path: 'focus',
+        element: <FocusPage />,
+      },
     ],
   },
 ]);
