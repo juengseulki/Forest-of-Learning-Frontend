@@ -3,6 +3,7 @@ import pointIcon from '../../../../shared/images/icons/ic_point.png';
 import { pointMockResponse } from '../../../../mocks/point/pointMockData';
 import '../../../../styles/StudyDetailPage.css';
 import { getPoint } from '../../../../api/pointApi';
+import handleApiError from '../../../../utils/handleApiError.jsx';
 
 function StudyInfoSection({ study, studyId }) {
   const [point, setPoint] = useState(0);
@@ -11,10 +12,9 @@ function StudyInfoSection({ study, studyId }) {
     const loadPoint = async () => {
       try {
         const studyPoint = await getPoint(studyId);
-        console.log('studyPoint => ', studyPoint);
         setPoint(studyPoint.totalPoint);
       } catch (error) {
-        console.error('포인트 로딩 실패!', error);
+        handleApiError(error, '포인트를 불러오지 못했습니다.');
       }
     };
 

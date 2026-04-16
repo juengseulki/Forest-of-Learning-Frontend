@@ -10,6 +10,7 @@ import StudyActionButtonGroup from './components/actionSection/StudyActionButton
 import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
 import EmojiSection from './components/emoji/EmojiSection.jsx';
 import HabitRecord from './components/HabitRecord.jsx';
+import handleApiError from '../../../utils/handleApiError.jsx';
 import { getStudy, deleteStudy } from '../../../api/studyApi.js';
 import StudyPasswordModal from '../../study/shared/modal/StudyPasswordModal.jsx';
 import StudyConfirmModal from '../../study/shared/modal/StudyConfirmModal.jsx';
@@ -31,22 +32,7 @@ function StudyDetailPage() {
         const targetStudy = await getStudy(id);
         setStudy(targetStudy);
       } catch (error) {
-        console.error('스터디 로딩 실패!', error);
-        toast(
-          <Toast
-            type="danger"
-            icon="❌"
-            message="스터디 정보를 불러오지 못했습니다."
-          />,
-          {
-            position: 'bottom-center',
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeButton: false,
-            pauseOnHover: false,
-            draggable: false,
-          }
-        );
+        handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
       }
     };
 

@@ -51,7 +51,14 @@ function StudyEditPage() {
 
       toast(
         <Toast type="success" icon="✅" message="스터디가 수정되었습니다." />,
-        { position: 'bottom-center' }
+        {
+          position: 'bottom-center',
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeButton: false,
+          pauseOnHover: false,
+          draggable: false,
+        }
       );
 
       navigate(`/studies/${studyId}`);
@@ -59,7 +66,14 @@ function StudyEditPage() {
       console.error('스터디 수정 실패', error);
       toast(
         <Toast type="danger" icon="❗" message="스터디 수정에 실패했습니다." />,
-        { position: 'bottom-center' }
+        {
+          position: 'bottom-center',
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeButton: false,
+          pauseOnHover: false,
+          draggable: false,
+        }
       );
     } finally {
       setIsSubmitting(false);

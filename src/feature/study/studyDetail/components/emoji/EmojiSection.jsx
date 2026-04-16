@@ -7,6 +7,7 @@ import {
   getEmojiReactions,
   addEmojiReaction,
 } from '../../../../../api/emojiApi';
+import handleApiError from '../../../../../utils/handleApiError.jsx';
 
 function EmojiSection({ studyId }) {
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -17,7 +18,7 @@ function EmojiSection({ studyId }) {
       const emojiData = await getEmojiReactions(studyId);
       setEmojis(emojiData?.items || []);
     } catch (error) {
-      console.error('이모지 로딩 실패!', error);
+      handleApiError(error, '이모지를 불러오지 못했습니다.');
     }
   }, [studyId]);
 
@@ -29,10 +30,14 @@ function EmojiSection({ studyId }) {
   }, [getEmoji]);
 
   const handleAddEmoji = async (emojiData) => {
-    const emojiValue = emojiData.native ? emojiData.native : emojiData;
-    const addEmoji = await addEmojiReaction(studyId, emojiValue);
-    getEmoji();
-    setPickerVisible(false);
+    try {
+      const emojiValue = emojiData.native ? emojiData.native : emojiData;
+      await addEmojiReaction(studyId, emojiValue);
+      getEmoji();
+      setPickerVisible(false);
+    } catch (error) {
+      handleApiError(error, '이모지 추가에 실패했습니다.');
+    }
   };
 
   return (
