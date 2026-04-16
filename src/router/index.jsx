@@ -21,15 +21,15 @@ const router = createBrowserRouter([
         element: <StudyCreatePage />,
       },
       {
-        path: '/studies/:studyId/edit',
+        path: 'studies/:studyId/edit',
         element: <StudyEditPage />,
       },
       {
-        path: 'studies/:id',
+        path: 'studies/:studyId',
         element: <StudyDetailPage />,
       },
       {
-        path: 'studies/:id/habit',
+        path: 'studies/:studyId/habit',
         element: <HabitPage />,
       },
       {
@@ -39,14 +39,6 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <Navigate to="/" replace />,
-      },
-      {
-        path: 'focus',
-        element: <FocusPage />,
-      },
-      {
-        path: 'focus',
-        element: <FocusPage />,
       },
     ],
   },
