@@ -1,8 +1,10 @@
 import client from './client.js';
 
 // 스터디 목록 조회
-export async function getStudies() {
-  const response = await client.get('/studies');
+export async function getStudies(keyword, order) {
+  const response = await client.get('/studies', {
+    params: { keyword, order },
+  });
   return response.data;
 }
 
