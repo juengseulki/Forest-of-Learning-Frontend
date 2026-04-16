@@ -63,8 +63,10 @@ function StudyForm({ isEditMode = false, onBackClick }) {
       name,
       description,
       backgroundId: selectedBackground, 
-      password,                        
-      passwordConfirm: passwordCheck,  
+      ...(isEditMode ? {} : { 
+      password: password, 
+      passwordConfirm: passwordCheck
+  }),
     };
 
     console.log(newData);
