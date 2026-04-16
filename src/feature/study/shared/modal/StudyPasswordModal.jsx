@@ -7,11 +7,13 @@ function StudyPasswordModal({
   isOpen,
   studyName,
   password,
+  description = '권한이 필요해요!',
   errorMessage = '',
   isSubmitting = false,
   onChangePassword,
   onClose,
   onSubmit,
+  actionLabel = '확인',
 }) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -19,7 +21,7 @@ function StudyPasswordModal({
     <BaseStudyModal
       isOpen={isOpen}
       title={studyName}
-      description="권한이 필요해요!"
+      description={description}
       rightText="나가기"
       onClose={onClose}
       className="study-modal__content--password"
@@ -58,7 +60,7 @@ function StudyPasswordModal({
           onClick={onSubmit}
           disabled={!password.trim() || isSubmitting}
         >
-          수정하러 가기
+          {actionLabel}
         </button>
 
         <button
@@ -68,6 +70,7 @@ function StudyPasswordModal({
         >
           나가기
         </button>
+
         {errorMessage ? (
           <p className="study-modal__error">{errorMessage}</p>
         ) : null}
