@@ -40,6 +40,10 @@ const router = createBrowserRouter([
         path: '*',
         element: <Navigate to="/" replace />,
       },
+      {
+        path: 'focus',
+        element: <FocusPage />,
+      },
     ],
   },
 ]);
