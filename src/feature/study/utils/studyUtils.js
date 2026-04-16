@@ -28,7 +28,7 @@ export function getStudyCardProps({
     name: item.name,
     description: item.description,
     duration: getDaysFrom(item.createdAt),
-    totalPoint: point.studyId === item.id ? point.totalPoint : 0,
+    totalPoint: item.point ?? 0,
     emojis: emoji?.emojis ?? [],
     backgroundImage: background?.imageUrl,
     theme,
