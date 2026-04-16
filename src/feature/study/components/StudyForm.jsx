@@ -1,60 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Input from '../../../components/common/Input';
 import '../../../styles/StudyForm.css';
 import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
 import ic_pow from '../../../images/icon/ic_pow.svg';
 import { createStudy, updateStudy } from '../../../api/studyApi';
-import { useNavigate, useParams } from 'react-router-dom';
 
-function StudyForm({ isEditMode = false, initialData = {} }) {
+function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { studyId } = useParams();
 
-  const [background] = useState(backgroundsMockResponse.data.items);
-  const [selectedBackground, setSelectedBackground] = useState(
-    initialData.background?.id ?? 1
-  );
-  const [nickname, setNickname] = useState(initialData.nickname ?? '');
-  const [name, setName] = useState(initialData.name ?? '');
-  const [description, setDescription] = useState(initialData.description ?? '');
+  // 배경 이미지 데이터
+  const [backgrounds] = useState(backgroundsMockResponse.data.items);
+  
+  // Form 상태 관리
+  const [selectedBackground, setSelectedBackground] = useState(1);
+  const [nickname, setNickname] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-  const [errors, setErrors] = useState({
-    nickname: '',
-    name: '',
-    description: '',
-    password: '',
-    passwordCheck: '',
-  });
+  const [errors, setErrors] = useState({});
 
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/;
+  // 수정 모드일 때 전달받은 initialData를 넣어줌
+  useEffect(() => {
+    if (isEditMode && initialData && Object.keys(initialData).length > 0) {
+      setNickname(initialData.nickname ?? '');
+      setName(initialData.name ?? '');
+      setDescription(initialData.description ?? '');
+      setSelectedBackground(initialData.background?.id ?? 1);
+    }
+  }, [initialData, isEditMode]);
 
   const submitButtonClick = async () => {
     const newErrors = {};
 
-    if (!nickname.trim()) {
-      newErrors.nickname = '*닉네임을 입력해주세요.';
-    } else if (nickname.length > 10) {
-      newErrors.nickname = '*닉네임은 10자 이내입니다.';
-    }
-
-    if (!name.trim()) {
-      newErrors.name = '*스터디 이름을 입력해주세요.';
-    } else if (name.length > 20) {
-      newErrors.name = '*스터디 이름은 20자 이내입니다.';
-    }
+    if (!nickname.trim()) newErrors.nickname = '*닉네임을 입력해주세요.';
+    if (!name.trim()) newErrors.name = '*스터디 이름을 입력해주세요.';
 
     if (!isEditMode) {
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/;
       if (!password) {
         newErrors.password = '*비밀번호를 입력해주세요.';
       } else if (!passwordRegex.test(password)) {
-        newErrors.password =
-          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
+        newErrors.password = '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
       }
 
-      if (!passwordCheck) {
-        newErrors.passwordCheck = '*비밀번호를 확인해주세요.';
-      } else if (password !== passwordCheck) {
+      if (password !== passwordCheck) {
         newErrors.passwordCheck = '*비밀번호가 일치하지 않습니다.';
       }
     }
@@ -62,36 +54,34 @@ function StudyForm({ isEditMode = false, initialData = {} }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
+    const formData = {
+      nickname,
+      name,
+      description,
+      backgroundId: selectedBackground,
+    };
+
+  
+    if (onValidSubmit) {
+      onValidSubmit(formData);
+      return;
+    }
+
     try {
       if (isEditMode) {
-        await updateStudy(id, {
-          nickname,
-          name,
-          description,
-          backgroundId: selectedBackground,
+        await updateStudy(studyId, formData);
+        navigate(`/studies/${studyId}`);
+      } else {
+        const result = await createStudy({
+          ...formData,
+          password,
+          passwordConfirm: passwordCheck,
         });
-
-        navigate(`/studies/${id}`);
-        return;
+        navigate(`/studies/${result.id}`);
       }
-
-      const result = await createStudy({
-        nickname,
-        name,
-        description,
-        backgroundId: selectedBackground,
-        password,
-        passwordConfirm: passwordCheck,
-      });
-
-      navigate(`/studies/${result.id}`);
     } catch (error) {
-      console.error(isEditMode ? '수정 에러:' : '생성 에러:', error);
-      alert(
-        isEditMode
-          ? '스터디 수정에 실패했습니다.'
-          : '스터디 생성에 실패했습니다.'
-      );
+      console.error(error);
+     
     }
   };
 
@@ -105,7 +95,6 @@ function StudyForm({ isEditMode = false, initialData = {} }) {
         <Input
           labelName="닉네임"
           placeholder="닉네임을 입력해주세요"
-          password={false}
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           error={errors.nickname}
@@ -114,7 +103,6 @@ function StudyForm({ isEditMode = false, initialData = {} }) {
         <Input
           labelName="스터디 이름"
           placeholder="스터디 이름을 입력해주세요"
-          password={false}
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={errors.name}
@@ -133,13 +121,12 @@ function StudyForm({ isEditMode = false, initialData = {} }) {
         <div className="form-wrapper">
           <label className="input-label">배경을 선택해주세요</label>
           <div className="background-grid">
-            {background.map((t) => {
+            {backgrounds.map((t) => {
               const isSelected = selectedBackground === t.id;
-
               return (
                 <div
                   key={t.id}
-                  className="background-item"
+                  className={`background-item ${isSelected ? 'selected' : ''}`}
                   onClick={() => setSelectedBackground(t.id)}
                 >
                   <img
@@ -147,7 +134,6 @@ function StudyForm({ isEditMode = false, initialData = {} }) {
                     alt={t.name}
                     className="background-image"
                   />
-
                   {isSelected && (
                     <img className="check-icon" src={ic_pow} alt="선택됨" />
                   )}
@@ -167,7 +153,6 @@ function StudyForm({ isEditMode = false, initialData = {} }) {
               onChange={(e) => setPassword(e.target.value)}
               error={errors.password}
             />
-
             <Input
               labelName="비밀번호 확인"
               placeholder="비밀번호를 다시 입력해주세요"
