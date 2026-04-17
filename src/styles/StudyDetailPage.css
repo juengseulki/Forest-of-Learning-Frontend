@@ -289,6 +289,12 @@ em-emoji-picker {
   color: var(--gray-300);
   font-size: 16px;
 }
+.habit-scroll-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
 
 /*테블릿*/
 @media (max-width: 1024px) {
@@ -432,7 +438,7 @@ em-emoji-picker {
   .habit-scroll-container {
     width: 100%;
     overflow-x: auto;
-    display: block;
+
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
       display: none;
