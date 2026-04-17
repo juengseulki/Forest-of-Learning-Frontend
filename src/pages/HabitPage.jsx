@@ -17,14 +17,14 @@ import { toStudyId } from '../feature/habit/utils/habitUtils';
 
 function HabitPage() {
   const navigate = useNavigate();
-  const { studyId, habitId } = useParams();
+  const { id, habitId } = useParams();
 
-  const parsedStudyId = toStudyId(studyId);
+  const studyId = toStudyId(id);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
 
-  const studyTitle = useStudyTitle(parsedStudyId);
+  const studyTitle = useStudyTitle(studyId);
 
   const {
     habitList,
@@ -33,7 +33,7 @@ function HabitPage() {
     fetchHabitList,
     toggleHabit,
     removeHabitLocally,
-  } = useHabitList(parsedStudyId);
+  } = useHabitList(studyId);
 
   const {
     draftHabitList,
@@ -48,7 +48,7 @@ function HabitPage() {
     deleteDraftHabit,
     submitHabitList,
   } = useHabitForm({
-    studyId: parsedStudyId,
+    studyId,
     habitList,
     onAfterCreate: fetchHabitList,
     onAfterDelete: removeHabitLocally,
@@ -73,23 +73,15 @@ function HabitPage() {
       <main className="habit-home">
         <header className="habit-home__header">
           <div className="habit-home__top">
-            <h1
-              className="habit-home__title"
-              onClick={() => {
-                if (!parsedStudyId) return;
-                navigate(`/studies/${parsedStudyId}`);
-              }}
-            >
-              {studyTitle || '스터디'}
-            </h1>
+            <h1 className="habit-home__title">{studyTitle || '스터디'}</h1>
 
             <div className="habit-home__nav">
               <button
                 type="button"
                 className="habit-home__nav-btn"
                 onClick={() => {
-                  if (!parsedStudyId) return;
-                  navigate(`/studies/${parsedStudyId}/focus`);
+                  if (!studyId || habitList.length === 0) return;
+                  navigate(`/studies/${studyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">오늘의 집중</span>

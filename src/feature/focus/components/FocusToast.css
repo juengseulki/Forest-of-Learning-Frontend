@@ -1,4 +1,4 @@
-.toast {
+.focus-toast {
   min-width: 220px;
   max-width: 320px;
   display: inline-flex;
@@ -14,32 +14,36 @@
   box-sizing: border-box;
 }
 
-.toast__icon {
+.focus-toast__icon {
   flex-shrink: 0;
   font-size: 13px;
   line-height: 1;
 }
 
-.toast__message {
+.focus-toast__message {
   margin: 0;
   white-space: nowrap;
 }
 
-.toast--danger {
+/* 1. 중단 토스트 */
+.focus-toast--danger {
   background: #ffdce5;
   color: #ff3b5c;
 }
 
-.toast--success {
+/* 2. 포인트 획득 토스트 */
+.focus-toast--success {
   background: #e3f3df;
   color: #6a9b5c;
 }
 
-.toast--info {
+/* 3. 설정시간 종료 */
+.focus-toast--info {
   background: #dff1ff;
   color: #3f8ecf;
 }
 
+/* react-toastify 기본 틀 제거용 */
 .Toastify__toast {
   background: transparent !important;
   box-shadow: none !important;
@@ -54,15 +58,4 @@
 
 .Toastify__close-button {
   display: none !important;
-}
-
-.Toastify__toast-container {
-  z-index: 9999;
-}
-
-.Toastify__toast-container--bottom-center {
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  bottom: 24px !important;
-  top: auto !important;
 }

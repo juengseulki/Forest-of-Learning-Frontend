@@ -3,21 +3,12 @@ export function toStudyId(id) {
   return Number.isInteger(numericId) && numericId > 0 ? numericId : null;
 }
 
-function formatLocalDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
-
 export function getTodayDateString() {
-  return formatLocalDate(new Date());
+  return new Date().toISOString().split('T')[0];
 }
 
 export function normalizeHabitListResponse(data) {
   const today = getTodayDateString();
-
   const items = Array.isArray(data?.items)
     ? data.items
     : Array.isArray(data)
@@ -27,10 +18,7 @@ export function normalizeHabitListResponse(data) {
   return items.map((habit) => ({
     ...habit,
     todayRecord:
-      habit.habitRecords?.find((record) => {
-        if (!record?.date) return false;
-        return record.date.slice(0, 10) === today;
-      }) ?? null,
+      habit.habitRecords?.find((r) => r.date.startsWith(today)) ?? null,
   }));
 }
 
