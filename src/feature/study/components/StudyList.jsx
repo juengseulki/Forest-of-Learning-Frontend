@@ -17,43 +17,45 @@ function StudyList({ visibleCount, keyword, order, recentIds = [] }) {
     const fetchData = async () => {
       try {
         const data = await getStudies(keyword, order);
+
         const studiesWithPoint = await Promise.all(
-          data.items.map(async (study) => {
+          (data?.items ?? []).map(async (study) => {
             const pointData = await getPoint(study.id);
             const emojiData = await getEmojiReactions(study.id);
             return {
               ...study,
-              point: pointData.totalPoint,
-              emojis: emojiData.items,
+              point: pointData?.totalPoint ?? 0,
+              emojis: emojiData?.items ?? [],
             };
           })
         );
 
         if (recentIds.length > 0) {
-          const filteredStudies = recentIds.map((id) =>
-            studiesWithPoint.find((study) => study.id === id)
-          );
+          const filteredStudies = recentIds
+            .map((id) => studiesWithPoint.find((study) => study.id === id))
+            .filter(Boolean);
 
           setStudies(filteredStudies);
         } else {
           setStudies(studiesWithPoint);
         }
       } catch (error) {
-        console.error(error);
+        console.error('스터디 목록 조회 실패:', error);
+        setStudies([]);
       }
     };
 
     fetchData();
-  }, [keyword, order]);
+  }, [keyword, order, recentIds]);
 
   return (
     <div className="card-list">
-      {visibleStudies.map((item) => {
+      {visibleStudies.filter(Boolean).map((item) => {
         const cardProps = getStudyCardProps({
           item,
-          point: item.point,
+          point: item?.point ?? 0,
           backgrounds,
-          emojiItems: item.emojis,
+          emojiItems: item?.emojis ?? [],
           getBackgroundTheme,
         });
 

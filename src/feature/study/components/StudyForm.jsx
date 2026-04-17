@@ -2,19 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Input from '../../../components/common/Input';
 import '../../../styles/StudyForm.css';
-import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
 import ic_pow from '../../../images/icon/ic_pow.svg';
 import { createStudy, updateStudy } from '../../../api/studyApi';
+import { getBackgrounds } from '../../../api/backgroundApi';
 
 function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const navigate = useNavigate();
   const { studyId } = useParams();
 
-  // 배경 이미지 데이터
-  const [backgrounds] = useState(backgroundsMockResponse.data.items);
-  
-  // Form 상태 관리
-  const [selectedBackground, setSelectedBackground] = useState(1);
+  const [backgrounds, setBackgrounds] = useState([]);
+  const [selectedBackground, setSelectedBackground] = useState(null);
+
   const [nickname, setNickname] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -22,28 +20,54 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [errors, setErrors] = useState({});
 
-  // 수정 모드일 때 전달받은 initialData를 넣어줌
   useEffect(() => {
-    if (isEditMode && initialData && Object.keys(initialData).length > 0) {
-      setNickname(initialData.nickname ?? '');
-      setName(initialData.name ?? '');
-      setDescription(initialData.description ?? '');
-      setSelectedBackground(initialData.background?.id ?? 1);
+    const fetchBackgrounds = async () => {
+      try {
+        const data = await getBackgrounds();
+        const items = data?.items ?? [];
+
+        setBackgrounds(items);
+
+        if (!isEditMode && items.length > 0) {
+          setSelectedBackground(items[0].id);
+        }
+      } catch (error) {
+        console.error('배경 목록 조회 실패:', error);
+        setBackgrounds([]);
+      }
+    };
+
+    fetchBackgrounds();
+  }, [isEditMode]);
+
+  useEffect(() => {
+    if (!isEditMode || !initialData || Object.keys(initialData).length === 0) {
+      return;
     }
-  }, [initialData, isEditMode]);
+
+    setNickname(initialData.nickname ?? '');
+    setName(initialData.name ?? '');
+    setDescription(initialData.description ?? '');
+    setSelectedBackground(initialData.background?.id ?? null);
+  }, [isEditMode, initialData]);
 
   const submitButtonClick = async () => {
     const newErrors = {};
 
     if (!nickname.trim()) newErrors.nickname = '*닉네임을 입력해주세요.';
     if (!name.trim()) newErrors.name = '*스터디 이름을 입력해주세요.';
+    if (!selectedBackground) {
+      newErrors.background = '*배경을 선택해주세요.';
+    }
 
     if (!isEditMode) {
       const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/;
+
       if (!password) {
         newErrors.password = '*비밀번호를 입력해주세요.';
       } else if (!passwordRegex.test(password)) {
-        newErrors.password = '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
+        newErrors.password =
+          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
       }
 
       if (password !== passwordCheck) {
@@ -58,10 +82,9 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       nickname,
       name,
       description,
-      backgroundId: selectedBackground,
+      backgroundId: Number(selectedBackground),
     };
 
-  
     if (onValidSubmit) {
       onValidSubmit(formData);
       return;
@@ -77,11 +100,11 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
           password,
           passwordConfirm: passwordCheck,
         });
+
         navigate(`/studies/${result.id}`);
       }
     } catch (error) {
-      console.error(error);
-     
+      console.error('스터디 저장 실패:', error);
     }
   };
 
@@ -121,17 +144,18 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         <div className="form-wrapper">
           <label className="input-label">배경을 선택해주세요</label>
           <div className="background-grid">
-            {backgrounds.map((t) => {
-              const isSelected = selectedBackground === t.id;
+            {backgrounds.map((background) => {
+              const isSelected = selectedBackground === background.id;
+
               return (
                 <div
-                  key={t.id}
+                  key={background.id}
                   className={`background-item ${isSelected ? 'selected' : ''}`}
-                  onClick={() => setSelectedBackground(t.id)}
+                  onClick={() => setSelectedBackground(background.id)}
                 >
                   <img
-                    src={t.imageUrl}
-                    alt={t.name}
+                    src={background.imageUrl}
+                    alt={background.name}
                     className="background-image"
                   />
                   {isSelected && (
@@ -141,6 +165,9 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
               );
             })}
           </div>
+          {errors.background && (
+            <p className="input-error-message">{errors.background}</p>
+          )}
         </div>
 
         {!isEditMode && (
