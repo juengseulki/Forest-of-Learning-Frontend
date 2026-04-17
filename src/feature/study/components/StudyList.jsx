@@ -8,7 +8,7 @@ import { getPoint } from '../../../api/pointApi.js';
 import { getEmojiReactions } from '../../../api/emojiApi.js';
 import { useEffect, useState } from 'react';
 
-function StudyList({ visibleCount, keyword, order }) {
+function StudyList({ visibleCount, keyword, order, recentIds = [] }) {
   const backgrounds = backgroundsMockResponse.data.items;
   const [studies, setStudies] = useState([]);
   const visibleStudies = studies.slice(0, visibleCount);
@@ -29,7 +29,15 @@ function StudyList({ visibleCount, keyword, order }) {
           })
         );
 
-        setStudies(studiesWithPoint);
+        if (recentIds.length > 0) {
+          const filteredStudies = recentIds.map((id) =>
+            studiesWithPoint.find((study) => study.id === id)
+          );
+
+          setStudies(filteredStudies);
+        } else {
+          setStudies(studiesWithPoint);
+        }
       } catch (error) {
         console.error(error);
       }
