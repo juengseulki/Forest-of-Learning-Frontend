@@ -16,13 +16,17 @@ export default function StudyCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    const recentStudies =
-      JSON.parse(localStorage.getItem('recentStudies')) || [];
+    let recent = JSON.parse(localStorage.getItem('recentStudies')) || [];
 
-    const filtered = recentStudies.filter((studyId) => studyId !== id);
-    const updated = [id, ...filtered].slice(0, 3);
+    recent = recent.filter((t) => t !== id);
 
-    localStorage.setItem('recentStudies', JSON.stringify(updated));
+    recent.unshift(id);
+
+    if (recent.length > 3) {
+      recent = recent.slice(0, 3);
+    }
+
+    localStorage.setItem('recentStudies', JSON.stringify(recent));
 
     navigate(`/studies/${id}`);
   };
