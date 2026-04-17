@@ -68,7 +68,7 @@
   height: auto;
 
   padding: 12px;
-  width: 245px;
+  width: 232px;
   background-color: var(--color-white);
   border: 1px solid var(--gray-200);
 
@@ -289,6 +289,12 @@ em-emoji-picker {
   color: var(--gray-300);
   font-size: 16px;
 }
+.habit-scroll-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
 
 /*테블릿*/
 @media (max-width: 1024px) {
@@ -302,6 +308,9 @@ em-emoji-picker {
 
   .habit-weeks {
     padding-left: 187px;
+  }
+  .emoji-popup {
+    width: 230px;
   }
 }
 /*///////////////////////////*/
@@ -343,7 +352,7 @@ em-emoji-picker {
     display: flex;
     align-items: center;
     height: 30px;
-    padding: 7px 6px;
+    padding: 8px 8px;
     flex-shrink: 0;
     display: flex;
     justify-content: center;
@@ -358,7 +367,7 @@ em-emoji-picker {
     padding: 0 5px;
   }
   .emoji-more-btn {
-    width: 50px;
+    width: 51px;
 
     padding: 0;
     flex-shrink: 0;
@@ -367,7 +376,7 @@ em-emoji-picker {
     align-items: center;
   }
   .emoji-popup {
-    width: 225px;
+    width: 227px;
   }
   .emoji-picker-container {
     position: relative;
@@ -429,7 +438,7 @@ em-emoji-picker {
   .habit-scroll-container {
     width: 100%;
     overflow-x: auto;
-    display: block;
+
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
       display: none;
