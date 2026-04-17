@@ -22,7 +22,6 @@ function StudyList({ visibleCount, keyword, order, recentIds = [] }) {
           (data?.items ?? []).map(async (study) => {
             const pointData = await getPoint(study.id);
             const emojiData = await getEmojiReactions(study.id);
-
             return {
               ...study,
               point: pointData?.totalPoint ?? 0,

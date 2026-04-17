@@ -16,8 +16,25 @@ export default function StudyCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
+    let recent = JSON.parse(localStorage.getItem('recentStudies')) || [];
+
+    recent = recent.filter((t) => t !== id);
+
+    recent.unshift(id);
+
+    if (recent.length > 3) {
+      recent = recent.slice(0, 3);
+    }
+
+    localStorage.setItem('recentStudies', JSON.stringify(recent));
+
     navigate(`/studies/${id}`);
   };
+
+  const MAX_VISIBLE = 3;
+  const sortedEmojis = [...(emojis || [])].sort((a, b) => b.count - a.count);
+  const visibleEmojis = sortedEmojis?.slice(0, MAX_VISIBLE) || [];
+  const hiddenCount = sortedEmojis.length - MAX_VISIBLE;
 
   return (
     <>
@@ -61,12 +78,18 @@ export default function StudyCard({
           </p>
         </section>
         <section className="card-footer">
-          {emojis.map((item) => (
+          {visibleEmojis.map((item) => (
             <div className="footer-content" key={item.emoji}>
               <p className="icon">{item.emoji}</p>
               <p className="icon-count">{item.count}</p>
             </div>
           ))}
+
+          {hiddenCount > 0 && (
+            <div className="footer-content">
+              <p className="icon-count">+ {hiddenCount}..</p>
+            </div>
+          )}
         </section>
       </div>
     </>

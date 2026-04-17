@@ -8,8 +8,12 @@ import '../styles/HomePage.css';
 function HomePage() {
   const [listPage, setListPage] = useState(1);
   const [studies, setStudies] = useState([]);
-  const [keyword, setKeyword] = useState([]);
+  const [keyword, setKeyword] = useState('');
   const [order, setOrder] = useState('');
+
+  //최근 조회 id 로컬에 저장
+  const recentIds = JSON.parse(localStorage.getItem('recentStudies')) || [];
+
   const listLimit = 6;
   const recentLimit = 3;
 
@@ -35,12 +39,12 @@ function HomePage() {
       <section className="recent-lookup">
         <p className="home-title">최근 조회한 스터디</p>
         <div className="recent-scroll">
-          {studies.length == 0 ? (
+          {recentIds.length === 0 ? (
             <div className="look-study">
               <p className="null-text">아직 조회한 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList visibleCount={recentLimit} />
+            <StudyList visibleCount={recentLimit} recentIds={recentIds} />
           )}
         </div>
       </section>
@@ -82,11 +86,13 @@ function HomePage() {
             />
           )}
         </div>
-        <div className="button-container">
-          <button className="see-more" onClick={moreSee}>
-            더보기
-          </button>
-        </div>
+        {listPage * listLimit < studies.length && (
+          <div className="button-container">
+            <button className="see-more" onClick={moreSee}>
+              더보기
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );
