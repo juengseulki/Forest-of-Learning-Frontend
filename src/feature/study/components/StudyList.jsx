@@ -21,7 +21,6 @@ function StudyList({ visibleCount, keyword, order }) {
           data.items.map(async (study) => {
             const pointData = await getPoint(study.id);
             const emojiData = await getEmojiReactions(study.id);
-            console.log(emojiData);
             return {
               ...study,
               point: pointData.totalPoint,
