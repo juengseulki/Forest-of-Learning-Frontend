@@ -16,6 +16,14 @@ export default function StudyCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
+    const recentStudies =
+      JSON.parse(localStorage.getItem('recentStudies')) || [];
+
+    const filtered = recentStudies.filter((studyId) => studyId !== id);
+    const updated = [id, ...filtered].slice(0, 3);
+
+    localStorage.setItem('recentStudies', JSON.stringify(updated));
+
     navigate(`/studies/${id}`);
   };
 
