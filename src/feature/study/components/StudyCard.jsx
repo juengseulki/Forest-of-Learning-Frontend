@@ -19,6 +19,11 @@ export default function StudyCard({
     navigate(`/studies/${id}`);
   };
 
+  const MAX_VISIBLE = 3;
+  const sortedEmojis = [...(emojis || [])].sort((a, b) => b.count - a.count);
+  const visibleEmojis = sortedEmojis?.slice(0, MAX_VISIBLE) || [];
+  const hiddenCount = sortedEmojis.length - MAX_VISIBLE;
+
   return (
     <>
       <div
@@ -61,12 +66,18 @@ export default function StudyCard({
           </p>
         </section>
         <section className="card-footer">
-          {emojis.map((item) => (
+          {visibleEmojis.map((item) => (
             <div className="footer-content" key={item.emoji}>
               <p className="icon">{item.emoji}</p>
               <p className="icon-count">{item.count}</p>
             </div>
           ))}
+
+          {hiddenCount > 0 && (
+            <div className="footer-content">
+              <p className="icon-count">+ {hiddenCount}..</p>
+            </div>
+          )}
         </section>
       </div>
     </>
