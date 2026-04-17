@@ -82,11 +82,13 @@ function HomePage() {
             />
           )}
         </div>
-        <div className="button-container">
-          <button className="see-more" onClick={moreSee}>
-            더보기
-          </button>
-        </div>
+        {listPage * listLimit < studies.length && (
+          <div className="button-container">
+            <button className="see-more" onClick={moreSee}>
+              더보기
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );
