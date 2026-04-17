@@ -14,8 +14,6 @@ function EmojiSection({ studyId }) {
   const [emojis, setEmojis] = useState([]);
 
   const getEmoji = useCallback(async () => {
-    if (!studyId) return;
-
     try {
       const emojiData = await getEmojiReactions(studyId);
       setEmojis(emojiData?.items || []);

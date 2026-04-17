@@ -1,8 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../shared/layouts/MainLayout/MainLayout';
 import HomePage from '../pages/HomePage';
-import StudyCreatePage from '../pages/StudyCreatePage';
-import StudyEditPage from '../pages/StudyEditPage';
+import CreateStudyPage from '../pages/CreateStudyPage';
 import FocusPage from '../pages/FocusPage';
 import HabitPage from '../pages/HabitPage';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
@@ -18,18 +17,14 @@ const router = createBrowserRouter([
       },
       {
         path: 'studies/create',
-        element: <StudyCreatePage />,
+        element: <CreateStudyPage />,
       },
       {
-        path: 'studies/:studyId/edit',
-        element: <StudyEditPage />,
-      },
-      {
-        path: 'studies/:studyId',
+        path: 'studies/:id',
         element: <StudyDetailPage />,
       },
       {
-        path: 'studies/:studyId/habit',
+        path: 'studies/:id/habit',
         element: <HabitPage />,
       },
       {
