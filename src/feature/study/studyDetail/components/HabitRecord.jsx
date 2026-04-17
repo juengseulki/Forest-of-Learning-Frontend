@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { habitRecordMockResponse } from '../../../../mocks/habit/habitMockData.js';
 import HabitRow from './HabitRow.jsx';
 import handleApiError from '../../../../utils/handleApiError.jsx';
 import { getWeekDays } from '../utils/getWeekDays';
@@ -9,33 +8,43 @@ function HabitRecord({ studyId }) {
   const [habits, setHabits] = useState([]);
   const [weekStart, setWeekStart] = useState('');
 
+  const formatLocalDateTime = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  };
+
   const getThisWeekRange = () => {
     const now = new Date();
-    const day = now.getDay(); // 오늘 요일 (0:일, 1:월...)
+    const day = now.getDay(); // 0:일, 1:월, 2:화, 3:수, 4:목, 5:금, 6:토
 
-    // 1. 월요일까지 며칠 차이나는지 계산
-    // (오늘 요일이 일요일(0)이면 6일 전으로, 아니면 요일-1 만큼 전으로)
     const daysToMonday = day === 0 ? 6 : day - 1;
 
-    // 2. 월요일 구하기
     const monday = new Date(now);
     monday.setDate(now.getDate() - daysToMonday);
-    monday.setHours(0, 0, 0, 0); // 월요일 00:00:00
+    monday.setHours(0, 0, 0, 0);
 
-    // 3. 일요일 구하기 (월요일에서 6일 뒤)
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
-    sunday.setHours(23, 59, 59, 999); // 일요일 23:59:59
+    sunday.setHours(23, 59, 59, 999);
 
     setWeekStart(monday);
+
     return {
-      startDate: monday.toISOString(),
-      endDate: sunday.toISOString(),
+      startDate: formatLocalDateTime(monday),
+      endDate: formatLocalDateTime(sunday),
     };
   };
 
   useEffect(() => {
-    const featchHabits = async () => {
+    if (!studyId) return;
+
+    const fetchHabits = async () => {
       try {
         const { startDate, endDate } = getThisWeekRange();
         const habitData = await getHabitRecords(studyId, startDate, endDate);
@@ -44,7 +53,8 @@ function HabitRecord({ studyId }) {
         handleApiError(error, '습관 기록을 불러오지 못했습니다.');
       }
     };
-    featchHabits();
+
+    fetchHabits();
   }, [studyId]);
 
   const weekDays = getWeekDays(weekStart);
@@ -52,26 +62,27 @@ function HabitRecord({ studyId }) {
   return (
     <section className="detail-habit-section">
       <h2>습관 기록표</h2>
-
-      {habits.length === 0 ? (
-        <div className="empty-habit-container">
-          <p>아직 습관이 없어요.</p>
-          <p>오늘의 습관에서 습관을 생성해보세요!</p>
-        </div>
-      ) : (
-        <div className="habit-wrapper">
-          <div className="habit-weeks">
-            <span>월</span>
-            <span>화</span>
-            <span>수</span>
-            <span>목</span>
-            <span>금</span>
-            <span>토</span>
-            <span>일</span>
+      <div className="habit-scroll-container">
+        {habits.length === 0 ? (
+          <div className="empty-habit-container">
+            <p>아직 습관이 없어요.</p>
+            <p>오늘의 습관에서 습관을 생성해보세요!</p>
           </div>
-          <HabitRow habits={habits} weekDays={weekDays} />
-        </div>
-      )}
+        ) : (
+          <div className="habit-wrapper">
+            <div className="habit-weeks">
+              <span>월</span>
+              <span>화</span>
+              <span>수</span>
+              <span>목</span>
+              <span>금</span>
+              <span>토</span>
+              <span>일</span>
+            </div>
+            <HabitRow habits={habits} weekDays={weekDays} />
+          </div>
+        )}
+      </div>
     </section>
   );
 }

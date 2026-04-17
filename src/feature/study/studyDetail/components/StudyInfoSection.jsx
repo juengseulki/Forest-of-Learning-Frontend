@@ -9,6 +9,8 @@ function StudyInfoSection({ study, studyId }) {
   const [point, setPoint] = useState(0);
 
   useEffect(() => {
+    if (!studyId) return;
+
     const loadPoint = async () => {
       try {
         const studyPoint = await getPoint(studyId);
@@ -30,7 +32,7 @@ function StudyInfoSection({ study, studyId }) {
         </div>
       </section>
       <div className="detail-point-group">
-        <h3 className="detail-field">현재까지 획득한 포인트</h3>
+        <h3 className="detail-point-title">현재까지 획득한 포인트</h3>
         <div className="detail-point">
           <img src={pointIcon} alt="포인트 아이콘" />
           {point}P 획득
