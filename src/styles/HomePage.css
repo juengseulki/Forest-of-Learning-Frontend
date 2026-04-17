@@ -123,6 +123,7 @@ select::-ms-expand {
   .recent-lookup {
     padding: 25px;
     width: 697px;
+    height: 338px;
   }
 
   .study-list {
@@ -136,6 +137,7 @@ select::-ms-expand {
   .recent-lookup {
     padding: 20px;
     width: 344px;
+    height: 247px;
   }
 
   .study-list {
