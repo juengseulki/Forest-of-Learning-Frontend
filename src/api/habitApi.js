@@ -14,7 +14,7 @@ export async function getHabitList(studyId) {
 
 // 습관 생성
 export async function createHabit(studyId, habitData) {
-  const response = await client.post('/whabits', { studyId, ...habitData });
+  const response = await client.post('/habits', { studyId, ...habitData });
   return response.data;
 }
 

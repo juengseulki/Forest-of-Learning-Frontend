@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import FocusToast from '../shared/components/toast/Toast';
+import FocusToast from '../feature/focus/components/FocusToast';
 
 const toastOptions = {
   position: 'bottom-center',

@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import Toast from '../../../shared/components/toast/Toast';
+import FocusToast from '../components/FocusToast';
 
 const toastOptions = {
   position: 'bottom-center',
@@ -12,14 +12,14 @@ const toastOptions = {
 
 export function showPauseToast() {
   toast(
-    <Toast type="danger" icon="🚨" message="집중이 중단되었습니다." />,
+    <FocusToast type="danger" icon="🚨" message="집중이 중단되었습니다." />,
     toastOptions
   );
 }
 
 export function showPointToast(firstPoint, secondPoint, totalPoint) {
   toast(
-    <Toast
+    <FocusToast
       type="success"
       icon="🎉"
       message={`기본 ${firstPoint}P + 초과 집중 ${secondPoint}P = 총 ${totalPoint}P 획득!`}
@@ -30,7 +30,7 @@ export function showPointToast(firstPoint, secondPoint, totalPoint) {
 
 export function showTargetToast() {
   toast(
-    <Toast type="info" icon="💙" message="설정한 집중이 끝났습니다!" />,
+    <FocusToast type="info" icon="💙" message="설정한 집중이 끝났습니다!" />,
     toastOptions
   );
 }
