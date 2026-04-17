@@ -8,7 +8,7 @@ import { getPoint } from '../../../api/pointApi.js';
 import { getEmojiReactions } from '../../../api/emojiApi.js';
 import { useEffect, useState } from 'react';
 
-function StudyList({ visibleCount, keyword, order }) {
+function StudyList({ visibleCount, keyword, order, recentIds = [] }) {
   const backgrounds = backgroundsMockResponse.data.items;
   const [studies, setStudies] = useState([]);
   const visibleStudies = studies.slice(0, visibleCount);
@@ -17,36 +17,46 @@ function StudyList({ visibleCount, keyword, order }) {
     const fetchData = async () => {
       try {
         const data = await getStudies(keyword, order);
+
         const studiesWithPoint = await Promise.all(
-          data.items.map(async (study) => {
+          (data?.items ?? []).map(async (study) => {
             const pointData = await getPoint(study.id);
             const emojiData = await getEmojiReactions(study.id);
-            console.log(emojiData);
+
             return {
               ...study,
-              point: pointData.totalPoint,
-              emojis: emojiData.items,
+              point: pointData?.totalPoint ?? 0,
+              emojis: emojiData?.items ?? [],
             };
           })
         );
 
-        setStudies(studiesWithPoint);
+        if (recentIds.length > 0) {
+          const filteredStudies = recentIds
+            .map((id) => studiesWithPoint.find((study) => study.id === id))
+            .filter(Boolean);
+
+          setStudies(filteredStudies);
+        } else {
+          setStudies(studiesWithPoint);
+        }
       } catch (error) {
-        console.error(error);
+        console.error('스터디 목록 조회 실패:', error);
+        setStudies([]);
       }
     };
 
     fetchData();
-  }, [keyword, order]);
+  }, [keyword, order, recentIds]);
 
   return (
     <div className="card-list">
-      {visibleStudies.map((item) => {
+      {visibleStudies.filter(Boolean).map((item) => {
         const cardProps = getStudyCardProps({
           item,
-          point: item.point,
+          point: item?.point ?? 0,
           backgrounds,
-          emojiItems: item.emojis,
+          emojiItems: item?.emojis ?? [],
           getBackgroundTheme,
         });
 
