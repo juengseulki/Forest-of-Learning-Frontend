@@ -78,16 +78,19 @@ export default function StudyCard({
           </p>
         </section>
         <section className="card-footer">
-          {visibleEmojis.map((item) => (
-            <div className="footer-content" key={item.emoji}>
-              <p className="icon">{item.emoji}</p>
-              <p className="icon-count">{item.count}</p>
-            </div>
-          ))}
+          {[...emojis]
+            .sort((a, b) => b.count - a.count) // 많은 순으로 정렬
+            .slice(0, 3) // 상위 3개만
+            .map((item) => (
+              <div className="footer-content" key={item.emoji}>
+                <p className="icon">{item.emoji}</p>
+                <p className="icon-count">{item.count}</p>
+              </div>
+            ))}
 
-          {hiddenCount > 0 && (
-            <div className="footer-content">
-              <p className="icon-count">+ {hiddenCount}..</p>
+          {emojis.length > 3 && (
+            <div className="footer-content more">
+              <p className="icon">+{emojis.length - 3}</p>
             </div>
           )}
         </section>

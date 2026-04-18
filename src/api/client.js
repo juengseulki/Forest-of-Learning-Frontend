@@ -11,11 +11,17 @@ async function request(method, url, { data, params } = {}) {
     });
   }
 
-  const res = await fetch(fullUrl.toString(), {
+  const options = {
     method,
-    headers: { 'Content-Type': 'application/json' },
-    body: data !== undefined ? JSON.stringify(data) : undefined,
-  });
+    headers: {},
+  };
+
+  if (data !== undefined) {
+    options.headers['Content-Type'] = 'application/json';
+    options.body = JSON.stringify(data);
+  }
+
+  const res = await fetch(fullUrl.toString(), options);
 
   const contentType = res.headers.get('content-type') || '';
   const isJson = contentType.includes('application/json');
