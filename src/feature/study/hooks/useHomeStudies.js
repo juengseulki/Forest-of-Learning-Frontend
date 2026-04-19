@@ -2,15 +2,16 @@ import { useEffect, useMemo, useState } from 'react';
 import { getStudies } from '../../../api/studyApi';
 import { getPoint } from '../../../api/pointApi';
 import { getEmojiReactions } from '../../../api/emojiApi';
+import { useRecentStudies } from './useRecentStudies';
 import {
-  getRecentStudies,
-  clearRecentStudies,
-} from '../shared/utils/recentStudy';
+  getFilteredStudies,
+  getVisibleCount,
+  getHasMore,
+} from '../utils/homeStudyUtils';
 
 export function useHomeStudies() {
   const [listPage, setListPage] = useState(1);
   const [studies, setStudies] = useState([]);
-  const [recentStudyIds, setRecentStudyIds] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [order, setOrder] = useState('latest');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,24 +23,10 @@ export function useHomeStudies() {
     setListPage((prev) => prev + 1);
   }
 
-  function refreshRecentStudies() {
-    const recent = getRecentStudies();
-    setRecentStudyIds(recent.map((item) => item.id));
-  }
-
-  function clearRecentStudyList() {
-    clearRecentStudies();
-    setRecentStudyIds([]);
-  }
-
-  useEffect(() => {
-    refreshRecentStudies();
-  }, []);
-
   useEffect(() => {
     let isMounted = true;
 
-    const fetchData = async () => {
+    async function fetchData() {
       try {
         setIsLoading(true);
 
@@ -65,6 +52,7 @@ export function useHomeStudies() {
         }
       } catch (error) {
         console.error('홈 스터디 목록 조회 실패:', error);
+
         if (isMounted) {
           setStudies([]);
         }
@@ -73,7 +61,7 @@ export function useHomeStudies() {
           setIsLoading(false);
         }
       }
-    };
+    }
 
     fetchData();
 
@@ -82,58 +70,24 @@ export function useHomeStudies() {
     };
   }, []);
 
+  useEffect(() => {
+    setListPage(1);
+  }, [keyword, order]);
+
   const filteredStudies = useMemo(() => {
-    const normalizedKeyword = keyword.trim().toLowerCase();
-
-    let result = [...studies];
-
-    if (normalizedKeyword) {
-      result = result.filter((study) => {
-        const nickname = study.nickname?.toLowerCase() ?? '';
-        const name = study.name?.toLowerCase() ?? '';
-        const description = study.description?.toLowerCase() ?? '';
-
-        return (
-          nickname.includes(normalizedKeyword) ||
-          name.includes(normalizedKeyword) ||
-          description.includes(normalizedKeyword)
-        );
-      });
-    }
-
-    switch (order) {
-      case 'oldest':
-        result.sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-        break;
-      case 'pointDesc':
-        result.sort((a, b) => (b.point ?? 0) - (a.point ?? 0));
-        break;
-      case 'pointAsc':
-        result.sort((a, b) => (a.point ?? 0) - (b.point ?? 0));
-        break;
-      case 'latest':
-      default:
-        result.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        break;
-    }
-
-    return result;
+    return getFilteredStudies(studies, keyword, order);
   }, [studies, keyword, order]);
 
-  const recentStudies = useMemo(() => {
-    if (recentStudyIds.length === 0) return [];
+  const visibleCount = useMemo(() => {
+    return getVisibleCount(listPage, listLimit);
+  }, [listPage, listLimit]);
 
-    return recentStudyIds
-      .map((id) => studies.find((study) => study.id === id))
-      .filter(Boolean)
-      .slice(0, recentLimit);
-  }, [recentStudyIds, studies]);
+  const hasMore = useMemo(() => {
+    return getHasMore(filteredStudies.length, visibleCount);
+  }, [filteredStudies.length, visibleCount]);
+
+  const { recentStudies, refreshRecentStudies, clearRecentStudyList } =
+    useRecentStudies(studies, recentLimit);
 
   return {
     listPage,
@@ -146,6 +100,8 @@ export function useHomeStudies() {
     isLoading,
     filteredStudies,
     recentStudies,
+    visibleCount,
+    hasMore,
     moreSee,
     clearRecentStudyList,
     refreshRecentStudies,

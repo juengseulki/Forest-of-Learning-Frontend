@@ -6,8 +6,6 @@ import '../styles/HomePage.css';
 
 function HomePage() {
   const {
-    listPage,
-    listLimit,
     recentLimit,
     keyword,
     setKeyword,
@@ -16,6 +14,8 @@ function HomePage() {
     isLoading,
     filteredStudies,
     recentStudies,
+    visibleCount,
+    hasMore,
     moreSee,
     clearRecentStudyList,
   } = useHomeStudies();
@@ -94,19 +94,17 @@ function HomePage() {
               <p className="null-text">아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList
-              studies={filteredStudies}
-              studies={filteredStudies}
-              visibleCount={listPage * listLimit}
-            />
+            <StudyList studies={filteredStudies} visibleCount={visibleCount} />
           )}
         </div>
 
-        <div className="button-container">
-          <button className="see-more" onClick={moreSee}>
-            더보기
-          </button>
-        </div>
+        {hasMore && (
+          <div className="button-container">
+            <button type="button" className="see-more" onClick={moreSee}>
+              더보기
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );
