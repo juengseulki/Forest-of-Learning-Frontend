@@ -32,7 +32,7 @@ function HomePage() {
               className="recent-clear-button"
               onClick={clearRecentStudyList}
             >
-              기록 비우기
+              🍃 비우기
             </button>
           )}
         </div>

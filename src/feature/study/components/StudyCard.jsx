@@ -26,7 +26,14 @@ export default function StudyCard({
     <div
       className="study-card"
       style={{
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `
+          linear-gradient(
+            to bottom,
+           rgba(255, 255, 255, 0.10),
+           rgba(255, 255, 255, 0.18)
+          ),
+          url(${backgroundImage})
+          `,
       }}
       onClick={handleClick}
     >

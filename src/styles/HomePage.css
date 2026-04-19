@@ -174,3 +174,31 @@ select::-ms-expand {
   letter-spacing: 0%;
   color: var(--gray-300);
 }
+
+.home-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recent-clear-button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  background-color: #a8cbb3;
+  color: #2f4f3e;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.recent-clear-button:hover {
+  background-color: #8fb996;
+  color: white;
+}
+
+.recent-clear-button:active {
+  transform: scale(0.96);
+}
