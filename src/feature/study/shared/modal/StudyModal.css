@@ -265,6 +265,13 @@
   display: none;
 }
 
+.record-container {
+  margin: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .record-date-nav {
   display: flex;
   justify-content: space-around;
