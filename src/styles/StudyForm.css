@@ -1,10 +1,10 @@
 .form-container {
   width: 696px;
+  margin: 20px auto 0;
   display: flex;
   flex-direction: column;
   gap: 40px;
   align-items: center;
-  margin-top: 20px;
 }
 
 .form-title {
@@ -21,12 +21,13 @@
 }
 
 .textarea-wrapper {
+  width: 648px;
   resize: none;
   height: 98px;
   padding: 14px 16px;
-}
-
-.textarea-wrapper:focus {
+  border: 1px solid var(--gray-200);
+  border-radius: 15px;
+  background-color: var(--color-white);
   outline: none;
 }
 
@@ -95,6 +96,7 @@
     width: 344px;
   }
 
+  .textarea-wrapper,
   .create-button {
     width: 312px;
   }
