@@ -18,8 +18,7 @@ function StudyInfoSection({ study, studyId }) {
 
       <div className="detail-point-group">
         <h3 className="detail-point-title">현재까지 획득한 포인트</h3>
-
-        <div className="detail-point">
+        <div className="detail-point common-point-box">
           <img src={pointIcon} alt="포인트 아이콘" />
           {point}P 획득
         </div>

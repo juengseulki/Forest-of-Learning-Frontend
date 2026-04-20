@@ -4,9 +4,7 @@
   align-items: center;
   height: 546px;
   padding: 35px;
-  border-radius: 20px;
-  border: 1px solid var(--gray-200);
-  background: #fff;
+  align-items: center;
 }
 
 .focus-timer-card__label {
