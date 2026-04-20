@@ -2,8 +2,12 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
+
 import Header from '../../components/Header/Header';
 import Button from '../../components/Button/Button';
+import { StudyProvider } from '../../../contexts/StudyContext';
+import { UIProvider } from '../../../contexts/UIContext';
+
 import './MainLayout.css';
 
 function MainLayout() {
@@ -25,31 +29,36 @@ function MainLayout() {
   };
 
   return (
-    <div className="main-layout">
-      <Header
-        rightContent={
-          isHomePage ? (
-            <Button onClick={() => navigate('/studies/create')}>
-              스터디 만들기
-            </Button>
-          ) : isStudyEditPage ? (
-            <Button onClick={handleHeaderClick}>뒤로가기</Button>
-          ) : null
-        }
-      />
+    <StudyProvider>
+      <UIProvider>
+        <div className="main-layout">
+          <Header
+            rightContent={
+              isHomePage ? (
+                <Button onClick={() => navigate('/studies/create')}>
+                  스터디 만들기
+                </Button>
+              ) : isStudyEditPage ? (
+                <Button onClick={handleHeaderClick}>뒤로가기</Button>
+              ) : null
+            }
+          />
 
-      <main className="main-layout__content">
-        <Outlet context={{ setHeaderAction }} />
-        <ToastContainer
-          position="bottom-center"
-          autoClose={2000}
-          hideProgressBar
-          closeButton={false}
-          pauseOnHover={false}
-          draggable={false}
-        />
-      </main>
-    </div>
+          <main className="main-layout__content">
+            <Outlet context={{ setHeaderAction }} />
+            <ToastContainer
+              position="bottom-center"
+              autoClose={2000}
+              hideProgressBar
+              closeButton={false}
+              pauseOnHover={false}
+              draggable={false}
+              limit={1}
+            />
+          </main>
+        </div>
+      </UIProvider>
+    </StudyProvider>
   );
 }
 

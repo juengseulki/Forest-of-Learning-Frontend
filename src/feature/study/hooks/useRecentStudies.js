@@ -1,32 +1,38 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   getRecentStudies,
   clearRecentStudies,
 } from '../shared/utils/recentStudy';
+import { useStudy } from '../../../contexts/StudyContext';
 
 export function useRecentStudies(studies, recentLimit = 3) {
-  const [recentStudyIds, setRecentStudyIds] = useState(() =>
-    getRecentStudies().map((item) => item.id)
-  );
+  const { state, dispatch } = useStudy();
+  const { recentStudies: recentState } = state;
 
   const refreshRecentStudies = useCallback(() => {
     const recent = getRecentStudies();
-    setRecentStudyIds(recent.map((item) => item.id));
-  }, []);
+    dispatch({ type: 'SET_RECENT', payload: recent });
+  }, [dispatch]);
 
   const clearRecentStudyList = useCallback(() => {
     clearRecentStudies();
-    setRecentStudyIds([]);
-  }, []);
+    dispatch({ type: 'SET_RECENT', payload: [] });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (recentState.length === 0) {
+      refreshRecentStudies();
+    }
+  }, [recentState.length, refreshRecentStudies]);
 
   const recentStudies = useMemo(() => {
-    if (recentStudyIds.length === 0) return [];
+    if (recentState.length === 0) return [];
 
-    return recentStudyIds
-      .map((id) => studies.find((study) => study.id === id))
+    return recentState
+      .map((recentItem) => studies.find((study) => study.id === recentItem.id))
       .filter(Boolean)
       .slice(0, recentLimit);
-  }, [recentStudyIds, studies, recentLimit]);
+  }, [recentState, studies, recentLimit]);
 
   return {
     recentStudies,
