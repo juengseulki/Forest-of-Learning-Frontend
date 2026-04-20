@@ -265,6 +265,84 @@
   display: none;
 }
 
+.record-date-nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+.record-date-nav button {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.record-date-nav span {
+  font-weight: 600;
+}
+
+.record-table {
+  width: 100%;
+}
+
+.record-table thead {
+  background: #f8f9fb;
+}
+
+.record-table th {
+  padding: 14px 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #414141;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.record-table td {
+  padding: 14px 12px;
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.record-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.record-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.record-pagination__button,
+.record-pagination__page {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 14px;
+  color: #414141;
+  cursor: pointer;
+}
+
+.record-pagination__button:disabled {
+  background: #f3f4f6;
+  colors: #b5b9c0;
+  cursor: not-allowed;
+}
+
+.record-pagination__page--active {
+  border-color: #578246;
+  background: #578246;
+  color: #ffffff;
+  font-weight: 700;
+}
+
 @media (min-width: 768px) and (max-width: 1024px) {
   .study-modal {
     padding: 20px;
