@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -9,9 +9,11 @@ import {
   verifyStudyPassword,
   deleteStudy,
 } from '../../../../api/studyApi.js';
+import { useStudy } from '../../../../contexts/StudyContext';
 
 export function useStudyDetail(studyId) {
   const navigate = useNavigate();
+  const { state, dispatch } = useStudy();
 
   const [study, setStudy] = useState({});
   const [password, setPassword] = useState('');
@@ -20,7 +22,15 @@ export function useStudyDetail(studyId) {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
+
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+
+  const parsedStudyId = Number(studyId);
+
+  const studyFromStore = useMemo(() => {
+    return state.studies.find((item) => item.id === parsedStudyId);
+  }, [state.studies, parsedStudyId]);
+
   const showToast = useCallback((type, icon, message) => {
     toast(<Toast type={type} icon={icon} message={message} />, {
       position: 'bottom-center',
@@ -32,20 +42,30 @@ export function useStudyDetail(studyId) {
     });
   }, []);
 
-  const fetchStudy = useCallback(async () => {
+  useEffect(() => {
+    if (studyFromStore) {
+      setStudy(studyFromStore);
+      return;
+    }
+
     if (!studyId) return;
 
-    try {
-      const targetStudy = await getStudy(studyId);
-      setStudy(targetStudy);
-    } catch (error) {
-      handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
-    }
-  }, [studyId]);
+    const fetchStudy = async () => {
+      try {
+        const targetStudy = await getStudy(studyId);
+        setStudy(targetStudy);
 
-  useEffect(() => {
+        dispatch({
+          type: 'SET_STUDIES',
+          payload: [...state.studies, targetStudy],
+        });
+      } catch (error) {
+        handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
+      }
+    };
+
     fetchStudy();
-  }, [fetchStudy]);
+  }, [studyId, studyFromStore, dispatch, state.studies]);
 
   const handleRequirePassword = useCallback((action) => {
     setPendingAction(action);
@@ -130,7 +150,6 @@ export function useStudyDetail(studyId) {
       await verifyStudyPassword(studyId, password);
 
       handleClosePasswordModal();
-      showToast('success', '✅', '확인되었습니다.');
       moveByAction(pendingAction);
     } catch (error) {
       showToast('danger', '❌', error.message || '오류가 발생했습니다.');
@@ -151,6 +170,18 @@ export function useStudyDetail(studyId) {
       setIsSubmitting(true);
       await deleteStudy(studyId, password);
 
+      dispatch({
+        type: 'SET_STUDIES',
+        payload: state.studies.filter((item) => item.id !== parsedStudyId),
+      });
+
+      dispatch({
+        type: 'SET_RECENT',
+        payload: state.recentStudies.filter(
+          (item) => item.id !== parsedStudyId
+        ),
+      });
+
       setIsDeleteConfirmModalOpen(false);
       setPassword('');
       setPendingAction(null);
@@ -166,7 +197,16 @@ export function useStudyDetail(studyId) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [studyId, password, showToast, navigate]);
+  }, [
+    studyId,
+    password,
+    dispatch,
+    state.studies,
+    state.recentStudies,
+    parsedStudyId,
+    showToast,
+    navigate,
+  ]);
 
   return {
     study,

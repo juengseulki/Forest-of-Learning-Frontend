@@ -1,7 +1,9 @@
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
 import { useNavigate } from 'react-router-dom';
+
 import { addRecentStudy } from '../shared/utils/recentStudy';
+import { useStudy } from '../../../contexts/StudyContext';
 
 export default function StudyCard({
   id,
@@ -15,9 +17,16 @@ export default function StudyCard({
   theme,
 }) {
   const navigate = useNavigate();
+  const { dispatch } = useStudy();
 
   const handleClick = () => {
-    addRecentStudy({ id });
+    const updatedRecentStudies = addRecentStudy({ id });
+
+    dispatch({
+      type: 'SET_RECENT',
+      payload: updatedRecentStudies,
+    });
+
     navigate(`/studies/${id}`);
   };
 

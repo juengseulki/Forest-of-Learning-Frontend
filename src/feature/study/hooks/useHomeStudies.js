@@ -1,8 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { getStudies } from '../../../api/studyApi';
 import { getPoint } from '../../../api/pointApi';
 import { getEmojiReactions } from '../../../api/emojiApi';
+
 import { useRecentStudies } from './useRecentStudies';
+import { useStudy } from '../../../contexts/StudyContext';
+import { useUI } from '../../../contexts/UIContext';
 import {
   getFilteredStudies,
   getVisibleCount,
@@ -10,33 +13,43 @@ import {
 } from '../utils/homeStudyUtils';
 
 export function useHomeStudies() {
-  const [listPage, setListPage] = useState(1);
-  const [studies, setStudies] = useState([]);
-  const [keyword, setKeyword] = useState('');
-  const [order, setOrder] = useState('latest');
-  const [isLoading, setIsLoading] = useState(false);
+  const { state: studyState, dispatch: studyDispatch } = useStudy();
+  const { state: uiState, dispatch: uiDispatch } = useUI();
+
+  const { studies, isLoading } = studyState;
+  const { keyword, order, listPage } = uiState;
 
   const listLimit = 6;
   const recentLimit = 3;
 
-  function moreSee() {
-    setListPage((prev) => prev + 1);
-  }
+  const setKeyword = (value) => {
+    uiDispatch({ type: 'SET_KEYWORD', payload: value });
+    uiDispatch({ type: 'RESET_PAGE' });
+  };
+
+  const setOrder = (value) => {
+    uiDispatch({ type: 'SET_ORDER', payload: value });
+    uiDispatch({ type: 'RESET_PAGE' });
+  };
+
+  const moreSee = () => {
+    uiDispatch({ type: 'INCREMENT_PAGE' });
+  };
 
   useEffect(() => {
     let isMounted = true;
 
     async function fetchData() {
       try {
-        setIsLoading(true);
+        studyDispatch({ type: 'SET_LOADING', payload: true });
 
         const data = await getStudies();
 
         const studiesWithExtra = await Promise.all(
           (data?.items ?? []).map(async (study) => {
             const [pointData, emojiData] = await Promise.all([
-              getPoint(study.id),
-              getEmojiReactions(study.id),
+              getPoint(study.id).catch(() => ({ totalPoint: 0 })),
+              getEmojiReactions(study.id).catch(() => ({ items: [] })),
             ]);
 
             return {
@@ -48,31 +61,38 @@ export function useHomeStudies() {
         );
 
         if (isMounted) {
-          setStudies(studiesWithExtra);
+          studyDispatch({
+            type: 'SET_STUDIES',
+            payload: studiesWithExtra,
+          });
         }
       } catch (error) {
         console.error('홈 스터디 목록 조회 실패:', error);
 
         if (isMounted) {
-          setStudies([]);
+          studyDispatch({
+            type: 'SET_STUDIES',
+            payload: [],
+          });
         }
       } finally {
         if (isMounted) {
-          setIsLoading(false);
+          studyDispatch({
+            type: 'SET_LOADING',
+            payload: false,
+          });
         }
       }
     }
 
-    fetchData();
+    if (studies.length === 0) {
+      fetchData();
+    }
 
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  useEffect(() => {
-    setListPage(1);
-  }, [keyword, order]);
+  }, [studyDispatch, studies.length]);
 
   const filteredStudies = useMemo(() => {
     return getFilteredStudies(studies, keyword, order);
@@ -80,7 +100,7 @@ export function useHomeStudies() {
 
   const visibleCount = useMemo(() => {
     return getVisibleCount(listPage, listLimit);
-  }, [listPage, listLimit]);
+  }, [listPage]);
 
   const hasMore = useMemo(() => {
     return getHasMore(filteredStudies.length, visibleCount);
