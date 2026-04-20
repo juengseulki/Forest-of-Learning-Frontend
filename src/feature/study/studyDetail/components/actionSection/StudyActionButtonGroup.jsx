@@ -1,55 +1,43 @@
-import React from 'react';
-import { toast } from 'react-toastify';
-import Toast from '../../../../../shared/components/toast/Toast';
+import React, { useState } from 'react';
+import ShareSheet from './ShareSheet';
 
-function StudyActionButtonGroup({ onEditClick, onDeleteClick, onRecordClick }) {
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-
-      toast(
-        <Toast type="success" icon="🔗" message="링크가 복사되었습니다!" />,
-        {
-          position: 'bottom-center',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeButton: false,
-          pauseOnHover: false,
-          draggable: false,
-        }
-      );
-    } catch (error) {
-      console.error('복사 실패', error);
-
-      toast(<Toast type="danger" icon="❗" message="복사에 실패했습니다." />, {
-        position: 'bottom-center',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeButton: false,
-        pauseOnHover: false,
-        draggable: false,
-      });
-    }
-  };
+function StudyActionButtonGroup({ onEditClick, onDeleteClick, study }) {
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (
-    <div className="detail-action-group">
-      <button className="action-item" onClick={handleCopyLink}>
-        공유하기
-      </button>
+    <>
+      <div className="detail-action-group">
+        <button
+          type="button"
+          className="action-item"
+          onClick={() => setIsShareOpen(true)}
+        >
+          공유하기
+        </button>
 
-      <button className="action-item" onClick={onEditClick}>
-        수정하기
-      </button>
+        <button className="action-item" onClick={onEditClick}>
+          수정하기
+        </button>
 
-      <button className="action-item" onClick={onRecordClick}>
-        포인트 기록
-      </button>
+        <button className="action-item" onClick={onRecordClick}>
+          포인트 기록
+        </button>
 
-      <button className="action-item detail-delete" onClick={onDeleteClick}>
-        스터디 삭제하기
-      </button>
-    </div>
+        <button
+          type="button"
+          className="action-item detail-delete"
+          onClick={onDeleteClick}
+        >
+          스터디 삭제하기
+        </button>
+      </div>
+
+      <ShareSheet
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        study={study}
+      />
+    </>
   );
 }
 
