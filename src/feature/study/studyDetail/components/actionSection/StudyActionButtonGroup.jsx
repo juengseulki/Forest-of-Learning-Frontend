@@ -2,7 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import Toast from '../../../../../shared/components/toast/Toast';
 
-function StudyActionButtonGroup({ onEditClick, onDeleteClick }) {
+function StudyActionButtonGroup({ onEditClick, onDeleteClick, onRecordClick }) {
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -40,6 +40,10 @@ function StudyActionButtonGroup({ onEditClick, onDeleteClick }) {
 
       <button className="action-item" onClick={onEditClick}>
         수정하기
+      </button>
+
+      <button className="action-item" onClick={onRecordClick}>
+        포인트 기록
       </button>
 
       <button className="action-item detail-delete" onClick={onDeleteClick}>

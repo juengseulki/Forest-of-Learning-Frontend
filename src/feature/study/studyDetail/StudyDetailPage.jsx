@@ -18,6 +18,7 @@ import {
 } from '../../../api/studyApi.js';
 import StudyPasswordModal from '../../study/shared/modal/StudyPasswordModal.jsx';
 import StudyConfirmModal from '../../study/shared/modal/StudyConfirmModal.jsx';
+import StudyRecordModal from '../../study/shared/modal/StudyRecordModal.jsx';
 
 function StudyDetailPage() {
   const { studyId } = useParams();
@@ -27,6 +28,7 @@ function StudyDetailPage() {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -170,6 +172,7 @@ function StudyDetailPage() {
             <StudyActionButtonGroup
               onEditClick={() => handleRequirePassword('edit')}
               onDeleteClick={() => handleRequirePassword('delete')}
+              onRecordClick={() => setIsRecordModalOpen(true)}
             />
 
             <StudyLinkGroup
@@ -203,6 +206,16 @@ function StudyDetailPage() {
         cancelText="취소"
         onClose={handleCloseDeleteConfirmModal}
         onConfirm={handleConfirmDelete}
+      />
+
+      <StudyRecordModal
+        isOpen={isRecordModalOpen}
+        title="포인트 기록"
+        description="포인트 내역을 확인할 수 있습니다."
+        stayText="닫기"
+        leaveText="확인"
+        onClose={() => setIsRecordModalOpen(false)}
+        onLeave={() => setIsRecordModalOpen(false)}
       />
     </div>
   );
