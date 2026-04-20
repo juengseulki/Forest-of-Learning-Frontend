@@ -98,7 +98,33 @@ em-emoji-picker {
   height: 100%;
   cursor: pointer;
 }
+/* 다크모드 전용 스타일 설정 */
+[data-theme='dark'] .emoji-btn,
+[data-theme='dark'] .emoji-more-btn {
+  background-color: var(--bg-button-gray) !important;
+  border: 1px solid var(--border-button) !important;
+  color: var(--text-main) !important;
+  transition: none !important;
+}
 
+[data-theme='dark'] .emoji-add-btn {
+  background-color: var(--bg-button-gray) !important;
+  border: 1px solid var(--border-button) !important;
+  color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .emoji-popup {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-button);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+[data-theme='dark'] .emoji-add-btn img {
+  /* 2. 그냥 지금보다 조금 더 밝게만 하고 싶을 때 (숫자를 조절해보세요) */
+  filter: brightness(2);
+
+  /* 3. 약간 푸른빛 도는 밝은 회색으로 만들고 싶을 때 */
+  /* filter: brightness(1.5) sepia(1) hue-rotate(180deg); */
+}
 /* info */
 .detail-info {
   display: flex;
