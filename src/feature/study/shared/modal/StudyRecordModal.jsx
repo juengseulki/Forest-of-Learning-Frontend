@@ -69,7 +69,6 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
           return formatDateString(logDate) === selected;
         });
         setPointLogs(filteredData);
-        console.log(data);
         setCurrentPage(1);
       } catch (error) {
         console.error(error);
