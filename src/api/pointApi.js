@@ -11,3 +11,9 @@ export async function getPoint(studyId) {
 //   const response = await client.patch(`/points/${studyId}/calculate`, { sessionData });
 //   return response.data;
 // }
+
+// 포인트 로그 조회
+export async function getPointLog(studyId) {
+  const response = await client.get(`/points/${studyId}/logs`);
+  return response.data;
+}

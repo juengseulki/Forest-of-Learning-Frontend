@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BaseStudyModal from './BaseStudyModal';
+import { getPointLog } from '../../../../api/pointApi';
 
 function StudyRecordModal({
   isOpen,
@@ -10,6 +11,8 @@ function StudyRecordModal({
 }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentPage, setCurrentPage] = useState(1);
+  const [pointLogs, setPointLogs] = useState([]);
+
   const totalPages = 3;
 
   const handlePrevPage = () => {
@@ -24,7 +27,7 @@ function StudyRecordModal({
     setCurrentPage(page);
   };
 
-  const formatDate = (date) => {
+  const formatDateString = (date) => {
     return date.toISOString().slice(0, 10);
   };
 
@@ -40,6 +43,35 @@ function StudyRecordModal({
     setSelectedDate(nextDate);
   };
 
+  const formatTime = (dateString) => {
+    return new Date(dateString).toLocaleTimeString('ko-KR', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  };
+
+  useEffect(() => {
+    const fetchPointLogs = async () => {
+      try {
+        const data = await getPointLog(18);
+        const selected = formatDateString(selectedDate);
+
+        const filteredData = data.filter((log) => {
+          const logDate = new Date(log.createdAt);
+          return formatDateString(logDate) === selected;
+        });
+
+        setPointLogs(filteredData);
+      } catch (error) {
+        console.error('로그 목록 조회 실패:', error);
+      }
+    };
+
+    fetchPointLogs();
+  }, [selectedDate]);
+
   return (
     <BaseStudyModal
       isOpen={isOpen}
@@ -53,7 +85,7 @@ function StudyRecordModal({
           &lt;
         </button>
 
-        <span>{formatDate(selectedDate)}</span>
+        <span>{formatDateString(selectedDate)}</span>
 
         <button type="button" onClick={handleNextDate}>
           &gt;
@@ -70,41 +102,21 @@ function StudyRecordModal({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>00시간 26분</td>
-            <td>6point</td>
-            <td>05:02:53</td>
-            <td>05:03:12</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>00시간 26분</td>
-            <td>6point</td>
-            <td>05:02:53</td>
-            <td>05:03:12</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>00시간 26분</td>
-            <td>6point</td>
-            <td>05:02:53</td>
-            <td>05:03:12</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>00시간 26분</td>
-            <td>6point</td>
-            <td>05:02:53</td>
-            <td>05:03:12</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>00시간 26분</td>
-            <td>6point</td>
-            <td>05:02:53</td>
-            <td>05:03:12</td>
-          </tr>
+          {pointLogs.length > 0 ? (
+            pointLogs.map((log, index) => (
+              <tr key={log.id}>
+                <td>{index + 1}</td>
+                <td>{log.focusSession.duration}분</td>
+                <td>{log.amount}point</td>
+                <td>{formatTime(log.focusSession.startedAt)}</td>
+                <td>{formatTime(log.focusSession.completedAt)}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">기록이 없습니다.</td>
+            </tr>
+          )}
         </tbody>
       </table>
       <div className="record-pagination">
