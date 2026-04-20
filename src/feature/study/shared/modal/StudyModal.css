@@ -310,6 +310,13 @@
   border-bottom: 1px solid #f1f3f5;
 }
 
+.record-point {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
 .record-pagination {
   display: flex;
   justify-content: center;

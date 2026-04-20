@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import BaseStudyModal from './BaseStudyModal';
 import { getPointLog } from '../../../../api/pointApi';
+import pointIcon from '../../../../shared/images/icons/ic_point.png';
 
 function StudyRecordModal({
   isOpen,
@@ -112,7 +113,10 @@ function StudyRecordModal({
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
                   <td>{log.focusSession.duration}</td>
-                  <td>{log.amount}P</td>
+                  <td className="record-point">
+                    <img src={pointIcon} alt="포인트 아이콘" />
+                    <p>{log.amount}P</p>
+                  </td>
                   <td>{formatTime(log.focusSession.startedAt)}</td>
                   <td>{formatTime(log.focusSession.completedAt)}</td>
                 </tr>
