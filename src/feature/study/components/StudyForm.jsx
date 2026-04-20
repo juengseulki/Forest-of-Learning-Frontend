@@ -6,6 +6,19 @@ import ic_pow from '../../../images/icon/ic_pow.svg';
 import { createStudy, updateStudy } from '../../../api/studyApi';
 import { getBackgrounds } from '../../../api/backgroundApi';
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
+function resolveImageUrl(imageUrl) {
+  if (!imageUrl) return '';
+
+  if (imageUrl.startsWith('http')) {
+    return imageUrl;
+  }
+
+  return `${API_BASE_URL}${imageUrl}`;
+}
+
 function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const navigate = useNavigate();
   const { studyId } = useParams();
@@ -154,7 +167,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
                   onClick={() => setSelectedBackground(background.id)}
                 >
                   <img
-                    src={background.imageUrl}
+                    src={resolveImageUrl(background.imageUrl)}
                     alt={background.name}
                     className="background-image"
                   />

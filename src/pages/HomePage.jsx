@@ -1,50 +1,51 @@
-import { useEffect, useState } from 'react';
-import { getStudies } from '../../src/api/studyApi';
 import StudyList from '../feature/study/components/StudyList';
+import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
 import ic_search from '../shared/images/icons/ic_search.png';
 
 import '../styles/HomePage.css';
 
 function HomePage() {
-  const [listPage, setListPage] = useState(1);
-  const [studies, setStudies] = useState([]);
-  const [keyword, setKeyword] = useState('');
-  const [order, setOrder] = useState('');
-
-  //최근 조회 id 로컬에 저장
-  const recentIds = JSON.parse(localStorage.getItem('recentStudies')) || [];
-
-  const listLimit = 6;
-  const recentLimit = 3;
-
-  function moreSee() {
-    setListPage((prev) => prev + 1);
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getStudies();
-        setStudies(data.items);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const {
+    recentLimit,
+    keyword,
+    setKeyword,
+    order,
+    setOrder,
+    isLoading,
+    filteredStudies,
+    recentStudies,
+    visibleCount,
+    hasMore,
+    moreSee,
+    clearRecentStudyList,
+  } = useHomeStudies();
 
   return (
     <div className="main-container">
       <section className="recent-lookup">
-        <p className="home-title">최근 조회한 스터디</p>
+        <div className="home-section-header">
+          <p className="home-title">최근 조회한 스터디</p>
+
+          {recentStudies.length > 0 && (
+            <button
+              type="button"
+              className="recent-clear-button"
+              onClick={clearRecentStudyList}
+            >
+              🍃 비우기
+            </button>
+          )}
+        </div>
+
         <div className="recent-scroll">
-          {recentIds.length === 0 ? (
+          {recentStudies.length === 0 ? (
+          {recentStudies.length === 0 ? (
             <div className="look-study">
               <p className="null-text">아직 조회한 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList visibleCount={recentLimit} recentIds={recentIds} />
+            <StudyList studies={recentStudies} visibleCount={recentLimit} />
+            <StudyList studies={recentStudies} visibleCount={recentLimit} />
           )}
         </div>
       </section>
@@ -52,14 +53,17 @@ function HomePage() {
       <section className="study-list">
         <div className="list-top">
           <p className="home-title">스터디 둘러보기</p>
+
+
           <div className="filter">
             <div className="search-container">
               <img src={ic_search} alt="검색 아이콘" />
               <input
                 placeholder="검색"
-                onChange={(e) => {
-                  setKeyword(e.target.value);
-                }}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
               />
             </div>
 
@@ -74,21 +78,29 @@ function HomePage() {
               <option value="pointAsc">적은 포인트 순</option>
             </select>
           </div>
-          {studies.length == 0 ? (
+
+          {isLoading ? (
+            <div className="look-study">
+              <p className="null-text">스터디를 불러오는 중이에요...</p>
+            </div>
+          ) : filteredStudies.length === 0 ? (
+
+          {isLoading ? (
+            <div className="look-study">
+              <p className="null-text">스터디를 불러오는 중이에요...</p>
+            </div>
+          ) : filteredStudies.length === 0 ? (
             <div className="look-study">
               <p className="null-text">아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList
-              visibleCount={listPage * listLimit}
-              keyword={keyword}
-              order={order}
-            />
+            <StudyList studies={filteredStudies} visibleCount={visibleCount} />
           )}
         </div>
-        {listPage * listLimit < studies.length && (
+
+        {hasMore && (
           <div className="button-container">
-            <button className="see-more" onClick={moreSee}>
+            <button type="button" className="see-more" onClick={moreSee}>
               더보기
             </button>
           </div>
