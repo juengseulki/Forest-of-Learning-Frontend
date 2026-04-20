@@ -23,6 +23,8 @@ export function useStudyDetail(studyId) {
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
 
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+
   const parsedStudyId = Number(studyId);
 
   const studyFromStore = useMemo(() => {
@@ -85,6 +87,14 @@ export function useStudyDetail(studyId) {
 
   const handleChangePassword = useCallback((e) => {
     setPassword(e.target.value);
+  }, []);
+
+  const handleOpenRecordModal = useCallback(() => {
+    setIsRecordModalOpen(true);
+  }, []);
+
+  const handleCloseRecordModal = useCallback(() => {
+    setIsRecordModalOpen(false);
   }, []);
 
   const getActionLabel = useCallback(() => {
@@ -204,12 +214,15 @@ export function useStudyDetail(studyId) {
     isSubmitting,
     isPasswordModalOpen,
     isDeleteConfirmModalOpen,
+    isRecordModalOpen,
     handleRequirePassword,
     handleClosePasswordModal,
     handleCloseDeleteConfirmModal,
     handleChangePassword,
     handleSubmitPassword,
     handleConfirmDelete,
+    handleOpenRecordModal,
+    handleCloseRecordModal,
     getActionLabel,
   };
 }

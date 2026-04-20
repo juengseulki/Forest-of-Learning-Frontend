@@ -173,6 +173,10 @@ em-emoji-picker {
   border-right: 2px solid var(--color-green-text);
 }
 
+.action-item:nth-child(2) {
+  border-right: 2px solid var(--color-green-text);
+}
+
 .detail-delete {
   color: var(--gray-300);
   border-left: 2px solid var(--gray-300);
@@ -320,7 +324,7 @@ em-emoji-picker {
   }
 
   .action-item {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .emoji {

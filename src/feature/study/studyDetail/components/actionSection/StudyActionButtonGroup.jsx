@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import ShareSheet from './ShareSheet';
 
-function StudyActionButtonGroup({ onEditClick, onDeleteClick, study }) {
+function StudyActionButtonGroup({
+  onEditClick,
+  onDeleteClick,
+  onRecordClick,
+  study,
+}) {
   const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (
@@ -15,8 +20,12 @@ function StudyActionButtonGroup({ onEditClick, onDeleteClick, study }) {
           공유하기
         </button>
 
-        <button type="button" className="action-item" onClick={onEditClick}>
+        <button className="action-item" onClick={onEditClick}>
           수정하기
+        </button>
+
+        <button className="action-item" onClick={onRecordClick}>
+          포인트 기록
         </button>
 
         <button
