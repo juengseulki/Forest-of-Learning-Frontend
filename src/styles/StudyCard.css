@@ -165,3 +165,13 @@
     gap: 12px;
   }
 }
+
+.description {
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 2줄 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
