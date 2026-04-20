@@ -3,13 +3,7 @@ import BaseStudyModal from './BaseStudyModal';
 import { getPointLog } from '../../../../api/pointApi';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
 
-function StudyRecordModal({
-  isOpen,
-  title = '포인트 기록',
-  // description = '포인트 변동 내역을 확인할 수 있습니다.',
-  closeText = '닫기',
-  onClose,
-}) {
+function StudyRecordModal({ isOpen, title, closeText, onClose }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentPage, setCurrentPage] = useState(1);
   const [pointLogs, setPointLogs] = useState([]);
@@ -89,7 +83,6 @@ function StudyRecordModal({
     <BaseStudyModal
       isOpen={isOpen}
       title={title}
-      // description={description}
       onClose={onClose}
       className="study-modal__content--confirm"
     >

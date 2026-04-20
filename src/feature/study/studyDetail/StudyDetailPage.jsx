@@ -85,7 +85,6 @@ function StudyDetailPage() {
       <StudyRecordModal
         isOpen={isRecordModalOpen}
         title="포인트 기록"
-        // description="포인트 변동 내역을 확인할 수 있습니다."
         closeText="닫기"
         onClose={handleCloseRecordModal}
       />
