@@ -122,7 +122,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container common-panel-md">
       <div className="form-wrapper">
         <p className="form-title">
           {isEditMode ? '스터디 수정하기' : '스터디 만들기'}

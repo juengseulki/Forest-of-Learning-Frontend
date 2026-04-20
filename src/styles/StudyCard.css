@@ -3,10 +3,10 @@
   height: 243px;
   border-radius: var(--radius-lg);
   display: flex;
-  gap: 54px;
   flex-direction: column;
-  padding: 24px;
   justify-content: center;
+  gap: 54px;
+  padding: 24px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -29,24 +29,24 @@
 .title-group {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .title {
   font-weight: 700;
   font-size: 18px;
-  line-height: 100%;
-  letter-spacing: 0%;
+  line-height: 1.3;
   color: #414141;
 }
 
 .point {
   display: flex;
+  align-items: center;
+  gap: 8px;
   border-radius: 50px;
   border: 1px solid #0000001a;
   background-color: #ffffff4d;
   padding: 4px 8px;
-  gap: 8px;
-  align-items: center;
 }
 
 .point-icon {
@@ -58,7 +58,6 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: #414141;
 }
 
@@ -66,7 +65,6 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: var(--gray-300);
 }
 
@@ -74,7 +72,10 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  letter-spacing: 0%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-footer {
@@ -95,29 +96,13 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
-  letter-spacing: 0%;
 }
 
 .icon-count {
   font-weight: 400;
   font-size: 12px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: var(--color-white);
-}
-
-.form-container {
-  border-radius: 20px;
-  padding: 24px 24px 40px 24px;
-  display: flex;
-  gap: 40px;
-  background-color: var(--color-white);
-  flex-direction: column;
-  width: 696px;
-  align-items: center;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 @media (max-width: 744px) {
@@ -125,6 +110,7 @@
     width: 358px;
     height: 243px;
   }
+
   .study-card {
     width: 312px;
     height: 243px;
@@ -137,41 +123,40 @@
     height: 180px;
     gap: 11px;
   }
+
   .study-card {
     width: 312px;
     height: 180px;
     gap: 11px;
   }
+
   .title {
     font-size: 16px;
   }
+
   .duration {
     font-size: 12px;
   }
+
   .description {
     font-size: 14px;
   }
+
   .icon {
     font-size: 12px;
   }
+
   .point {
     align-self: flex-start;
     gap: 4px;
   }
+
   .title-group {
+    flex-direction: column;
     gap: 6px;
   }
+
   .card-header {
     gap: 12px;
   }
-}
-
-.description {
-  word-break: break-word;
-  overflow-wrap: break-word;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* 2줄 제한 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }

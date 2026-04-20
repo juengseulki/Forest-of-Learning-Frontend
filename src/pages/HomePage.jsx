@@ -3,6 +3,7 @@ import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
 import ic_search from '../shared/images/icons/ic_search.png';
 
 import '../styles/HomePage.css';
+import '../styles/global.css';
 
 function HomePage() {
   const {
@@ -22,9 +23,9 @@ function HomePage() {
 
   return (
     <div className="main-container">
-      <section className="recent-lookup">
+      <section className="recent-lookup common-panel-lg">
         <div className="home-section-header">
-          <p className="home-title">최근 조회한 스터디</p>
+          <p className="home-title common-title-lg">최근 조회한 스터디</p>
 
           {recentStudies.length > 0 && (
             <button
@@ -48,14 +49,15 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="study-list">
+      <section className="study-list common-panel-lg">
         <div className="list-top">
-          <p className="home-title">스터디 둘러보기</p>
+          <p className="home-title common-title-lg">스터디 둘러보기</p>
 
           <div className="filter">
-            <div className="search-container">
+            <div className="search-container common-field">
               <img src={ic_search} alt="검색 아이콘" />
               <input
+                className="common-field-control"
                 placeholder="검색"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
@@ -63,7 +65,7 @@ function HomePage() {
             </div>
 
             <select
-              className="select-container"
+              className="select-container common-field"
               value={order}
               onChange={(e) => setOrder(e.target.value)}
             >

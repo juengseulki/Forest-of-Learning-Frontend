@@ -69,7 +69,7 @@ function HabitPage() {
   }, [habitId, habitList]);
 
   return (
-    <section className="habit-page common-panel">
+    <section className="habit-page common-panel-lg">
       <main className="habit-home">
         <header className="habit-home__header">
           <div className="habit-home__top">
@@ -123,7 +123,7 @@ function HabitPage() {
           </div>
         </header>
 
-        <section className="habit-card common-card">
+        <section className="habit-card common-card common-panel-md">
           <div className="habit-card__header">
             <div className="habit-card__header-left" />
             <h2 className="habit-card__title">오늘의 습관</h2>
