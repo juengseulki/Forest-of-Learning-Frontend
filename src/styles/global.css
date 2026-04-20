@@ -77,3 +77,52 @@ textarea::placeholder {
   font-weight: normal;
   font-style: normal;
 }
+
+/* 공통 css */
+
+/*흰색 배경*/
+.common-panel {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  padding: 40px;
+}
+.common-point-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--gray-200);
+  border-radius: 999px;
+  background-color: var(--color-white);
+}
+
+/*회색테두리 */
+.common-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid var(--gray-200);
+  background: #fff;
+}
+
+.common-action-btn {
+  border: 1px solid var(--gray-200);
+  border-radius: 14px;
+  background-color: var(--color-white);
+  color: var(--gray-300);
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.common-action-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
