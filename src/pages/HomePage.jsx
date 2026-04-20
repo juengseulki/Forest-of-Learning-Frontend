@@ -39,12 +39,10 @@ function HomePage() {
 
         <div className="recent-scroll">
           {recentStudies.length === 0 ? (
-          {recentStudies.length === 0 ? (
             <div className="look-study">
               <p className="null-text">아직 조회한 스터디가 없어요</p>
             </div>
           ) : (
-            <StudyList studies={recentStudies} visibleCount={recentLimit} />
             <StudyList studies={recentStudies} visibleCount={recentLimit} />
           )}
         </div>
@@ -54,14 +52,11 @@ function HomePage() {
         <div className="list-top">
           <p className="home-title">스터디 둘러보기</p>
 
-
           <div className="filter">
             <div className="search-container">
               <img src={ic_search} alt="검색 아이콘" />
               <input
                 placeholder="검색"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
               />
@@ -78,12 +73,6 @@ function HomePage() {
               <option value="pointAsc">적은 포인트 순</option>
             </select>
           </div>
-
-          {isLoading ? (
-            <div className="look-study">
-              <p className="null-text">스터디를 불러오는 중이에요...</p>
-            </div>
-          ) : filteredStudies.length === 0 ? (
 
           {isLoading ? (
             <div className="look-study">
