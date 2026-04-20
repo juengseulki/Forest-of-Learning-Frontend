@@ -74,13 +74,13 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     }
 
     if (!isEditMode) {
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,20}$/;
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{5,20}$/;
 
       if (!password) {
         newErrors.password = '*비밀번호를 입력해주세요.';
       } else if (!passwordRegex.test(password)) {
         newErrors.password =
-          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다.';
+          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다. (특수문자 !@#$%^&* 사용 가능)';
       }
 
       if (password !== passwordCheck) {
