@@ -57,6 +57,14 @@ function StudyRecordModal({
     });
   };
 
+  const formatDuration = (seconds) => {
+    const hour = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    const minute = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    const second = String(seconds % 60).padStart(2, '0');
+
+    return `${hour}시간 ${minute}분 ${second}초`;
+  };
+
   useEffect(() => {
     const fetchPointLogs = async () => {
       try {
@@ -102,7 +110,7 @@ function StudyRecordModal({
             <tr>
               <th>번호</th>
               <th>집중 시간</th>
-              <th>획득 포인트</th>
+              <th>포인트</th>
               <th>시작 시간</th>
               <th>종료 시간</th>
             </tr>
@@ -112,7 +120,7 @@ function StudyRecordModal({
               currentPageLogs.map((log, index) => (
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
-                  <td>{log.focusSession.duration}</td>
+                  <td>{formatDuration(log.focusSession.duration)}</td>
                   <td className="record-point">
                     <img src={pointIcon} alt="포인트 아이콘" />
                     <p>{log.amount}P</p>

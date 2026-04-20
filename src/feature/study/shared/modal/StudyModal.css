@@ -344,7 +344,6 @@
 }
 
 .record-pagination__page--active {
-  /* border-color: #578246; */
   background: #99c08e;
   color: #ffffff;
   font-weight: 700;
@@ -554,5 +553,14 @@
 
   .study-modal__content--password .study-modal__actions {
     margin-top: 16px;
+  }
+}
+
+@media (max-width: 365px) {
+  .record-table th:nth-child(4),
+  .record-table th:nth-child(5),
+  .record-table td:nth-child(4),
+  .record-table td:nth-child(5) {
+    display: none;
   }
 }
