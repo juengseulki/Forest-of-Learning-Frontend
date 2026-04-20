@@ -9,7 +9,20 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
     />
+    <script>
+      //새로고침 깜빡임 방지
+      (function () {
+        const savedTheme = localStorage.getItem('theme');
 
+        const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)')
+          .matches
+          ? 'dark'
+          : 'light';
+
+        const theme = savedTheme || preferredTheme;
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
     <title>공부의 숲</title>
   </head>
   <body>
