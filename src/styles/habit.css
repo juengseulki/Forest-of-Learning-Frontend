@@ -1,12 +1,6 @@
-body {
-  background: #f6f4ef;
-  color: #414141;
-  font-family: Pretendard, sans-serif;
-}
-
 /* =========================
    PAGE
-   ========================= */
+========================= */
 
 .habit-page {
   margin-top: 30px;
@@ -20,7 +14,7 @@ body {
 
 /* =========================
    HEADER
-   ========================= */
+========================= */
 
 .habit-home__header {
   display: flex;
@@ -97,12 +91,10 @@ body {
 
 /* =========================
    CARD
-   ========================= */
+========================= */
 
 .habit-card {
   width: 100%;
-  padding: 24px 20px;
-  box-sizing: border-box;
   margin-bottom: 40px;
 }
 
@@ -174,7 +166,7 @@ body {
 
 /* =========================
    EMPTY
-   ========================= */
+========================= */
 
 .habit-empty {
   width: 100%;
@@ -200,7 +192,7 @@ body {
 
 /* =========================
    MODAL
-   ========================= */
+========================= */
 
 .habit-modal {
   position: fixed;
@@ -366,7 +358,7 @@ body {
 
 /* =========================
    TABLET
-   ========================= */
+========================= */
 
 @media (max-width: 1024px) {
   .habit-page {
@@ -379,7 +371,6 @@ body {
 
   .habit-home__title {
     font-size: 24px;
-    cursor: pointer;
   }
 
   .habit-home__nav-btn {
@@ -402,10 +393,7 @@ body {
     height: 20px;
   }
 
-  .habit-home__time-label {
-    font-size: 15px;
-  }
-
+  .habit-home__time-label,
   .habit-home__time-value {
     font-size: 15px;
   }
@@ -487,7 +475,7 @@ body {
 
 /* =========================
    MOBILE
-   ========================= */
+========================= */
 
 @media (max-width: 767px) {
   .habit-page {
@@ -514,7 +502,6 @@ body {
   .habit-home__title {
     font-size: 18px;
     line-height: 1.3;
-    cursor: pointer;
   }
 
   .habit-home__nav {
@@ -550,15 +537,14 @@ body {
     gap: 6px;
   }
 
-  .habit-home__time-label {
+  .habit-home__time-label,
+  .habit-home__time-value {
     font-size: 10px;
     line-height: 1.2;
   }
 
   .habit-home__time-value {
     padding: 6px 10px;
-    font-size: 10px;
-    line-height: 1.2;
   }
 
   .habit-card {

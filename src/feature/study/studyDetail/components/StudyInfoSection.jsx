@@ -12,7 +12,7 @@ function StudyInfoSection({ study, studyId }) {
 
         <div className="detail-field">
           <h3>소개</h3>
-          <p>{study.description}</p>
+          <p className="text-break">{study.description}</p>
         </div>
       </section>
 

@@ -18,7 +18,6 @@ export default function StudyCard({
 
   const handleClick = () => {
     addRecentStudy({ id });
-
     navigate(`/studies/${id}`);
   };
 
@@ -33,7 +32,7 @@ export default function StudyCard({
            rgba(255, 255, 255, 0.18)
           ),
           url(${backgroundImage})
-          `,
+        `,
       }}
       onClick={handleClick}
     >
@@ -58,7 +57,10 @@ export default function StudyCard({
           </p>
         </div>
 
-        <p className="description" style={{ color: theme?.description }}>
+        <p
+          className="description text-break"
+          style={{ color: theme?.description }}
+        >
           {description}
         </p>
       </section>

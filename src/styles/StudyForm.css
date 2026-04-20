@@ -1,11 +1,8 @@
 .form-container {
-  border-radius: 20px;
-  padding: 24px 24px 40px 24px;
-  display: flex;
-  gap: 40px;
-  background-color: var(--color-white);
-  flex-direction: column;
   width: 696px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
   align-items: center;
   margin-top: 20px;
 }
@@ -14,7 +11,6 @@
   font-weight: 800;
   font-size: 24px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: #414141;
 }
 
@@ -27,9 +23,6 @@
 .textarea-wrapper {
   resize: none;
   height: 98px;
-  border-radius: 15px;
-  border: 1px solid var(--gray-200);
-  background-color: var(--color-white);
   padding: 14px 16px;
 }
 
@@ -68,28 +61,22 @@
   width: 648px;
   height: 58px;
   padding: 10px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-
   border: none;
   border-radius: 16px;
   background-color: #99c08e;
   color: #ffffff;
-
   font-family: 'Doldam', sans-serif;
-
   text-shadow:
     0px 2px 0px rgba(0, 0, 0, 0.15),
     0px 0px 6px rgba(255, 255, 255, 0.3);
-
   font-size: 18px;
   font-weight: 400;
   line-height: normal;
   white-space: nowrap;
-
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -103,7 +90,6 @@
   cursor: not-allowed;
 }
 
-/* mobile */
 @media (max-width: 365px) {
   .form-container {
     width: 344px;
@@ -112,6 +98,7 @@
   .create-button {
     width: 312px;
   }
+
   .background-grid {
     grid-template-columns: repeat(2, 1fr);
   }
