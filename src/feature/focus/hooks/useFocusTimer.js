@@ -152,7 +152,7 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
     const newSession = {
       durationMinutes: Math.floor(totalSeconds / 60),
-      durationSeconds: totalSeconds,
+      durationSeconds: totalSeconds % 60,
       startedAt: start.toISOString(),
       plannedEndAt: end.toISOString(),
       status: TIMER_STATUS.RUNNING,
@@ -210,8 +210,8 @@ export function useFocusTimer(studyId, onSessionComplete) {
     if (!session) return;
 
     const sessionPayload = {
-      durationMinutes: session.durationMinutes,
-      durationSeconds: session.durationSeconds,
+      durationMinutes: Math.floor(session.durationSeconds / 60),
+      durationSeconds: session.durationSeconds % 60,
       startedAt: session.startedAt,
       totalPausedMs: session.totalPausedMs || 0,
     };

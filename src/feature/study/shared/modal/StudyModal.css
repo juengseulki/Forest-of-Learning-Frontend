@@ -265,6 +265,90 @@
   display: none;
 }
 
+.record-container {
+  margin: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.record-date-nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+.record-date-nav button {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.record-date-nav span {
+  font-weight: 600;
+}
+
+.record-table {
+  width: 100%;
+}
+
+.record-table thead {
+  background: #f8f9fb;
+}
+
+.record-table th {
+  padding: 14px 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #414141;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.record-table td {
+  padding: 14px 12px;
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.record-point {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.record-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.record-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.record-pagination__button,
+.record-pagination__page {
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.record-pagination__button:disabled {
+  cursor: not-allowed;
+}
+
+.record-pagination__page--active {
+  background: #99c08e;
+  color: #ffffff;
+  font-weight: 700;
+}
+
 @media (min-width: 768px) and (max-width: 1024px) {
   .study-modal {
     padding: 20px;
@@ -469,5 +553,14 @@
 
   .study-modal__content--password .study-modal__actions {
     margin-top: 16px;
+  }
+}
+
+@media (max-width: 365px) {
+  .record-table th:nth-child(4),
+  .record-table th:nth-child(5),
+  .record-table td:nth-child(4),
+  .record-table td:nth-child(5) {
+    display: none;
   }
 }
