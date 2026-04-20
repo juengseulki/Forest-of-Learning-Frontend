@@ -9,6 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 
+const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
+
+if (window.Kakao && !window.Kakao.isInitialized()) {
+  window.Kakao.init(kakaoKey);
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
     <>

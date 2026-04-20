@@ -43,6 +43,7 @@ function StudyDetailPage() {
             <StudyActionButtonGroup
               onEditClick={() => handleRequirePassword('edit')}
               onDeleteClick={() => handleRequirePassword('delete')}
+              study={study}
             />
 
             <StudyLinkGroup

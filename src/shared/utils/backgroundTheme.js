@@ -35,10 +35,10 @@ const IMAGE_MONSTERA_THEME = {
 };
 
 const BACKGROUND_THEME = {
-  1: { ...COMMON_THEME, nickname: '#3A8CA3' },
-  2: { ...COMMON_THEME, nickname: '#578246' },
-  3: { ...COMMON_THEME, nickname: '#C25578' },
-  4: { ...COMMON_THEME, nickname: '#C18E1B' },
+  1: { ...COMMON_THEME, nickname: '#578246' },
+  2: { ...COMMON_THEME, nickname: '#C18E1B' },
+  3: { ...COMMON_THEME, nickname: '#3A8CA3' },
+  4: { ...COMMON_THEME, nickname: '#C25578' },
 };
 
 export default function getBackgroundTheme(backgroundId) {
