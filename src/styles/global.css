@@ -78,9 +78,10 @@ textarea::placeholder {
   font-style: normal;
 }
 
-/* 공통 css */
+/* =========================
+   COMMON UI
+========================= */
 
-/*흰색 배경*/
 .common-panel {
   width: 100%;
   box-sizing: border-box;
@@ -88,6 +89,23 @@ textarea::placeholder {
   background-color: var(--color-white);
   padding: 40px;
 }
+
+.common-panel-lg {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  padding: 40px;
+}
+
+.common-panel-md {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  padding: 24px;
+}
+
 .common-point-box {
   display: inline-flex;
   align-items: center;
@@ -98,13 +116,12 @@ textarea::placeholder {
   background-color: var(--color-white);
 }
 
-/*회색테두리 */
 .common-card {
   display: flex;
   flex-direction: column;
   border-radius: 20px;
   border: 1px solid var(--gray-200);
-  background: #fff;
+  background: var(--color-white);
 }
 
 .common-action-btn {
@@ -112,7 +129,6 @@ textarea::placeholder {
   border-radius: 14px;
   background-color: var(--color-white);
   color: var(--gray-300);
-  font-family: Pretendard;
   font-size: 16px;
   font-weight: 500;
   line-height: normal;
@@ -125,4 +141,39 @@ textarea::placeholder {
   height: 24px;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+.common-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--gray-200);
+  border-radius: 15px;
+  background-color: var(--color-white);
+}
+
+.common-field-control {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #414141;
+}
+
+.common-title-lg {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #414141;
+}
+
+.common-title-xl {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #414141;
+}
+
+.text-break {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }

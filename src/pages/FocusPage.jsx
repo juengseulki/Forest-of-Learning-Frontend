@@ -71,7 +71,7 @@ function FocusPage() {
   return (
     <section className="focus-page">
       <div className="focus-page__content">
-        <div className="focus-page__panel common-panel">
+        <div className="focus-page__panel common-panel-lg">
           <div className="focus-page__study-header">
             <h1 className="focus-page__study-title">
               {studyData?.name || '스터디명'}
