@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import ShareSheet from './ShareSheet';
 
-function StudyActionButtonGroup({ onEditClick, onDeleteClick, study }) {
+function StudyActionButtonGroup({
+  onEditClick,
+  onDeleteClick,
+  onRecordClick,
+  study,
+}) {
   const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (

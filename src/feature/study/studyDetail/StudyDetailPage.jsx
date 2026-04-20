@@ -47,6 +47,7 @@ function StudyDetailPage() {
             <StudyActionButtonGroup
               onEditClick={() => handleRequirePassword('edit')}
               onDeleteClick={() => handleRequirePassword('delete')}
+              onRecordClick={() => handleOpenRecordModal()}
               study={study}
             />
 
