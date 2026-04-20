@@ -10,6 +10,7 @@ import EmojiSection from './components/emoji/EmojiSection.jsx';
 import HabitRecord from './components/HabitRecord.jsx';
 import StudyPasswordModal from '../shared/modal/StudyPasswordModal.jsx';
 import StudyConfirmModal from '../shared/modal/StudyConfirmModal.jsx';
+import StudyRecordModal from '../shared/modal/StudyRecordModal.jsx';
 import { useStudyDetail } from './hooks/useStudyDetail.jsx';
 
 function StudyDetailPage() {
@@ -21,12 +22,15 @@ function StudyDetailPage() {
     isSubmitting,
     isPasswordModalOpen,
     isDeleteConfirmModalOpen,
+    isRecordModalOpen,
     handleRequirePassword,
     handleClosePasswordModal,
     handleCloseDeleteConfirmModal,
     handleChangePassword,
     handleSubmitPassword,
     handleConfirmDelete,
+    handleOpenRecordModal,
+    handleCloseRecordModal,
     getActionLabel,
   } = useStudyDetail(studyId);
 
@@ -43,6 +47,7 @@ function StudyDetailPage() {
             <StudyActionButtonGroup
               onEditClick={() => handleRequirePassword('edit')}
               onDeleteClick={() => handleRequirePassword('delete')}
+              onRecordClick={() => handleOpenRecordModal()}
             />
 
             <StudyLinkGroup
@@ -75,6 +80,16 @@ function StudyDetailPage() {
         cancelText="취소"
         onClose={handleCloseDeleteConfirmModal}
         onConfirm={handleConfirmDelete}
+      />
+
+      <StudyRecordModal
+        isOpen={isRecordModalOpen}
+        title="포인트 기록"
+        description="포인트 변동 내역을 확인할 수 있습니다."
+        stayText="닫기"
+        leaveText="확인"
+        onClose={handleCloseRecordModal}
+        onLeave={handleCloseRecordModal}
       />
     </div>
   );

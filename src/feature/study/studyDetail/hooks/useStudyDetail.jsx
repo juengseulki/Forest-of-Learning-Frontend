@@ -20,7 +20,7 @@ export function useStudyDetail(studyId) {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
-
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const showToast = useCallback((type, icon, message) => {
     toast(<Toast type={type} icon={icon} message={message} />, {
       position: 'bottom-center',
@@ -67,6 +67,14 @@ export function useStudyDetail(studyId) {
 
   const handleChangePassword = useCallback((e) => {
     setPassword(e.target.value);
+  }, []);
+
+  const handleOpenRecordModal = useCallback(() => {
+    setIsRecordModalOpen(true);
+  }, []);
+
+  const handleCloseRecordModal = useCallback(() => {
+    setIsRecordModalOpen(false);
   }, []);
 
   const getActionLabel = useCallback(() => {
@@ -166,12 +174,15 @@ export function useStudyDetail(studyId) {
     isSubmitting,
     isPasswordModalOpen,
     isDeleteConfirmModalOpen,
+    isRecordModalOpen,
     handleRequirePassword,
     handleClosePasswordModal,
     handleCloseDeleteConfirmModal,
     handleChangePassword,
     handleSubmitPassword,
     handleConfirmDelete,
+    handleOpenRecordModal,
+    handleCloseRecordModal,
     getActionLabel,
   };
 }
