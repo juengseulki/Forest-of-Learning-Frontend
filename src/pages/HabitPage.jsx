@@ -21,6 +21,7 @@ function HabitPage() {
 
   const parsedStudyId = toStudyId(studyId);
 
+  // ✅ 현재 시간
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
 
@@ -115,6 +116,7 @@ function HabitPage() {
             </div>
           </div>
 
+          {/* ✅ 현재 시간 */}
           <div className="habit-home__time">
             <span className="habit-home__time-label">현재 시간</span>
             <span className="habit-home__time-value common-point-box">
