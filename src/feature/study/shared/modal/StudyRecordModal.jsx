@@ -13,7 +13,11 @@ function StudyRecordModal({
   const [currentPage, setCurrentPage] = useState(1);
   const [pointLogs, setPointLogs] = useState([]);
 
-  const totalPages = 3;
+  const ITEMS_PER_PAGE = 5;
+  const totalPages = Math.ceil(pointLogs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentPageLogs = pointLogs.slice(startIndex, endIndex);
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -57,15 +61,14 @@ function StudyRecordModal({
       try {
         const data = await getPointLog(18);
         const selected = formatDateString(selectedDate);
-
         const filteredData = data.filter((log) => {
           const logDate = new Date(log.createdAt);
           return formatDateString(logDate) === selected;
         });
-
         setPointLogs(filteredData);
+        setCurrentPage(1);
       } catch (error) {
-        console.error('로그 목록 조회 실패:', error);
+        console.error(error);
       }
     };
 
@@ -102,11 +105,11 @@ function StudyRecordModal({
           </tr>
         </thead>
         <tbody>
-          {pointLogs.length > 0 ? (
-            pointLogs.map((log, index) => (
+          {currentPageLogs.length > 0 ? (
+            currentPageLogs.map((log, index) => (
               <tr key={log.id}>
-                <td>{index + 1}</td>
-                <td>{log.focusSession.duration}분</td>
+                <td>{startIndex + index + 1}</td>
+                <td>{log.focusSession.duration}</td>
                 <td>{log.amount}point</td>
                 <td>{formatTime(log.focusSession.startedAt)}</td>
                 <td>{formatTime(log.focusSession.completedAt)}</td>
