@@ -7,7 +7,7 @@ import handleApiError from '../utils/handleApiError.jsx';
 
 import pointIcon from '../shared/images/icons/ic_point.png';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
-
+import '../styles/global.css';
 import '../styles/FocusPage.css';
 
 function FocusPage() {
@@ -53,22 +53,25 @@ function FocusPage() {
   }, [currentStudyId]);
 
   // 세션 완료 후 포인트 즉시 업데이트
-  const handleSessionComplete = useCallback((result) => {
-    // result: { focusSession, totalPoint } 또는 { totalPoint }
-    if (result && result.totalPoint !== undefined) {
-      setPointData({
-        totalPoint: result.totalPoint,
-      });
-    } else {
-      // 응답 형식이 다를 경우 서버에서 최신 포인트 조회
-      refreshPoint();
-    }
-  }, [refreshPoint]);
+  const handleSessionComplete = useCallback(
+    (result) => {
+      // result: { focusSession, totalPoint } 또는 { totalPoint }
+      if (result && result.totalPoint !== undefined) {
+        setPointData({
+          totalPoint: result.totalPoint,
+        });
+      } else {
+        // 응답 형식이 다를 경우 서버에서 최신 포인트 조회
+        refreshPoint();
+      }
+    },
+    [refreshPoint]
+  );
 
   return (
     <section className="focus-page">
       <div className="focus-page__content">
-        <div className="focus-page__panel">
+        <div className="focus-page__panel common-panel">
           <div className="focus-page__study-header">
             <h1 className="focus-page__study-title">
               {studyData?.name || '스터디명'}
@@ -77,13 +80,13 @@ function FocusPage() {
             <div className="focus-page__actions">
               <Link
                 to={`/studies/${currentStudyId}/habit`}
-                className="focus-page__action-btn"
+                className="focus-page__action-btn common-action-btn"
               >
                 <span>오늘의 습관</span>
                 <img
                   src={arrowRightIcon}
                   alt="오른쪽 화살표"
-                  className="focus-page__action-icon"
+                  className="common-action-icon"
                 />
               </Link>
 
@@ -99,7 +102,7 @@ function FocusPage() {
 
             <div className="focus-page__point-group">
               <p className="focus-page__study-desc">현재까지 획득한 포인트</p>
-              <div className="focus-page__point-box">
+              <div className="common-point-box">
                 <img
                   src={pointIcon}
                   alt="포인트 아이콘"

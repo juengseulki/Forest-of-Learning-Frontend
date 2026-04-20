@@ -81,7 +81,7 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
   const showTimerDisplay = isRunning || isPaused || isCompleted;
 
   return (
-    <div className="focus-timer-card">
+    <div className="focus-timer-card common-card">
       <p className="focus-timer-card__label">오늘의 집중</p>
 
       <FocusTimerDisplay

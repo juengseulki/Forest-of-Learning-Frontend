@@ -69,7 +69,7 @@ function HabitPage() {
   }, [habitId, habitList]);
 
   return (
-    <section className="habit-page">
+    <section className="habit-page common-panel">
       <main className="habit-home">
         <header className="habit-home__header">
           <div className="habit-home__top">
@@ -86,7 +86,7 @@ function HabitPage() {
             <div className="habit-home__nav">
               <button
                 type="button"
-                className="habit-home__nav-btn"
+                className="habit-home__nav-btn common-action-btn"
                 onClick={() => {
                   if (!parsedStudyId) return;
                   navigate(`/studies/${parsedStudyId}/focus`);
@@ -96,20 +96,20 @@ function HabitPage() {
                 <img
                   src={arrowRightIcon}
                   alt="화살표이미지"
-                  className="habit-home__nav-icon"
+                  className="common-action-icon habit-home__nav-icon"
                 />
               </button>
 
               <button
                 type="button"
-                className="habit-home__nav-btn habit-home__nav-btn--small"
+                className="habit-home__nav-btn habit-home__nav-btn--small common-action-btn"
                 onClick={() => navigate('/')}
               >
                 <span className="habit-home__nav-text">홈</span>
                 <img
                   src={arrowRightIcon}
                   alt="화살표이미지"
-                  className="habit-home__nav-icon"
+                  className="common-action-icon habit-home__nav-icon"
                 />
               </button>
             </div>
@@ -117,11 +117,13 @@ function HabitPage() {
 
           <div className="habit-home__time">
             <span className="habit-home__time-label">현재 시간</span>
-            <span className="habit-home__time-value">{formattedTime}</span>
+            <span className="habit-home__time-value common-point-box">
+              {formattedTime}
+            </span>
           </div>
         </header>
 
-        <section className="habit-card">
+        <section className="habit-card common-card">
           <div className="habit-card__header">
             <div className="habit-card__header-left" />
             <h2 className="habit-card__title">오늘의 습관</h2>

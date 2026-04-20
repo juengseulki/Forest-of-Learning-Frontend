@@ -159,7 +159,7 @@ function StudyDetailPage() {
 
   return (
     <div className="detail-wrapper">
-      <div className="detail-container">
+      <div className="detail-container common-panel">
         <section className="detail-top-section">
           <div className="detail-left">
             <EmojiSection studyId={studyId} />

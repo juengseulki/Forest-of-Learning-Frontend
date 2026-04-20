@@ -1,13 +1,8 @@
 .detail-container {
-  background-color: var(--color-white);
-
-  width: 100%;
   height: auto;
   min-height: 900px;
   margin: 0 auto;
   margin-top: 30px;
-  padding: 40px;
-  border-radius: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -146,13 +141,9 @@ em-emoji-picker {
   align-items: flex-start;
 }
 .detail-point {
-  border-radius: 50px;
-  border: 1px solid var(--gray-200);
-  background: rgba(255, 255, 255, 0.3);
   padding: 8px 12px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
 }
 
 /*detail-top-right*/
@@ -197,28 +188,17 @@ em-emoji-picker {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 15px;
-  border: 1px solid var(--gray-200);
   width: 144px;
   height: 48px;
-  color: var(--gray-300);
-  font-family: Pretendard;
-  font-size: 16px;
-  font-weight: 500;
 }
 
 /* 습관 기록표 */
 
 .detail-habit-section {
-  min-height: px;
   margin-top: 40px;
   width: 100%;
   flex: 1;
-  border: 1px solid var(--gray-200);
-  border-radius: 15px;
   padding: 24px;
-  display: flex;
-  flex-direction: column;
   gap: 15px;
   min-height: 400px;
 }

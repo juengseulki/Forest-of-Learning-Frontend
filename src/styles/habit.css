@@ -9,12 +9,7 @@ body {
    ========================= */
 
 .habit-page {
-  width: 100%;
-  padding: 40px 40px;
   margin-top: 30px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-sizing: border-box;
 }
 
 .habit-home {
@@ -67,10 +62,6 @@ body {
   min-width: 120px;
   height: 48px;
   padding: 0 18px;
-  border-radius: 15px;
-  border: 1px solid #dddddd;
-  background: #ffffff;
-  cursor: pointer;
   box-sizing: border-box;
 }
 
@@ -78,18 +69,8 @@ body {
   min-width: 72px;
 }
 
-.habit-home__nav-text {
-  font-size: 16px;
-  font-weight: 500;
-  color: #818181;
-  white-space: nowrap;
-}
-
 .habit-home__nav-icon {
-  width: 24px;
-  height: 24px;
   display: block;
-  flex-shrink: 0;
 }
 
 .habit-home__time {
@@ -105,14 +86,9 @@ body {
 }
 
 .habit-home__time-value {
-  display: inline-flex;
-  align-items: center;
   width: fit-content;
   max-width: 100%;
   padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: #ffffff;
   font-size: 16px;
   font-weight: 500;
   color: #414141;
@@ -126,11 +102,6 @@ body {
 .habit-card {
   width: 100%;
   padding: 24px 20px;
-  border-radius: 20px;
-  border: 1px solid #dddddd;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
   box-sizing: border-box;
   margin-bottom: 40px;
 }

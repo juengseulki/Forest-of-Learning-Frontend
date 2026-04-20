@@ -60,7 +60,7 @@ function HabitRecord({ studyId }) {
   const weekDays = getWeekDays(weekStart);
 
   return (
-    <section className="detail-habit-section">
+    <section className="detail-habit-section common-card">
       <h2>습관 기록표</h2>
       <div className="habit-scroll-container">
         {habits.length === 0 ? (
