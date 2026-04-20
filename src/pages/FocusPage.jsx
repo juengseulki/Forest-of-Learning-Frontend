@@ -90,7 +90,7 @@ function FocusPage() {
                 />
               </Link>
 
-              <Link to="/" className="focus-page__action-btn">
+              <Link to="/" className="focus-page__action-btn common-action-btn">
                 <span>홈</span>
                 <img
                   src={arrowRightIcon}

@@ -105,58 +105,123 @@
   color: var(--color-white);
 }
 
-@media (max-width: 744px) {
-  .recent-scroll .study-card {
-    width: 358px;
-    height: 243px;
-  }
-
-  .study-card {
-    width: 312px;
-    height: 243px;
-  }
-}
-
-@media (max-width: 375px) {
+/* tablet */
+@media (max-width: 1024px) {
   .recent-scroll .study-card {
     width: 240px;
-    height: 180px;
-    gap: 11px;
+    height: 160px;
+    gap: 16px;
+    padding: 16px;
   }
 
   .study-card {
-    width: 312px;
-    height: 180px;
-    gap: 11px;
-  }
-
-  .title {
-    font-size: 16px;
-  }
-
-  .duration {
-    font-size: 12px;
-  }
-
-  .description {
-    font-size: 14px;
-  }
-
-  .icon {
-    font-size: 12px;
-  }
-
-  .point {
-    align-self: flex-start;
-    gap: 4px;
-  }
-
-  .title-group {
-    flex-direction: column;
-    gap: 6px;
+    width: 100%;
+    height: 160px;
+    min-width: 0;
+    gap: 16px;
+    padding: 16px;
   }
 
   .card-header {
     gap: 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .duration {
+    font-size: 11px;
+  }
+
+  .description {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .point {
+    gap: 4px;
+    padding: 3px 6px;
+  }
+
+  .point-text {
+    font-size: 10px;
+  }
+
+  .icon {
+    font-size: 11px;
+  }
+
+  .icon-count {
+    font-size: 10px;
+  }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  .recent-scroll .study-card {
+    width: 180px;
+    height: 120px;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .study-card {
+    width: 100%;
+    height: 140px;
+    min-width: 0;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .card-header {
+    gap: 8px;
+  }
+
+  .title-group {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .title {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .duration {
+    font-size: 10px;
+  }
+
+  .description {
+    font-size: 11px;
+    line-height: 15px;
+    -webkit-line-clamp: 2;
+  }
+
+  .point {
+    align-self: flex-start;
+    gap: 3px;
+    padding: 2px 6px;
+  }
+
+  .point-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .point-text {
+    font-size: 9px;
+  }
+
+  .icon {
+    font-size: 10px;
+  }
+
+  .icon-count {
+    font-size: 9px;
+  }
+
+  .footer-content {
+    padding: 4px 6px;
   }
 }

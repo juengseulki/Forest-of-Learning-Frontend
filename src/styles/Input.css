@@ -21,17 +21,26 @@
 .input-wrapper-error {
   width: 648px;
   height: 48px;
+  border-radius: 15px;
+  background-color: var(--color-white);
   display: flex;
   align-items: center;
   padding: 14px 16px;
 }
 
+.input-wrapper {
+  border: 1px solid var(--gray-200);
+}
+
 .input-wrapper-error {
-  border-color: var(--color-red);
+  border: 1px solid var(--color-red);
 }
 
 .input-field {
   width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
 }
 
 .input-field::placeholder {
