@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint';
 import { TIMER_STATUS } from '../utils/focusConstants';
 import { completeFocus } from '../../../api/focus/focusApi';
@@ -18,28 +18,17 @@ import {
 export function useFocusTimer(studyId, onSessionComplete) {
   const { calculateFirstReward } = useFocusPoint();
 
-  // 현재 UI에서 사용하는 입력값
   const [minutes, setMinutes] = useState('00');
   const [seconds, setSeconds] = useState('00');
 
-  // 저장된 세션이 있으면 복원
   const [session, setSession] = useState(() => getStoredSession());
-
-  // 토스트나 상태 메시지용
   const [message, setMessage] = useState('');
-
-  // 현재 시각은 lazy initializer로 한 번만 계산
   const [now, setNow] = useState(() => Date.now());
 
-  // 1차 보상 중복 저장 방지
-  const savingRef = useRef(false);
-
-  // 입력값 총 초
   const totalSeconds = useMemo(() => {
     return Number(minutes || 0) * 60 + Number(seconds || 0);
   }, [minutes, seconds]);
 
-  // 입력값 변경
   const handleMinutesChange = (e) => {
     const value = e.target.value.replace(/\D/g, '').slice(0, 2);
     setMinutes(value);
@@ -56,7 +45,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     setSeconds(value);
   };
 
-  // blur 시 2자리 포맷
   const handleBlurMinutes = () => {
     setMinutes((prev) => String(Number(prev || 0)).padStart(2, '0'));
   };
@@ -73,7 +61,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     return formatSeconds(session.durationSeconds);
   }, [session]);
 
-  // 타이머가 RUNNING일 때 현재 시각 갱신 + 기준 시간 도달 보상 저장
   useEffect(() => {
     if (!session || session.status !== TIMER_STATUS.RUNNING) return;
 
@@ -83,17 +70,18 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
       setSession((prev) => {
         if (!prev || prev.status !== TIMER_STATUS.RUNNING) return prev;
-        if (prev.firstSaved || savingRef.current) return prev;
+
+        // 이미 보상 저장된 경우 → 중복 방지
+        if (prev.firstSaved) return prev;
 
         const totalPausedMs = prev.totalPausedMs ?? 0;
+
         const realElapsedMinutes = Math.floor(
           (currentNow - new Date(prev.startedAt).getTime() - totalPausedMs) /
             60000
         );
 
         if (realElapsedMinutes < prev.durationMinutes) return prev;
-
-        savingRef.current = true;
 
         const reward = calculateFirstReward(prev.durationMinutes);
 
@@ -108,7 +96,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
         saveStoredSession(updated);
         setMessage('기준 시간 도달!');
 
-        savingRef.current = false;
         return updated;
       });
     }, 1000);
@@ -116,7 +103,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     return () => clearInterval(timer);
   }, [session?.status, calculateFirstReward]);
 
-  // PAUSED일 때는 멈춘 시점 시간 유지
   const effectiveNow = useMemo(() => {
     if (!session) return now;
 
@@ -152,13 +138,11 @@ export function useFocusTimer(studyId, onSessionComplete) {
   const mode = diffSeconds >= 0 ? 'COUNTDOWN' : 'OVERTIME';
   const displayTime = formatSeconds(Math.abs(diffSeconds));
 
-  // 현재 UI 분기용 상태
   const isRunning = session?.status === TIMER_STATUS.RUNNING;
   const isPaused = session?.status === TIMER_STATUS.PAUSED;
   const isCompleted = session?.status === TIMER_STATUS.COMPLETED;
   const isOvertime = isRunning && mode === 'OVERTIME';
 
-  // 시작
   const handleStart = () => {
     if (totalSeconds === 0) return;
 
@@ -187,7 +171,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     setMessage('시작!');
   };
 
-  // 일시정지
   const handlePause = () => {
     if (!session) return;
 
@@ -202,7 +185,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     setSession(updated);
   };
 
-  // 재개
   const handleResume = () => {
     if (!session || !session.pausedAt) return;
 
@@ -224,11 +206,9 @@ export function useFocusTimer(studyId, onSessionComplete) {
     setSession(updated);
   };
 
-  // 종료
   const handleFinish = async () => {
     if (!session) return;
 
-    // 백단 계산에 필요한 데이터만 추출
     const sessionPayload = {
       durationMinutes: session.durationMinutes,
       durationSeconds: session.durationSeconds,
@@ -248,12 +228,10 @@ export function useFocusTimer(studyId, onSessionComplete) {
     if (studyId) {
       try {
         const result = await completeFocus(studyId, {
-          sessionData: sessionPayload, // 필요한 데이터만 전송
+          sessionData: sessionPayload,
         });
 
         setMessage('포인트가 추가되었습니다!');
-
-        // 콜백 함수에 result 객체 전달 (포인트 업데이트)
         onSessionComplete?.(result);
       } catch (err) {
         handleApiError(err, '집중 세션 저장에 실패했습니다.');
@@ -262,7 +240,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     }
   };
 
-  // 초기화
   const handleReset = () => {
     clearStoredSession();
     setSession(null);
@@ -273,7 +250,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
   };
 
   return {
-    // 입력값
     minutes,
     seconds,
     totalSeconds,
@@ -282,7 +258,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     handleBlurMinutes,
     handleBlurSeconds,
 
-    // 세션/표시값
     session,
     message,
     mode,
@@ -294,14 +269,12 @@ export function useFocusTimer(studyId, onSessionComplete) {
     isCompleted,
     isOvertime,
 
-    // 액션
     handleStart,
     handlePause,
     handleResume,
     handleFinish,
     handleReset,
 
-    // 상수
     TIMER_STATUS,
   };
 }
