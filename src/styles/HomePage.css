@@ -53,25 +53,9 @@ input:focus {
   gap: 10px;
 }
 
-select::-ms-expand {
-  display: none;
-}
-
-.select-container {
-  width: 180px;
-  height: 42px;
-  padding: 9px 20px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 100%;
-  color: var(--text-sub);
-  cursor: pointer;
-  outline: none;
-}
-
-/* 여기 */
 .select {
   position: relative;
+  display: flex;
 }
 
 .select .label {
@@ -86,13 +70,14 @@ select::-ms-expand {
   font-weight: 400;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   cursor: pointer;
 }
 
 .select .optionList {
   position: absolute;
   top: calc(100% + 10px);
-  width: 100%;
+  width: 180px;
   border: 1px solid var(--gray-200);
   border-radius: 15px;
   overflow: hidden;
@@ -128,8 +113,6 @@ select::-ms-expand {
 .select .optionItem:hover {
   background: var(--gray-100);
 }
-
-/* 여기까지 */
 
 .button-container {
   display: flex;
@@ -282,8 +265,7 @@ select::-ms-expand {
     gap: 10px;
   }
 
-  .search-container,
-  .select-container {
+  .search-container {
     width: 100%;
   }
 
@@ -301,5 +283,8 @@ select::-ms-expand {
     width: 180px;
     padding: 12px 0;
     font-size: 14px;
+  }
+  .select {
+    justify-content: flex-end;
   }
 }

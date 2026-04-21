@@ -3,6 +3,7 @@ import { useState } from 'react';
 import StudyList from '../feature/study/components/StudyList';
 import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
 import ic_search from '../shared/images/icons/ic_search.png';
+import ic_select_arrow from '../shared/components/icons/icon/ic_select_arrow.png';
 
 import '../styles/HomePage.css';
 import '../styles/global.css';
@@ -74,17 +75,6 @@ function HomePage() {
               />
             </div>
 
-            {/* <select
-              className="select-container common-field"
-              value={order}
-              onChange={(e) => setOrder(e.target.value)}
-            >
-              <option value="latest">최근순</option>
-              <option value="oldest">오래된 순</option>
-              <option value="pointDesc">많은 포인트 순</option>
-              <option value="pointAsc">적은 포인트 순</option>
-            </select> */}
-
             <div className={`select ${isOpen ? 'active' : ''}`}>
               <button
                 type="button"
@@ -92,6 +82,7 @@ function HomePage() {
                 onClick={() => setIsOpen(!isOpen)}
               >
                 {label}
+                <img src={ic_select_arrow} />
               </button>
               <ul className="optionList">
                 <li
