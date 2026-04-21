@@ -69,6 +69,68 @@ select::-ms-expand {
   outline: none;
 }
 
+/* 여기 */
+.select {
+  position: relative;
+}
+
+.select .label {
+  width: 180px;
+  height: 42px;
+  padding: 9px 20px;
+  border: 1px solid var(--gray-200);
+  background-color: var(--color-white);
+  border-radius: 15px;
+  color: var(--gray-300);
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.select .optionList {
+  position: absolute;
+  top: calc(100% + 10px);
+  width: 100%;
+  border: 1px solid var(--gray-200);
+  border-radius: 15px;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.2s ease,
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+  z-index: 100;
+}
+
+.select.active .optionList {
+  opacity: 1;
+}
+
+.select .optionItem {
+  height: 42px;
+  background: #ffffff;
+  color: #666666;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--gray-200);
+  cursor: pointer;
+}
+
+.select .optionItem:last-child {
+  border-bottom: none;
+}
+
+.select .optionItem:hover {
+  background: var(--gray-100);
+}
+
+/* 여기까지 */
+
 .button-container {
   display: flex;
   justify-content: center;
