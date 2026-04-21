@@ -15,6 +15,7 @@ function HomePage() {
     keyword,
     setKeyword,
     setOrder,
+    order,
     isLoading,
     filteredStudies,
     recentStudies,
@@ -27,10 +28,23 @@ function HomePage() {
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [label, setLabel] = useState(t('latest'));
 
-  function handleSelect(text, value) {
-    setLabel(text);
+  function getOrderLabel(order) {
+    switch (order) {
+      case 'latest':
+        return t('latest');
+      case 'oldest':
+        return t('oldest');
+      case 'pointDesc':
+        return t('pointDesc');
+      case 'pointAsc':
+        return t('pointAsc');
+      default:
+        return t('latest');
+    }
+  }
+
+  function handleSelect(value) {
     setOrder(value);
     setIsOpen(false);
   }
@@ -78,37 +92,37 @@ function HomePage() {
               />
             </div>
 
-            <div className={`select ${isOpen ? 'active' : ''}`}>
+            <div className={`select ${isOpen && 'active'}`}>
               <button
                 type="button"
                 className="label"
                 onClick={() => setIsOpen(!isOpen)}
               >
-                {label}
+                {getOrderLabel(order)}
                 <img src={ic_select_arrow} />
               </button>
               <ul className="optionList">
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect(t('latest'), 'latest')}
+                  onClick={() => handleSelect('latest')}
                 >
                   {t('latest')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect(t('oldest'), 'oldest')}
+                  onClick={() => handleSelect('oldest')}
                 >
                   {t('oldest')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect(t('pointDesc'), 'pointDesc')}
+                  onClick={() => handleSelect('pointDesc')}
                 >
                   {t('pointDesc')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect(t('pointAsc'), 'pointAsc')}
+                  onClick={() => handleSelect('pointAsc')}
                 >
                   {t('pointAsc')}
                 </li>
