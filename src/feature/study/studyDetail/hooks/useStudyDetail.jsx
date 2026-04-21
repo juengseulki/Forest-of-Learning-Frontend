@@ -108,9 +108,8 @@ export function useStudyDetail(studyId) {
         return t('goToHabit');
       case 'focus':
         return t('goToFocus');
-        return '오늘의 집중으로 가기';
       case 'record':
-        return '포인트 로그 보기';
+        return t('viewPointLog');
       default:
         return t('confirm');
     }
@@ -157,6 +156,14 @@ export function useStudyDetail(studyId) {
       }
 
       await verifyStudyPassword(studyId, password);
+
+      if (
+        pendingAction === 'edit' ||
+        pendingAction === 'habit' ||
+        pendingAction === 'focus'
+      ) {
+        sessionStorage.setItem(`study-auth-${studyId}`, 'true');
+      }
 
       handleClosePasswordModal();
       moveByAction(pendingAction);

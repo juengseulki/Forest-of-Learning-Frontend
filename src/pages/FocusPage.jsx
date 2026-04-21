@@ -109,7 +109,7 @@ function FocusPage() {
                 className="focus-page__action-btn common-action-btn"
                 onClick={handleOpenRecordModal}
               >
-                <span>포인트 기록</span>
+                <span>{t('viewPointLog')}</span>
               </button>
               <Link
                 to={`/studies/${currentStudyId}/habit`}

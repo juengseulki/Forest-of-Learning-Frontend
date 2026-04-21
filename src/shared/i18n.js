@@ -168,6 +168,8 @@ i18n.use(initReactI18next).init({
         deleteSuccess: '스터디가 삭제되었습니다.',
         deleteFail: '삭제 중 오류가 발생했습니다.',
         studyInfoLoadFail: '스터디 정보를 불러오지 못했습니다.',
+
+        viewPointLog: '포인트 로그',
       },
     },
 
@@ -334,6 +336,8 @@ i18n.use(initReactI18next).init({
         deleteSuccess: 'Study has been deleted.',
         deleteFail: 'An error occurred while deleting.',
         studyInfoLoadFail: 'Failed to load study information.',
+
+        viewPointLog: 'View Point Log',
       },
     },
 
@@ -500,6 +504,8 @@ i18n.use(initReactI18next).init({
         deleteSuccess: 'スタディが削除されました。',
         deleteFail: '削除中にエラーが発生しました。',
         studyInfoLoadFail: 'スタディ情報を読み込めませんでした。',
+
+        viewPointLog: 'ポイント履歴を見る',
       },
     },
 
@@ -665,6 +671,8 @@ i18n.use(initReactI18next).init({
         deleteSuccess: '学习组已删除。',
         deleteFail: '删除时发生错误。',
         studyInfoLoadFail: '无法加载学习组信息。',
+
+        viewPointLog: '查看积分记录',
       },
     },
   },

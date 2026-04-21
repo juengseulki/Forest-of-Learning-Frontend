@@ -6,6 +6,7 @@ import StudyEditPage from '../pages/StudyEditPage';
 import FocusPage from '../pages/FocusPage';
 import HabitPage from '../pages/HabitPage';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
+import ProtectedStudyRoute from '../shared/routes/ProtectedStudyRoute';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'studies/:studyId/edit',
-        element: <StudyEditPage />,
+        element: (
+          <ProtectedStudyRoute>
+            <StudyEditPage />
+          </ProtectedStudyRoute>
+        ),
       },
       {
         path: 'studies/:studyId',
@@ -30,11 +35,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'studies/:studyId/habit',
-        element: <HabitPage />,
+        element: (
+          <ProtectedStudyRoute>
+            <HabitPage />
+          </ProtectedStudyRoute>
+        ),
       },
       {
         path: 'studies/:studyId/focus',
-        element: <FocusPage />,
+        element: (
+          <ProtectedStudyRoute>
+            <FocusPage />
+          </ProtectedStudyRoute>
+        ),
       },
       {
         path: '*',

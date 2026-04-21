@@ -9,18 +9,22 @@ import Button from '../../components/Button/Button';
 import { StudyProvider } from '../../../contexts/StudyContext';
 import { UIProvider } from '../../../contexts/UIContext';
 import { useTheme } from '../../hooks/useTheme';
-import darkModIcon from '../../../shared/components/icons/button/sticker_dark_button.png';
-import lightModIcon from '../../../shared/components/icons/button/sticker_light_button.png';
+
+import mainIcon from '../../../images/habit/sticker_light_mint_100_04.png';
+import darkModeIcon from '../../../shared/components/icons/button/sticker_dark_button.png';
+import lightModeIcon from '../../../shared/components/icons/button/sticker_light_button.png';
 
 import './MainLayout.css';
+
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
   const [theme, toggleTheme] = useTheme();
-
   const [headerAction, setHeaderAction] = useState(null);
+  const [isFabMenuOpen, setIsFabMenuOpen] = useState(false);
+
   const isHomePage = location.pathname === '/';
   const isStudyEditPage = /^\/studies\/\d+\/edit$/.test(location.pathname);
 
@@ -36,6 +40,16 @@ function MainLayout() {
   const handleChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     localStorage.setItem('language', lang);
+    setIsFabMenuOpen(false);
+  };
+
+  const handleToggleFabMenu = () => {
+    setIsFabMenuOpen((prev) => !prev);
+  };
+
+  const handleToggleTheme = () => {
+    toggleTheme();
+    setIsFabMenuOpen(false);
   };
 
   return (
@@ -67,61 +81,85 @@ function MainLayout() {
             />
           </main>
 
-          <div className="floating-language-buttons">
+          <div className="floating-paw-menu">
             <button
               type="button"
-              className={`floating-language-button ${
-                i18n.language === 'ko' ? 'active' : ''
+              className={`floating-paw-menu__theme ${
+                isFabMenuOpen ? 'floating-paw-menu__theme--open' : ''
               }`}
-              onClick={() => handleChangeLanguage('ko')}
-            >
-              KO
-            </button>
-            <button
-              type="button"
-              className={`floating-language-button ${
-                i18n.language === 'en' ? 'active' : ''
-              }`}
-              onClick={() => handleChangeLanguage('en')}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              className={`floating-language-button ${
-                i18n.language === 'ja' ? 'active' : ''
-              }`}
-              onClick={() => handleChangeLanguage('ja')}
-            >
-              JP
-            </button>
-            <button
-              type="button"
-              className={`floating-language-button ${
-                i18n.language === 'zh-CN' ? 'active' : ''
-              }`}
-              onClick={() => handleChangeLanguage('zh-CN')}
-            >
-              CN
-            </button>
-          </div>
-          <div className="theme-toggle-container">
-            <button
-              onClick={toggleTheme}
-              className="theme-toggle-button"
+              onClick={handleToggleTheme}
               aria-label={
-                theme === 'light' ? '다크모드로 변경' : '라이트모드로 변경'
+                theme === 'light'
+                  ? t('switchToDarkMode')
+                  : t('switchToLightMode')
               }
             >
-              {theme === 'light' ? (
-                <img src={darkModIcon} alt="다크모드" className="theme-icon" />
-              ) : (
-                <img
-                  src={lightModIcon}
-                  alt="라이트모드"
-                  className="theme-icon"
-                />
-              )}
+              <img
+                src={theme === 'light' ? darkModeIcon : lightModeIcon}
+                alt=""
+                className="floating-paw-menu__theme-icon"
+              />
+            </button>
+
+            <div
+              className={`floating-paw-menu__languages ${
+                isFabMenuOpen ? 'floating-paw-menu__languages--open' : ''
+              }`}
+            >
+              <button
+                type="button"
+                className={`floating-paw-menu__lang ${
+                  i18n.language === 'ko' ? 'active' : ''
+                }`}
+                onClick={() => handleChangeLanguage('ko')}
+              >
+                KO
+              </button>
+
+              <button
+                type="button"
+                className={`floating-paw-menu__lang ${
+                  i18n.language === 'en' ? 'active' : ''
+                }`}
+                onClick={() => handleChangeLanguage('en')}
+              >
+                EN
+              </button>
+
+              <button
+                type="button"
+                className={`floating-paw-menu__lang ${
+                  i18n.language === 'ja' ? 'active' : ''
+                }`}
+                onClick={() => handleChangeLanguage('ja')}
+              >
+                JP
+              </button>
+
+              <button
+                type="button"
+                className={`floating-paw-menu__lang ${
+                  i18n.language === 'zh-CN' ? 'active' : ''
+                }`}
+                onClick={() => handleChangeLanguage('zh-CN')}
+              >
+                CN
+              </button>
+            </div>
+
+            <button
+              type="button"
+              className={`floating-paw-menu__main ${
+                isFabMenuOpen ? 'floating-paw-menu__main--open' : ''
+              }`}
+              onClick={handleToggleFabMenu}
+              aria-label={isFabMenuOpen ? t('closeMenu') : t('openMenu')}
+            >
+              <img
+                src={mainIcon}
+                alt=""
+                className="floating-paw-menu__main-icon"
+              />
             </button>
           </div>
         </div>
