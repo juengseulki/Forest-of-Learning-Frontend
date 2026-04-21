@@ -29,6 +29,7 @@
   border-radius: 15px;
   background-color: var(--bg-panel);
   outline: none;
+  color: var(--text-main);
 }
 
 .background-grid {
