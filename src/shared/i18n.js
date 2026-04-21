@@ -169,7 +169,7 @@ i18n.use(initReactI18next).init({
         deleteFail: '삭제 중 오류가 발생했습니다.',
         studyInfoLoadFail: '스터디 정보를 불러오지 못했습니다.',
 
-        viewPointLog: '포인트 로그 보기',
+        viewPointLog: '포인트 로그',
       },
     },
 

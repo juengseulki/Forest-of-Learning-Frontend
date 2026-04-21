@@ -234,13 +234,3 @@ textarea::placeholder {
 .habit-translate-loading-text {
   padding: 0 24px 20px;
 }
-
-.theme-toggle-container {
-  display: flex;
-}
-
-.theme-toggle-button {
-  margin-left: auto;
-  padding-right: 30px;
-  padding-bottom: 40px;
-}
