@@ -157,6 +157,14 @@ export function useStudyDetail(studyId) {
 
       await verifyStudyPassword(studyId, password);
 
+      if (
+        pendingAction === 'edit' ||
+        pendingAction === 'habit' ||
+        pendingAction === 'focus'
+      ) {
+        sessionStorage.setItem(`study-auth-${studyId}`, 'true');
+      }
+
       handleClosePasswordModal();
       moveByAction(pendingAction);
     } catch (error) {
