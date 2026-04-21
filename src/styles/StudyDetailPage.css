@@ -320,6 +320,10 @@ em-emoji-picker {
   .emoji-popup {
     width: 230px;
   }
+
+  .action-item {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 768px) {
