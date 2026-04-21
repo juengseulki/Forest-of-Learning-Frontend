@@ -81,16 +81,20 @@ input:focus {
   border: 1px solid var(--gray-200);
   border-radius: 15px;
   overflow: hidden;
+
   opacity: 0;
+  visibility: hidden;
+
   transition:
-    max-height 0.2s ease,
     opacity 0.2s ease,
     visibility 0.2s ease;
+
   z-index: 100;
 }
 
 .select.active .optionList {
   opacity: 1;
+  visibility: visible;
 }
 
 .select .optionItem {
