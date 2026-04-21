@@ -1,6 +1,9 @@
+import { useState } from 'react';
+
 import StudyList from '../feature/study/components/StudyList';
 import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
 import ic_search from '../shared/images/icons/ic_search.png';
+import ic_select_arrow from '../shared/components/icons/icon/ic_select_arrow.png';
 
 import '../styles/HomePage.css';
 import '../styles/global.css';
@@ -10,7 +13,6 @@ function HomePage() {
     recentLimit,
     keyword,
     setKeyword,
-    order,
     setOrder,
     isLoading,
     filteredStudies,
@@ -20,6 +22,15 @@ function HomePage() {
     moreSee,
     clearRecentStudyList,
   } = useHomeStudies();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [label, setLabel] = useState('최근순');
+
+  function handleSelect(text, value) {
+    setLabel(text);
+    setOrder(value);
+    setIsOpen(false);
+  }
 
   return (
     <div className="main-container">
@@ -64,18 +75,43 @@ function HomePage() {
               />
             </div>
 
-            <select
-              className="select-container common-field"
-              value={order}
-              onChange={(e) => setOrder(e.target.value)}
-            >
-              <option value="latest">최근순</option>
-              <option value="oldest">오래된 순</option>
-              <option value="pointDesc">많은 포인트 순</option>
-              <option value="pointAsc">적은 포인트 순</option>
-            </select>
+            <div className={`select ${isOpen ? 'active' : ''}`}>
+              <button
+                type="button"
+                className="label"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {label}
+                <img src={ic_select_arrow} />
+              </button>
+              <ul className="optionList">
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('최근순', 'latest')}
+                >
+                  최근순
+                </li>
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('오래된 순', 'oldest')}
+                >
+                  오래된 순
+                </li>
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('많은 포인트 순', 'pointDesc')}
+                >
+                  많은 포인트 순
+                </li>
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('적은 포인트 순', 'pointAsc')}
+                >
+                  적은 포인트 순
+                </li>
+              </ul>
+            </div>
           </div>
-
           {isLoading ? (
             <div className="look-study">
               <p className="null-text">스터디를 불러오는 중이에요...</p>

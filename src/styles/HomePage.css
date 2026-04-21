@@ -53,20 +53,69 @@ input:focus {
   gap: 10px;
 }
 
-select::-ms-expand {
-  display: none;
+.select {
+  position: relative;
+  display: flex;
 }
 
-.select-container {
+.select .label {
   width: 180px;
   height: 42px;
   padding: 9px 20px;
-  font-weight: 400;
+  border: 1px solid var(--gray-200);
+  background-color: var(--color-white);
+  border-radius: 15px;
+  color: var(--gray-300);
   font-size: 16px;
-  line-height: 100%;
-  color: var(--text-sub);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   cursor: pointer;
-  outline: none;
+}
+
+.select .optionList {
+  position: absolute;
+  top: calc(100% + 10px);
+  width: 180px;
+  border: 1px solid var(--gray-200);
+  border-radius: 15px;
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+
+  z-index: 100;
+}
+
+.select.active .optionList {
+  opacity: 1;
+  visibility: visible;
+}
+
+.select .optionItem {
+  height: 42px;
+  background: #ffffff;
+  color: #666666;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--gray-200);
+  cursor: pointer;
+}
+
+.select .optionItem:last-child {
+  border-bottom: none;
+}
+
+.select .optionItem:hover {
+  background: var(--gray-100);
 }
 
 .button-container {
@@ -220,8 +269,7 @@ select::-ms-expand {
     gap: 10px;
   }
 
-  .search-container,
-  .select-container {
+  .search-container {
     width: 100%;
   }
 
@@ -239,5 +287,8 @@ select::-ms-expand {
     width: 180px;
     padding: 12px 0;
     font-size: 14px;
+  }
+  .select {
+    justify-content: flex-end;
   }
 }
