@@ -198,3 +198,13 @@ textarea::placeholder {
   word-break: break-word;
   overflow-wrap: break-word;
 }
+
+.theme-toggle-container {
+  display: flex;
+}
+
+.theme-toggle-button {
+  margin-left: auto;
+  padding-right: 30px;
+  padding-bottom: 40px;
+}
