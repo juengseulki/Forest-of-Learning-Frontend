@@ -14,7 +14,7 @@
   font-weight: 600;
   font-size: 18px;
   line-height: 100%;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .input-wrapper,
@@ -22,14 +22,14 @@
   width: 648px;
   height: 48px;
   border-radius: 15px;
-  background-color: var(--color-white);
+  background-color: var(--bg-panel);
   display: flex;
   align-items: center;
   padding: 14px 16px;
 }
 
 .input-wrapper {
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--border-main);
 }
 
 .input-wrapper-error {
@@ -47,7 +47,7 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 100%;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .visibility-icon {

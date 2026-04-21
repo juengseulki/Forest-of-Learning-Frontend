@@ -62,8 +62,8 @@
   border-radius: 20px;
   padding: 12px;
   width: 232px;
-  background-color: var(--color-white);
-  border: 1px solid var(--gray-200);
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-main);
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -88,9 +88,9 @@ em-emoji-picker {
 }
 
 .emoji-add-btn {
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--border-main);
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba--bg-btn-alpha;
   padding: 6px 8px;
   display: inline-flex;
   align-items: center;
@@ -98,7 +98,29 @@ em-emoji-picker {
   height: 100%;
   cursor: pointer;
 }
+/* 다크모드 전용 스타일 설정 */
+[data-theme='dark'] .emoji-btn,
+[data-theme='dark'] .emoji-more-btn {
+  background-color: var(--bg-button-gray) !important;
+  border: 1px solid var(--border-button) !important;
+  color: var(--text-main) !important;
+  transition: none !important;
+}
 
+[data-theme='dark'] .emoji-add-btn {
+  background-color: var(--bg-button-gray) !important;
+  border: 1px solid var(--border-button) !important;
+  color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .emoji-popup {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-button);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+[data-theme='dark'] .emoji-add-btn img {
+  filter: brightness(3);
+}
 /* info */
 .detail-info {
   display: flex;
@@ -107,7 +129,7 @@ em-emoji-picker {
 }
 
 .detail-info h1 {
-  color: #414141;
+  color: var(--text-main);
   font-size: 32px;
   line-height: normal;
   font-weight: 800;
@@ -121,11 +143,11 @@ em-emoji-picker {
   font-size: 18px;
   font-weight: 400;
   line-height: normal;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .detail-field p {
-  color: #414141;
+  color: var(--text-main);
   line-height: 26px;
   font-weight: 500;
   word-break: break-word;
@@ -178,8 +200,8 @@ em-emoji-picker {
 }
 
 .detail-delete {
-  color: var(--gray-300);
-  border-left: 2px solid var(--gray-300);
+  color: var(--text-sub);
+  border-left: 2px solid var(--text-sub);
   border-right: none;
   padding: 0 0 0 16px;
 }
@@ -208,7 +230,7 @@ em-emoji-picker {
 }
 
 .detail-habit-section h2 {
-  color: #414141;
+  color: var(--text-main);
   font-size: 24px;
   font-weight: 800;
 }
@@ -233,7 +255,7 @@ em-emoji-picker {
 .habit-name {
   width: 170px;
   flex-shrink: 0;
-  color: #414141;
+  color: var(--text-main);
   text-align: right;
   font-size: 18px;
   font-weight: 700;
@@ -253,7 +275,7 @@ em-emoji-picker {
 }
 
 .habit-weeks span {
-  color: var(--gray-300);
+  color: var(--text-sub);
   font-size: 18px;
   font-weight: 400;
 }
@@ -271,7 +293,7 @@ em-emoji-picker {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  color: var(--gray-300);
+  color: var(--text-sub);
   font-size: 16px;
 }
 

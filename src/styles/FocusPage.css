@@ -5,7 +5,7 @@
 .focus-page__status {
   padding: 40px 0;
   font-size: 16px;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .focus-page__panel {
@@ -31,7 +31,7 @@
   font-size: 32px;
   font-weight: 800;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .focus-page__point-group {
@@ -49,7 +49,7 @@
   font-size: 18px;
   font-weight: 400;
   line-height: normal;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .focus-page__point-icon {
@@ -64,7 +64,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .focus-page__actions {
@@ -203,7 +203,7 @@
   border: none;
   border-radius: 999px;
   background: #d9d9d9;
-  color: #ffffff;
+  color: var(--bg-panel);
   cursor: not-allowed;
   opacity: 1;
 }

@@ -15,8 +15,8 @@
   min-height: 369px;
   padding: 40px 24px 24px;
   border-radius: 20px;
-  border: 1px solid var(--gray-200);
-  background: var(--color-white);
+  border: 1px solid var(--border-main);
+  background: var(--bg-panel);
   box-sizing: border-box;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
@@ -43,7 +43,7 @@
   font-size: 24px;
   font-weight: 800;
   line-height: 1.2;
-  color: #414141;
+  color: var(--text-main);
   word-break: keep-all;
 }
 
@@ -65,7 +65,7 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 1.2;
-  color: #818181;
+  color: var(--text-sub);
 }
 
 .study-modal__body {
@@ -82,7 +82,7 @@
   font-size: 18px;
   font-weight: 600;
   line-height: 1.2;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .study-modal__input-wrap {
@@ -92,9 +92,9 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--border-main);
   border-radius: 15px;
-  background: var(--color-white);
+  background: var(--bg-panel);
   box-sizing: border-box;
 }
 
@@ -106,7 +106,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .study-modal__input::placeholder {
@@ -145,7 +145,7 @@
 
 .study-modal__button--primary {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--bg-panel);
 }
 
 .study-modal__button--primary:hover {
@@ -154,19 +154,19 @@
 
 .study-modal__button--primary:disabled {
   background: #d9d9d9;
-  color: #ffffff;
+  color: var(--bg-panel);
   cursor: not-allowed;
   opacity: 1;
 }
 
 .study-modal__button--secondary {
   background: #d9d9d9;
-  color: #ffffff;
+  color: var(--bg-panel);
 }
 
 .study-modal__button--danger {
-  background: #818181;
-  color: #ffffff;
+  background: var(--text-sub);
+  color: var(--bg-panel);
 }
 
 .study-modal__button--password {
@@ -197,7 +197,7 @@
   font-weight: 500;
   line-height: 1.3;
   text-align: center;
-  color: #818181;
+  color: var(--text-sub);
 }
 
 .study-modal__content--confirm .study-modal__body {

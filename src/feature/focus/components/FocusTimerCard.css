@@ -18,7 +18,7 @@
   font-size: 24px;
   font-weight: 800;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
 }
 
 /* ===== 표시 전체 영역 ===== */
@@ -46,7 +46,7 @@
   gap: 8px;
   min-height: 28px;
   padding: 2px 8px;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--border-main);
   border-radius: 999px;
   background: #fff;
 }
@@ -67,7 +67,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-  color: #414141;
+  color: var(--text-main);
 }
 
 /* 큰 타이머 / 입력 영역 자리를 항상 고정 */
@@ -102,14 +102,14 @@
   font-size: 150px;
   font-weight: 800;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: textfield;
 }
 
 .focus-timer-card__time-input::placeholder {
-  color: #414141;
+  color: var(--text-main);
   opacity: 1;
 }
 
@@ -122,7 +122,7 @@
   font-size: 150px;
   font-weight: 800;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .focus-timer-card__time-display {
@@ -130,7 +130,7 @@
   font-size: 150px;
   font-weight: 800;
   line-height: 1;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .focus-timer-card__time-display.is-running {
@@ -138,7 +138,7 @@
 }
 
 .focus-timer-card__time-display.is-overtime {
-  color: #818181;
+  color: var(--text-sub);
 }
 
 /* ===== 버튼 영역 ===== */
@@ -157,7 +157,7 @@
   border: none;
   border-radius: 999px;
   background-color: var(--color-primary);
-  color: var(--color-white);
+  color: var(--bg-panel);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -203,13 +203,13 @@
 }
 
 .focus-timer-card__button--stop {
-  background: #818181;
+  background: var(--text-sub);
   color: #fff;
 }
 
 .focus-timer-card__button--start-disabled {
   background: #d9d9d9;
-  color: #ffffff;
+  color: var(--bg-panel);
   opacity: 1;
 }
 
@@ -391,7 +391,7 @@
     font-size: 120px;
     font-weight: 800;
     line-height: normal;
-    color: #414141;
+    color: var(--text-main);
     box-sizing: border-box;
     font-variant-numeric: tabular-nums;
     appearance: none;
@@ -400,7 +400,7 @@
   }
 
   .focus-timer-card__time-input::placeholder {
-    color: #414141;
+    color: var(--text-main);
     opacity: 1;
   }
 
@@ -417,7 +417,7 @@
     font-size: 120px;
     font-weight: 800;
     line-height: 2;
-    color: #414141;
+    color: var(--text-main);
     font-variant-numeric: tabular-nums;
   }
 
@@ -432,7 +432,7 @@
     font-size: 120px;
     font-weight: 800;
     line-height: normal;
-    color: #414141;
+    color: var(--text-main);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
@@ -614,7 +614,7 @@
     font-size: 80px;
     font-weight: 800;
     line-height: 1;
-    color: #414141;
+    color: var(--text-main);
     box-sizing: border-box;
     font-variant-numeric: tabular-nums;
     appearance: none;
@@ -623,7 +623,7 @@
   }
 
   .focus-timer-card__time-input::placeholder {
-    color: #414141;
+    color: var(--text-main);
     opacity: 1;
   }
 
@@ -640,7 +640,7 @@
     font-size: 80px;
     font-weight: 800;
     line-height: 1;
-    color: #414141;
+    color: var(--text-main);
     font-variant-numeric: tabular-nums;
   }
 
@@ -655,7 +655,7 @@
     font-size: 80px;
     font-weight: 800;
     line-height: 1;
-    color: #414141;
+    color: var(--text-main);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
