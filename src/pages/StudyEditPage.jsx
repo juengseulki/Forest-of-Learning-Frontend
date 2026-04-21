@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext, useParams, useLocation } from 'react-router-dom';
+import {
+  useNavigate,
+  useOutletContext,
+  useParams,
+  useLocation,
+} from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import Toast from '../shared/components/toast/Toast';
 import StudyForm from '../feature/study/components/StudyForm';
 import StudyUnsavedChangesModal from '../feature/study/shared/modal/StudyUnsavedChangesModal';
@@ -8,6 +14,7 @@ import StudyConfirmModal from '../feature/study/shared/modal/StudyConfirmModal';
 import { updateStudy, getStudy } from '../api/studyApi';
 
 function StudyEditPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { studyId } = useParams();
@@ -56,7 +63,7 @@ function StudyEditPage() {
       await updateStudy(studyId, pendingFormData);
       setIsConfirmModalOpen(false);
 
-      toast(<Toast type="success" icon="✅" message="스터디가 수정되었습니다." />, {
+      toast(<Toast type="success" icon="✅" message={t('editSuccess')} />, {
         position: 'bottom-center',
         autoClose: 2000,
         hideProgressBar: true,
@@ -65,7 +72,7 @@ function StudyEditPage() {
       navigate(`/studies/${studyId}`);
     } catch (error) {
       console.error('스터디 수정 실패', error);
-      toast(<Toast type="danger" icon="❗" message="스터디 수정에 실패했습니다." />, {
+      toast(<Toast type="danger" icon="❗" message={t('editFail')} />, {
         position: 'bottom-center',
         autoClose: 2000,
         hideProgressBar: true,
@@ -83,14 +90,14 @@ function StudyEditPage() {
   return (
     <div className="study-edit-page">
       {initialData ? (
-        <StudyForm 
-          isEditMode={true} 
-          initialData={initialData} 
-          onValidSubmit={handleValidSubmit} 
+        <StudyForm
+          isEditMode={true}
+          initialData={initialData}
+          onValidSubmit={handleValidSubmit}
         />
       ) : (
         <div className="loading-container">
-          <p>스터디 정보를 불러오고 있습니다...</p>
+          <p>{t('loadingStudy')}</p>
         </div>
       )}
 
@@ -102,10 +109,10 @@ function StudyEditPage() {
 
       <StudyConfirmModal
         isOpen={isConfirmModalOpen}
-        title="스터디를 수정할까요?"
-        description="수정 전 내용은 저장되지 않고, 변경한 내용으로 덮어씌워집니다."
-        confirmText="수정하기"
-        cancelText="취소"
+        title={t('editConfirmTitle')}
+        description={t('editConfirmDesc')}
+        confirmText={t('edit')}
+        cancelText={t('cancel')}
         onClose={handleCloseConfirmModal}
         onConfirm={handleConfirmEdit}
         isSubmitting={isSubmitting}

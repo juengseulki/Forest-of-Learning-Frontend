@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import i18n from '../../../shared/i18n';
 import Toast from '../../../shared/components/toast/Toast';
 
 const toastOptions = {
@@ -12,7 +13,7 @@ const toastOptions = {
 
 export function showPauseToast() {
   toast(
-    <Toast type="danger" icon="🚨" message="집중이 중단되었습니다." />,
+    <Toast type="danger" icon="🚨" message={i18n.t('focusPaused')} />,
     toastOptions
   );
 }
@@ -22,7 +23,11 @@ export function showPointToast(firstPoint, secondPoint, totalPoint) {
     <Toast
       type="success"
       icon="🎉"
-      message={`기본 ${firstPoint}P + 초과 집중 ${secondPoint}P = 총 ${totalPoint}P 획득!`}
+      message={i18n.t('focusPointMessage', {
+        firstPoint,
+        secondPoint,
+        totalPoint,
+      })}
     />,
     toastOptions
   );
@@ -30,7 +35,7 @@ export function showPointToast(firstPoint, secondPoint, totalPoint) {
 
 export function showTargetToast() {
   toast(
-    <Toast type="info" icon="💙" message="설정한 집중이 끝났습니다!" />,
+    <Toast type="info" icon="💙" message={i18n.t('focusTargetDone')} />,
     toastOptions
   );
 }

@@ -57,8 +57,12 @@ export function useFocusTimer(studyId, onSessionComplete) {
   };
 
   const displayDuration = useMemo(() => {
-    if (!session?.durationSeconds) return '';
-    return formatSeconds(session.durationSeconds);
+    if (!session) return '';
+
+    const totalDurationSeconds =
+      (session.durationMinutes ?? 0) * 60 + (session.durationSeconds ?? 0);
+
+    return formatSeconds(totalDurationSeconds);
   }, [session]);
 
   useEffect(() => {

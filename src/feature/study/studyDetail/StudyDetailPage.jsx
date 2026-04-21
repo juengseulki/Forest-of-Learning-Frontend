@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import '../../../styles/StudyDetailPage.css';
 import '../../../styles/global.css';
@@ -12,9 +14,12 @@ import StudyPasswordModal from '../shared/modal/StudyPasswordModal.jsx';
 import StudyConfirmModal from '../shared/modal/StudyConfirmModal.jsx';
 import StudyRecordModal from '../shared/modal/StudyRecordModal.jsx';
 import { useStudyDetail } from './hooks/useStudyDetail.jsx';
+import { translate } from '../../../api/translateApi.js';
 
 function StudyDetailPage() {
   const { studyId } = useParams();
+  const { i18n, t } = useTranslation();
+  const [translatedStudyName, setTranslatedStudyName] = useState('');
 
   const {
     study,
@@ -33,6 +38,27 @@ function StudyDetailPage() {
     handleCloseRecordModal,
     getActionLabel,
   } = useStudyDetail(studyId);
+
+  useEffect(() => {
+    async function translateTitle() {
+      if (!study?.name) return;
+
+      if (i18n.language === 'ko') {
+        setTranslatedStudyName('');
+        return;
+      }
+
+      try {
+        const result = await translate(study.name, i18n.language);
+        setTranslatedStudyName(result);
+      } catch (error) {
+        console.error('스터디 제목 번역 실패:', error);
+        setTranslatedStudyName('');
+      }
+    }
+
+    translateTitle();
+  }, [i18n.language, study?.name]);
 
   return (
     <div className="detail-wrapper">
@@ -63,30 +89,30 @@ function StudyDetailPage() {
 
       <StudyPasswordModal
         isOpen={isPasswordModalOpen}
-        studyName={study.name}
+        studyName={translatedStudyName || study.name}
         password={password}
         isSubmitting={isSubmitting}
         onChangePassword={handleChangePassword}
         onClose={handleClosePasswordModal}
         onSubmit={handleSubmitPassword}
         actionLabel={getActionLabel()}
-        description="권한이 필요해요!"
+        description={t('passwordRequired')}
       />
 
       <StudyConfirmModal
         isOpen={isDeleteConfirmModalOpen}
-        title="스터디를 삭제할까요?"
-        description="삭제하면 복구할 수 없습니다."
-        confirmText="삭제하기"
-        cancelText="취소"
+        title={t('deleteStudyTitle')}
+        description={t('deleteStudyDescription')}
+        confirmText={t('delete')}
+        cancelText={t('cancel')}
         onClose={handleCloseDeleteConfirmModal}
         onConfirm={handleConfirmDelete}
       />
 
       <StudyRecordModal
         isOpen={isRecordModalOpen}
-        title="포인트 기록"
-        closeText="닫기"
+        title={t('pointRecord')}
+        closeText={t('close')}
         onClose={handleCloseRecordModal}
       />
     </div>
