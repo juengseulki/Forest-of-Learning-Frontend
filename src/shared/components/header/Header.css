@@ -45,7 +45,7 @@
 .header__placeholder {
   width: 252px;
   height: 58px;
-  flex-shrink: 1;
+  flex-shrink: 0;
 }
 
 /* =========================
