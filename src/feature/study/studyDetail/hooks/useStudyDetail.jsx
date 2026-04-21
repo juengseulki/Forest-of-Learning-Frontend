@@ -68,36 +68,6 @@ export function useStudyDetail(studyId) {
     fetchStudy();
   }, [studyId, studyFromStore, dispatch, state.studies, t]);
 
-  const handleRequirePassword = useCallback((action) => {
-    setPendingAction(action);
-    setPassword('');
-    setIsPasswordModalOpen(true);
-  }, []);
-
-  const handleClosePasswordModal = useCallback(() => {
-    setIsPasswordModalOpen(false);
-    setPassword('');
-    setPendingAction(null);
-  }, []);
-
-  const handleCloseDeleteConfirmModal = useCallback(() => {
-    setIsDeleteConfirmModalOpen(false);
-    setPassword('');
-    setPendingAction(null);
-  }, []);
-
-  const handleChangePassword = useCallback((e) => {
-    setPassword(e.target.value);
-  }, []);
-
-  const handleOpenRecordModal = useCallback(() => {
-    setIsRecordModalOpen(true);
-  }, []);
-
-  const handleCloseRecordModal = useCallback(() => {
-    setIsRecordModalOpen(false);
-  }, []);
-
   const getActionLabel = useCallback(() => {
     switch (pendingAction) {
       case 'edit':
@@ -138,6 +108,50 @@ export function useStudyDetail(studyId) {
     },
     [navigate, studyId]
   );
+
+  const handleRequirePassword = useCallback(
+    (action) => {
+      const isVerified =
+        sessionStorage.getItem(`study-auth-${studyId}`) === 'true';
+
+      if (
+        isVerified &&
+        (action === 'edit' || action === 'habit' || action === 'focus')
+      ) {
+        moveByAction(action);
+        return;
+      }
+
+      setPendingAction(action);
+      setPassword('');
+      setIsPasswordModalOpen(true);
+    },
+    [studyId, moveByAction]
+  );
+
+  const handleClosePasswordModal = useCallback(() => {
+    setIsPasswordModalOpen(false);
+    setPassword('');
+    setPendingAction(null);
+  }, []);
+
+  const handleCloseDeleteConfirmModal = useCallback(() => {
+    setIsDeleteConfirmModalOpen(false);
+    setPassword('');
+    setPendingAction(null);
+  }, []);
+
+  const handleChangePassword = useCallback((e) => {
+    setPassword(e.target.value);
+  }, []);
+
+  const handleOpenRecordModal = useCallback(() => {
+    setIsRecordModalOpen(true);
+  }, []);
+
+  const handleCloseRecordModal = useCallback(() => {
+    setIsRecordModalOpen(false);
+  }, []);
 
   const handleSubmitPassword = useCallback(async () => {
     if (!password.trim()) {
