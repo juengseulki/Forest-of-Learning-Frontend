@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 function FocusIconButton({
   onClick,
   disabled = false,
@@ -5,8 +7,10 @@ function FocusIconButton({
   desktopActiveSrc,
   mobileInactiveSrc,
   mobileActiveSrc,
-  alt,
+  altKey,
 }) {
+  const { t } = useTranslation();
+
   return (
     <button
       type="button"
@@ -17,7 +21,7 @@ function FocusIconButton({
       {desktopInactiveSrc && (
         <img
           src={desktopInactiveSrc}
-          alt={alt}
+          alt={t(altKey)}
           className="focus-timer-card__control-icon focus-timer-card__control-icon--desktop icon-inactive"
         />
       )}
@@ -25,7 +29,7 @@ function FocusIconButton({
       {!disabled && desktopActiveSrc && (
         <img
           src={desktopActiveSrc}
-          alt={alt}
+          alt={t(altKey)}
           className="focus-timer-card__control-icon focus-timer-card__control-icon--desktop icon-active"
         />
       )}
@@ -33,7 +37,7 @@ function FocusIconButton({
       {mobileInactiveSrc && (
         <img
           src={mobileInactiveSrc}
-          alt={alt}
+          alt={t(altKey)}
           className="focus-timer-card__control-icon focus-timer-card__control-icon--mobile icon-inactive"
         />
       )}
@@ -41,7 +45,7 @@ function FocusIconButton({
       {!disabled && mobileActiveSrc && (
         <img
           src={mobileActiveSrc}
-          alt={alt}
+          alt={t(altKey)}
           className="focus-timer-card__control-icon focus-timer-card__control-icon--mobile icon-active"
         />
       )}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import BaseStudyModal from './BaseStudyModal';
 import visibleOffIcon from '../../../../shared/components/icons/button/btn_visibility_off.svg';
 import visibleOnIcon from '../../../../shared/components/icons/button/btn_visibility_on.svg';
@@ -7,27 +8,28 @@ function StudyPasswordModal({
   isOpen,
   studyName,
   password,
-  description = '권한이 필요해요!',
+  description,
   errorMessage = '',
   isSubmitting = false,
   onChangePassword,
   onClose,
   onSubmit,
-  actionLabel = '확인',
+  actionLabel,
 }) {
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <BaseStudyModal
       isOpen={isOpen}
       title={studyName}
-      description={description}
-      rightText="나가기"
+      description={description || t('passwordRequired')}
+      rightText={t('exit')}
       onClose={onClose}
       className="study-modal__content--password"
     >
       <div className="study-modal__field">
-        <label className="study-modal__label">비밀번호</label>
+        <label className="study-modal__label">{t('passwordLabel')}</label>
 
         <div className="study-modal__input-wrap">
           <input
@@ -35,14 +37,14 @@ function StudyPasswordModal({
             type={isVisible ? 'text' : 'password'}
             value={password}
             onChange={onChangePassword}
-            placeholder="비밀번호를 입력해 주세요"
+            placeholder={t('passwordPlaceholder')}
           />
 
           <button
             type="button"
             className="study-modal__toggle"
             onClick={() => setIsVisible((prev) => !prev)}
-            aria-label={isVisible ? '비밀번호 숨기기' : '비밀번호 보기'}
+            aria-label={isVisible ? t('hidePassword') : t('showPassword')}
           >
             <img
               src={isVisible ? visibleOnIcon : visibleOffIcon}
@@ -60,7 +62,7 @@ function StudyPasswordModal({
           onClick={onSubmit}
           disabled={!password.trim() || isSubmitting}
         >
-          {actionLabel}
+          {actionLabel || t('confirm')}
         </button>
 
         <button
@@ -68,7 +70,7 @@ function StudyPasswordModal({
           className="study-modal__mobile-close"
           onClick={onClose}
         >
-          나가기
+          {t('exit')}
         </button>
 
         {errorMessage ? (

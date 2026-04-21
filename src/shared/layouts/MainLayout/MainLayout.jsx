@@ -1,6 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../../components/Header/Header';
@@ -15,6 +16,7 @@ import './MainLayout.css';
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { i18n, t } = useTranslation();
 
   const [theme, toggleTheme] = useTheme();
 
@@ -31,6 +33,11 @@ function MainLayout() {
     navigate(-1);
   };
 
+  const handleChangeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
+
   return (
     <StudyProvider>
       <UIProvider>
@@ -39,10 +46,10 @@ function MainLayout() {
             rightContent={
               isHomePage ? (
                 <Button onClick={() => navigate('/studies/create')}>
-                  스터디 만들기
+                  {t('createStudy')}
                 </Button>
               ) : isStudyEditPage ? (
-                <Button onClick={handleHeaderClick}>뒤로가기</Button>
+                <Button onClick={handleHeaderClick}>{t('back')}</Button>
               ) : null
             }
           />
@@ -59,6 +66,45 @@ function MainLayout() {
               limit={1}
             />
           </main>
+
+          <div className="floating-language-buttons">
+            <button
+              type="button"
+              className={`floating-language-button ${
+                i18n.language === 'ko' ? 'active' : ''
+              }`}
+              onClick={() => handleChangeLanguage('ko')}
+            >
+              KO
+            </button>
+            <button
+              type="button"
+              className={`floating-language-button ${
+                i18n.language === 'en' ? 'active' : ''
+              }`}
+              onClick={() => handleChangeLanguage('en')}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={`floating-language-button ${
+                i18n.language === 'ja' ? 'active' : ''
+              }`}
+              onClick={() => handleChangeLanguage('ja')}
+            >
+              JP
+            </button>
+            <button
+              type="button"
+              className={`floating-language-button ${
+                i18n.language === 'zh-CN' ? 'active' : ''
+              }`}
+              onClick={() => handleChangeLanguage('zh-CN')}
+            >
+              CN
+            </button>
+          </div>
           <div className="theme-toggle-container">
             <button
               onClick={toggleTheme}

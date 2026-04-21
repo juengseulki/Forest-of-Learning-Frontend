@@ -1,6 +1,6 @@
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-
+import { useTheme } from '../../../../../shared/hooks/useTheme.js';
 import smileIcon from '../../../../../images/icon/ic_smile.svg';
 import EmojiList from './EmojiList.jsx';
 import { useEmojiSection } from '../../hooks/useEmojiSection.js';
@@ -8,7 +8,7 @@ import { useEmojiSection } from '../../hooks/useEmojiSection.js';
 function EmojiSection({ studyId }) {
   const { emojis, isPickerVisible, togglePicker, handleAddEmoji } =
     useEmojiSection(studyId);
-
+  const { theme } = useTheme();
   return (
     <span className="emoji">
       <EmojiList emojis={emojis} onAddEmoji={handleAddEmoji} />
@@ -24,7 +24,7 @@ function EmojiSection({ studyId }) {
             <Picker
               data={data}
               onEmojiSelect={handleAddEmoji}
-              theme="light"
+              theme={theme}
               perLine={7}
               maxFrequentRows={0}
               skinTonePosition="none"

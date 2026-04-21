@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ShareSheet from './ShareSheet';
 
 function StudyActionButtonGroup({
@@ -8,6 +9,7 @@ function StudyActionButtonGroup({
   study,
 }) {
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -17,15 +19,15 @@ function StudyActionButtonGroup({
           className="action-item"
           onClick={() => setIsShareOpen(true)}
         >
-          공유하기
+          {t('share')}
         </button>
 
-        <button className="action-item" onClick={onEditClick}>
-          수정하기
+        <button type="button" className="action-item" onClick={onEditClick}>
+          {t('edit')}
         </button>
 
-        <button className="action-item" onClick={onRecordClick}>
-          포인트 기록
+        <button type="button" className="action-item" onClick={onRecordClick}>
+          {t('pointRecord')}
         </button>
 
         <button
@@ -33,7 +35,7 @@ function StudyActionButtonGroup({
           className="action-item detail-delete"
           onClick={onDeleteClick}
         >
-          스터디 삭제하기
+          {t('deleteStudy')}
         </button>
       </div>
 

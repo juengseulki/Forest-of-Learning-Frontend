@@ -1,20 +1,23 @@
+import { useTranslation } from 'react-i18next';
 import BaseStudyModal from './BaseStudyModal';
 
 function StudyConfirmModal({
   isOpen,
-  title = '스터디를 수정할까요?',
-  description = '변경한 내용으로 스터디 정보를 수정합니다.',
-  confirmText = '수정하기',
-  cancelText = '취소',
+  title,
+  description,
+  confirmText,
+  cancelText,
   onClose,
   onConfirm,
   isSubmitting = false,
 }) {
+  const { t } = useTranslation();
+
   return (
     <BaseStudyModal
       isOpen={isOpen}
-      title={title}
-      description={description}
+      title={title || t('deleteStudyTitle')}
+      description={description || t('deleteStudyDescription')}
       onClose={onClose}
       className="study-modal__content--confirm"
     >
@@ -24,7 +27,7 @@ function StudyConfirmModal({
           className="study-modal__button study-modal__button--secondary"
           onClick={onClose}
         >
-          {cancelText}
+          {cancelText || t('cancel')}
         </button>
 
         <button
@@ -33,7 +36,7 @@ function StudyConfirmModal({
           onClick={onConfirm}
           disabled={isSubmitting}
         >
-          {confirmText}
+          {confirmText || t('confirm')}
         </button>
       </div>
     </BaseStudyModal>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import StudyList from '../feature/study/components/StudyList';
 import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
@@ -23,8 +24,10 @@ function HomePage() {
     clearRecentStudyList,
   } = useHomeStudies();
 
+  const { t } = useTranslation();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [label, setLabel] = useState('최근순');
+  const [label, setLabel] = useState(t('latest'));
 
   function handleSelect(text, value) {
     setLabel(text);
@@ -36,7 +39,7 @@ function HomePage() {
     <div className="main-container">
       <section className="recent-lookup common-panel-lg">
         <div className="home-section-header">
-          <p className="home-title common-title-lg">최근 조회한 스터디</p>
+          <p className="home-title common-title-lg">{t('recentStudies')}</p>
 
           {recentStudies.length > 0 && (
             <button
@@ -44,7 +47,7 @@ function HomePage() {
               className="recent-clear-button"
               onClick={clearRecentStudyList}
             >
-              🍃 비우기
+              🍃 {t('clear')}
             </button>
           )}
         </div>
@@ -52,7 +55,7 @@ function HomePage() {
         <div className="recent-scroll">
           {recentStudies.length === 0 ? (
             <div className="look-study">
-              <p className="null-text">아직 조회한 스터디가 없어요</p>
+              <p className="null-text">{t('noRecentStudies')}</p>
             </div>
           ) : (
             <StudyList studies={recentStudies} visibleCount={recentLimit} />
@@ -62,14 +65,14 @@ function HomePage() {
 
       <section className="study-list common-panel-lg">
         <div className="list-top">
-          <p className="home-title common-title-lg">스터디 둘러보기</p>
+          <p className="home-title common-title-lg">{t('browseStudies')}</p>
 
           <div className="filter">
             <div className="search-container common-field">
               <img src={ic_search} alt="검색 아이콘" />
               <input
                 className="common-field-control"
-                placeholder="검색"
+                placeholder={t('search')}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
               />
@@ -87,38 +90,38 @@ function HomePage() {
               <ul className="optionList">
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('최근순', 'latest')}
+                  onClick={() => handleSelect(t('latest'), 'latest')}
                 >
-                  최근순
+                  {t('latest')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('오래된 순', 'oldest')}
+                  onClick={() => handleSelect(t('oldest'), 'oldest')}
                 >
-                  오래된 순
+                  {t('oldest')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('많은 포인트 순', 'pointDesc')}
+                  onClick={() => handleSelect(t('pointDesc'), 'pointDesc')}
                 >
-                  많은 포인트 순
+                  {t('pointDesc')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('적은 포인트 순', 'pointAsc')}
+                  onClick={() => handleSelect(t('pointAsc'), 'pointAsc')}
                 >
-                  적은 포인트 순
+                  {t('pointAsc')}
                 </li>
               </ul>
             </div>
           </div>
           {isLoading ? (
             <div className="look-study">
-              <p className="null-text">스터디를 불러오는 중이에요...</p>
+              <p className="null-text">{t('loadingStudies')}</p>
             </div>
           ) : filteredStudies.length === 0 ? (
             <div className="look-study">
-              <p className="null-text">아직 둘러 볼 스터디가 없어요</p>
+              <p className="null-text">{t('noStudies')}</p>
             </div>
           ) : (
             <StudyList studies={filteredStudies} visibleCount={visibleCount} />
@@ -128,7 +131,7 @@ function HomePage() {
         {hasMore && (
           <div className="button-container">
             <button type="button" className="see-more" onClick={moreSee}>
-              더보기
+              {t('seeMore')}
             </button>
           </div>
         )}

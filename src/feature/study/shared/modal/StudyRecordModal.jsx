@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import BaseStudyModal from './BaseStudyModal';
 import { getPointLog } from '../../../../api/pointApi';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
 
 function StudyRecordModal({ isOpen, title, closeText, onClose }) {
+  const { t, i18n } = useTranslation();
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentPage, setCurrentPage] = useState(1);
   const [pointLogs, setPointLogs] = useState([]);
@@ -43,12 +46,15 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
   };
 
   const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString('ko-KR', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
+    return new Date(dateString).toLocaleTimeString(
+      i18n.language === 'ko' ? 'ko-KR' : 'en-US',
+      {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }
+    );
   };
 
   const formatDuration = (seconds) => {
@@ -56,7 +62,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
     const minute = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
     const second = String(seconds % 60).padStart(2, '0');
 
-    return `${hour}시간 ${minute}분 ${second}초`;
+    return `${hour}:${minute}:${second}`;
   };
 
   useEffect(() => {
@@ -81,7 +87,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
   return (
     <BaseStudyModal
       isOpen={isOpen}
-      title={title}
+      title={title || t('pointRecord')}
       onClose={onClose}
       className="study-modal__content--confirm"
     >
@@ -97,16 +103,18 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
             &gt;
           </button>
         </div>
+
         <table className="record-table">
           <thead>
             <tr>
-              <th>번호</th>
-              <th>집중 시간</th>
-              <th>포인트</th>
-              <th>시작 시간</th>
-              <th>종료 시간</th>
+              <th>{t('recordNumber')}</th>
+              <th>{t('recordFocusTime')}</th>
+              <th>{t('recordPoint')}</th>
+              <th>{t('recordStartTime')}</th>
+              <th>{t('recordEndTime')}</th>
             </tr>
           </thead>
+
           <tbody>
             {currentPageLogs.length > 0 ? (
               currentPageLogs.map((log, index) => (
@@ -114,7 +122,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
                   <td>{startIndex + index + 1}</td>
                   <td>{formatDuration(log.focusSession.duration)}</td>
                   <td className="record-point">
-                    <img src={pointIcon} alt="포인트 아이콘" />
+                    <img src={pointIcon} alt={t('pointIconAlt')} />
                     <p>{log.amount}P</p>
                   </td>
                   <td>{formatTime(log.focusSession.startedAt)}</td>
@@ -123,11 +131,12 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
               ))
             ) : (
               <tr>
-                <td colSpan="5">기록이 없습니다.</td>
+                <td colSpan="5">{t('noRecords')}</td>
               </tr>
             )}
           </tbody>
         </table>
+
         {currentPageLogs.length > 0 && (
           <div className="record-pagination">
             <button
@@ -176,7 +185,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
           className="study-modal__button study-modal__button--secondary"
           onClick={onClose}
         >
-          {closeText}
+          {closeText || t('close')}
         </button>
       </div>
     </BaseStudyModal>

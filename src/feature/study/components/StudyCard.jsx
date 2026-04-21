@@ -1,9 +1,13 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
-import { useNavigate } from 'react-router-dom';
 
 import { addRecentStudy } from '../shared/utils/recentStudy';
 import { useStudy } from '../../../contexts/StudyContext';
+import { translate } from '../../../api/translateApi';
 
 export default function StudyCard({
   id,
@@ -18,6 +22,38 @@ export default function StudyCard({
 }) {
   const navigate = useNavigate();
   const { dispatch } = useStudy();
+  const { i18n, t } = useTranslation();
+
+  const [translatedName, setTranslatedName] = useState('');
+  const [translatedDescription, setTranslatedDescription] = useState('');
+
+  useEffect(() => {
+    async function translateCardContent() {
+      if (i18n.language === 'ko') {
+        setTranslatedName('');
+        setTranslatedDescription('');
+        return;
+      }
+
+      try {
+        const [nameResult, descriptionResult] = await Promise.all([
+          translate(name, i18n.language),
+          translate(description, i18n.language),
+        ]);
+
+        setTranslatedName(nameResult);
+        setTranslatedDescription(descriptionResult);
+      } catch (error) {
+        console.error('홈 카드 번역 실패:', error);
+        setTranslatedName('');
+        setTranslatedDescription('');
+      }
+    }
+
+    if (name || description) {
+      translateCardContent();
+    }
+  }, [i18n.language, name, description]);
 
   const handleClick = () => {
     const updatedRecentStudies = addRecentStudy({ id });
@@ -29,6 +65,9 @@ export default function StudyCard({
 
     navigate(`/studies/${id}`);
   };
+
+  const displayName = translatedName || name;
+  const displayDescription = translatedDescription || description;
 
   return (
     <div
@@ -49,20 +88,27 @@ export default function StudyCard({
         <div className="header-top">
           <div className="title-group">
             <h2 className="title" style={{ color: theme?.title }}>
-              <span style={{ color: theme?.nickname }}>{nickname}</span>의{' '}
-              {name}
+              <span style={{ color: theme?.nickname }}>{nickname}</span>
+              {t('studyPossessive')} {displayName}
             </h2>
 
             <div className="point" style={{ backgroundColor: theme?.pointBg }}>
-              <img className="point-icon" src={ic_point} alt="포인트 아이콘" />
+              <img
+                className="point-icon"
+                src={ic_point}
+                alt={t('pointIconAlt')}
+              />
               <p className="point-text" style={{ color: theme?.pointText }}>
-                {totalPoint}P 획득
+                {totalPoint}P {t('earned')}
               </p>
             </div>
           </div>
 
           <p className="duration" style={{ color: theme?.duration }}>
-            {duration}일째 진행 중
+            {duration}
+            {i18n.language === 'zh-CN'
+              ? ` ${t('dayProgress')}`
+              : `${t('dayProgress')}`}
           </p>
         </div>
 
@@ -70,7 +116,7 @@ export default function StudyCard({
           className="description text-break"
           style={{ color: theme?.description }}
         >
-          {description}
+          {displayDescription}
         </p>
       </section>
 

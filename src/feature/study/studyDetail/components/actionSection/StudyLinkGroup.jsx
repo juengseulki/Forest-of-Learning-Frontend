@@ -1,6 +1,9 @@
 import arrowRightIcon from '../../../../../shared/images/icons/ic_arrow_right.svg';
+import { useTranslation } from 'react-i18next';
 
 function StudyLinkGroup({ onHabitClick, onFocusClick }) {
+  const { t } = useTranslation();
+
   return (
     <div className="detail-link-group">
       <button
@@ -8,11 +11,11 @@ function StudyLinkGroup({ onHabitClick, onFocusClick }) {
         className="link-btn common-action-btn"
         onClick={onHabitClick}
       >
-        오늘의 습관{' '}
+        {t('todayHabit')}{' '}
         <img
           src={arrowRightIcon}
           className="common-action-icon"
-          alt="오른쪽 화살표"
+          alt={t('arrowRight')}
         />
       </button>
 
@@ -21,11 +24,11 @@ function StudyLinkGroup({ onHabitClick, onFocusClick }) {
         className="link-btn common-action-btn"
         onClick={onFocusClick}
       >
-        오늘의 집중{' '}
+        {t('todayFocus')}{' '}
         <img
           src={arrowRightIcon}
           className="common-action-icon"
-          alt="오른쪽 화살표"
+          alt={t('arrowRight')}
         />
       </button>
     </div>
