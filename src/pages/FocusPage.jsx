@@ -11,6 +11,8 @@ import pointIcon from '../shared/images/icons/ic_point.png';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
 import '../styles/global.css';
 import '../styles/FocusPage.css';
+import StudyRecordModal from '../../src/feature/study/shared/modal/StudyRecordModal.jsx';
+import { useStudyDetail } from '../feature/study/studyDetail/hooks/useStudyDetail.jsx';
 
 function FocusPage() {
   const { studyId } = useParams();
@@ -90,6 +92,9 @@ function FocusPage() {
     [refreshPoint]
   );
 
+  const { isRecordModalOpen, handleCloseRecordModal, handleOpenRecordModal } =
+    useStudyDetail(studyId);
+
   return (
     <section className="focus-page">
       <div className="focus-page__content">
@@ -100,6 +105,12 @@ function FocusPage() {
             </h1>
 
             <div className="focus-page__actions">
+              <button
+                className="focus-page__action-btn common-action-btn"
+                onClick={handleOpenRecordModal}
+              >
+                <span>포인트 기록</span>
+              </button>
               <Link
                 to={`/studies/${currentStudyId}/habit`}
                 className="focus-page__action-btn common-action-btn"
@@ -144,6 +155,12 @@ function FocusPage() {
           <FocusTimerCard
             studyId={currentStudyId}
             onSessionComplete={handleSessionComplete}
+          />
+          <StudyRecordModal
+            isOpen={isRecordModalOpen}
+            title="포인트 기록"
+            closeText="닫기"
+            onClose={handleCloseRecordModal}
           />
         </div>
       </div>

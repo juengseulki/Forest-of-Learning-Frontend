@@ -34,7 +34,6 @@ function StudyDetailPage() {
     handleChangePassword,
     handleSubmitPassword,
     handleConfirmDelete,
-    handleOpenRecordModal,
     handleCloseRecordModal,
     getActionLabel,
   } = useStudyDetail(studyId);
@@ -73,7 +72,7 @@ function StudyDetailPage() {
             <StudyActionButtonGroup
               onEditClick={() => handleRequirePassword('edit')}
               onDeleteClick={() => handleRequirePassword('delete')}
-              onRecordClick={() => handleOpenRecordModal()}
+              onRecordClick={() => handleRequirePassword('record')}
               study={study}
             />
 

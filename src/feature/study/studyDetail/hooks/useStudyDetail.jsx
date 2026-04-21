@@ -108,6 +108,9 @@ export function useStudyDetail(studyId) {
         return t('goToHabit');
       case 'focus':
         return t('goToFocus');
+        return '오늘의 집중으로 가기';
+      case 'record':
+        return '포인트 로그 보기';
       default:
         return t('confirm');
     }
@@ -127,6 +130,11 @@ export function useStudyDetail(studyId) {
 
       if (action === 'focus') {
         navigate(`/studies/${studyId}/focus`);
+      }
+
+      if (action === 'record') {
+        setIsRecordModalOpen(true);
+        return;
       }
     },
     [navigate, studyId]
