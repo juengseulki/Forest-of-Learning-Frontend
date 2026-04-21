@@ -9,13 +9,11 @@ import { StudyProvider } from '../../../contexts/StudyContext';
 import { UIProvider } from '../../../contexts/UIContext';
 
 import './MainLayout.css';
-
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [headerAction, setHeaderAction] = useState(null);
-
   const isHomePage = location.pathname === '/';
   const isStudyEditPage = /^\/studies\/\d+\/edit$/.test(location.pathname);
 

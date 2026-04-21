@@ -20,7 +20,7 @@ input:focus {
 }
 
 .home-title {
-  color: #414141;
+  color: var(--text-main);
 }
 
 .recent-scroll {
@@ -64,7 +64,7 @@ select::-ms-expand {
   font-weight: 400;
   font-size: 16px;
   line-height: 100%;
-  color: var(--gray-300);
+  color: var(--text-sub);
   cursor: pointer;
   outline: none;
 }
@@ -139,7 +139,7 @@ select::-ms-expand {
 .see-more {
   width: 280px;
   border-radius: 20px;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--border-main);
   padding: 17px 119px;
   color: var(--color-green-text);
   font-weight: 500;
@@ -160,7 +160,7 @@ select::-ms-expand {
   font-weight: 500;
   font-size: 20px;
   line-height: 100%;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .home-section-header {
@@ -186,7 +186,7 @@ select::-ms-expand {
 
 .recent-clear-button:hover {
   background-color: #8fb996;
-  color: var(--color-white);
+  color: var(--bg-panel);
 }
 
 .recent-clear-button:active {
