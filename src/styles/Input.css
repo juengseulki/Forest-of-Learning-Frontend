@@ -41,6 +41,7 @@
   border: none;
   background: transparent;
   outline: none;
+  color: var(--text-main);
 }
 
 .input-field::placeholder {
