@@ -85,14 +85,12 @@ export function useHomeStudies() {
       }
     }
 
-    if (studies.length === 0) {
-      fetchData();
-    }
+    fetchData();
 
     return () => {
       isMounted = false;
     };
-  }, [studyDispatch, studies.length]);
+  }, [studyDispatch]);
 
   const filteredStudies = useMemo(() => {
     return getFilteredStudies(studies, keyword, order);
