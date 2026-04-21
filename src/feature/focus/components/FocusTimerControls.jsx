@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import playIcon from '../../../images/icon/ic_play.svg';
 import pauseIcon from '../../../images/icon/ic_pause.svg';
 
@@ -26,6 +27,8 @@ function FocusTimerControls({
   handleFinish,
   handleReset,
 }) {
+  const { t } = useTranslation();
+
   let content = null;
 
   if (!session) {
@@ -39,10 +42,10 @@ function FocusTimerControls({
         <span className="focus-timer-card__button-content">
           <img
             src={playIcon}
-            alt=""
+            alt={t('focusPlayAlt')}
             className="focus-timer-card__button-icon"
           />
-          <span>Start!</span>
+          <span>{t('focusStart')}</span>
         </span>
       </button>
     );
@@ -56,10 +59,10 @@ function FocusTimerControls({
         <span className="focus-timer-card__button-content">
           <img
             src={playIcon}
-            alt=""
+            alt={t('focusPlayAlt')}
             className="focus-timer-card__button-icon"
           />
-          <span>Start!</span>
+          <span>{t('focusStart')}</span>
         </span>
       </button>
     );
@@ -68,7 +71,7 @@ function FocusTimerControls({
       <div className="focus-timer-card__control-wrap">
         <FocusIconButton
           disabled
-          alt="pause"
+          altKey="focusPauseAlt"
           desktopInactiveSrc={pauseInactive}
           mobileInactiveSrc={pauseMobileInactive}
         />
@@ -81,16 +84,16 @@ function FocusTimerControls({
           <span className="focus-timer-card__button-content">
             <img
               src={playIcon}
-              alt=""
+              alt={t('focusPlayAlt')}
               className="focus-timer-card__button-icon"
             />
-            <span>Start!</span>
+            <span>{t('focusResume')}</span>
           </span>
         </button>
 
         <FocusIconButton
           onClick={handleReset}
-          alt="reset"
+          altKey="focusResetAlt"
           desktopInactiveSrc={resetInactive}
           desktopActiveSrc={resetActive}
           mobileInactiveSrc={resetMobileInactive}
@@ -108,10 +111,10 @@ function FocusTimerControls({
         <span className="focus-timer-card__button-content">
           <img
             src={pauseIcon}
-            alt=""
+            alt={t('focusStop')}
             className="focus-timer-card__button-icon"
           />
-          <span>Stop</span>
+          <span>{t('focusStop')}</span>
         </span>
       </button>
     );
@@ -120,7 +123,7 @@ function FocusTimerControls({
       <div className="focus-timer-card__control-wrap">
         <FocusIconButton
           onClick={handlePause}
-          alt="pause"
+          altKey="focusPauseAlt"
           desktopInactiveSrc={pauseInactive}
           desktopActiveSrc={pauseActive}
           mobileInactiveSrc={pauseMobileInactive}
@@ -135,16 +138,16 @@ function FocusTimerControls({
           <span className="focus-timer-card__button-content">
             <img
               src={playIcon}
-              alt=""
+              alt={t('focusPlayAlt')}
               className="focus-timer-card__button-icon"
             />
-            <span>Start!</span>
+            <span>{t('focusStart')}</span>
           </span>
         </button>
 
         <FocusIconButton
           onClick={handleReset}
-          alt="reset"
+          altKey="focusResetAlt"
           desktopInactiveSrc={resetInactive}
           desktopActiveSrc={resetActive}
           mobileInactiveSrc={resetMobileInactive}

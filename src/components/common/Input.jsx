@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import '../../styles/Input.css';
 import btn_visibility_off from '../../images/button/btn_visibility_off.svg';
 import btn_visibility_on from '../../images/button/btn_visibility_on.svg';
 
 function Input({ labelName, placeholder, password, value, onChange, error }) {
   const [visible, setVisible] = useState(false);
+  const { t } = useTranslation();
 
   const toggleVisibility = () => {
-    setVisible((t) => !t);
+    setVisible((toggled) => !toggled);
   };
 
   return (
@@ -26,6 +28,7 @@ function Input({ labelName, placeholder, password, value, onChange, error }) {
             src={visible ? btn_visibility_on : btn_visibility_off}
             onClick={toggleVisibility}
             className="visibility-icon"
+            alt={visible ? t('hidePassword') : t('showPassword')}
           />
         )}
       </div>

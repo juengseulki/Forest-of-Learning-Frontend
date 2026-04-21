@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import Toast from '../../../../shared/components/toast/Toast.jsx';
 import handleApiError from '../../../../utils/handleApiError.jsx';
@@ -14,6 +15,7 @@ import { useStudy } from '../../../../contexts/StudyContext';
 export function useStudyDetail(studyId) {
   const navigate = useNavigate();
   const { state, dispatch } = useStudy();
+  const { t } = useTranslation();
 
   const [study, setStudy] = useState({});
   const [password, setPassword] = useState('');
@@ -22,7 +24,6 @@ export function useStudyDetail(studyId) {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
-
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
 
   const parsedStudyId = Number(studyId);
@@ -60,12 +61,12 @@ export function useStudyDetail(studyId) {
           payload: [...state.studies, targetStudy],
         });
       } catch (error) {
-        handleApiError(error, '스터디 정보를 불러오지 못했습니다.');
+        handleApiError(error, t('studyInfoLoadFail'));
       }
     };
 
     fetchStudy();
-  }, [studyId, studyFromStore, dispatch, state.studies]);
+  }, [studyId, studyFromStore, dispatch, state.studies, t]);
 
   const handleRequirePassword = useCallback((action) => {
     setPendingAction(action);
@@ -100,19 +101,20 @@ export function useStudyDetail(studyId) {
   const getActionLabel = useCallback(() => {
     switch (pendingAction) {
       case 'edit':
-        return '수정하러 가기';
+        return t('goToEdit');
       case 'delete':
-        return '삭제하기';
+        return t('delete');
       case 'habit':
-        return '오늘의 습관으로 가기';
+        return t('goToHabit');
       case 'focus':
+        return t('goToFocus');
         return '오늘의 집중으로 가기';
       case 'record':
         return '포인트 로그 보기';
       default:
-        return '확인';
+        return t('confirm');
     }
-  }, [pendingAction]);
+  }, [pendingAction, t]);
 
   const moveByAction = useCallback(
     (action) => {
@@ -140,7 +142,7 @@ export function useStudyDetail(studyId) {
 
   const handleSubmitPassword = useCallback(async () => {
     if (!password.trim()) {
-      showToast('info', '💙', '비밀번호를 입력해주세요.');
+      showToast('info', '💙', t('enterPassword'));
       return;
     }
 
@@ -159,7 +161,7 @@ export function useStudyDetail(studyId) {
       handleClosePasswordModal();
       moveByAction(pendingAction);
     } catch (error) {
-      showToast('danger', '❌', error.message || '오류가 발생했습니다.');
+      showToast('danger', '❌', error.message || t('commonError'));
     } finally {
       setIsSubmitting(false);
     }
@@ -170,6 +172,7 @@ export function useStudyDetail(studyId) {
     showToast,
     handleClosePasswordModal,
     moveByAction,
+    t,
   ]);
 
   const handleConfirmDelete = useCallback(async () => {
@@ -193,14 +196,10 @@ export function useStudyDetail(studyId) {
       setPassword('');
       setPendingAction(null);
 
-      showToast('success', '💚', '스터디가 삭제되었습니다.');
+      showToast('success', '💚', t('deleteSuccess'));
       navigate('/');
     } catch (error) {
-      showToast(
-        'danger',
-        '❌',
-        error.message || '삭제 중 오류가 발생했습니다.'
-      );
+      showToast('danger', '❌', error.message || t('deleteFail'));
     } finally {
       setIsSubmitting(false);
     }
@@ -213,6 +212,7 @@ export function useStudyDetail(studyId) {
     parsedStudyId,
     showToast,
     navigate,
+    t,
   ]);
 
   return {

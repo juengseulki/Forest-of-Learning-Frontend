@@ -1,9 +1,12 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import Toast from '../../../../../shared/components/toast/Toast';
 import './ShareSheet.css';
 
 function ShareSheet({ isOpen, onClose, study }) {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   const shareUrl = window.location.href;
@@ -22,30 +25,30 @@ function ShareSheet({ isOpen, onClose, study }) {
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
-      showToast('success', '🔗', '링크가 복사되었습니다!');
+      showToast('success', '🔗', t('copySuccess'));
       onClose();
     } catch (error) {
       console.error('복사 실패', error);
-      showToast('danger', '❗', '복사에 실패했습니다.');
+      showToast('danger', '❗', t('copyFail'));
     }
   };
 
   const handleKakaoShare = () => {
     if (!window.Kakao) {
-      showToast('danger', '❗', '카카오 SDK를 불러오지 못했습니다.');
+      showToast('danger', '❗', t('kakaoLoadFail'));
       return;
     }
 
     if (!window.Kakao.isInitialized()) {
-      showToast('danger', '❗', '카카오가 초기화되지 않았습니다.');
+      showToast('danger', '❗', t('kakaoInitFail'));
       return;
     }
 
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: study?.name || '스터디 함께해요',
-        description: study?.description || '공부의 숲에서 함께 공부해요!',
+        title: study?.name || t('shareStudyTitle'),
+        description: study?.description || t('shareStudyDescription'),
         imageUrl:
           study?.backgroundImageUrl ||
           'https://developers.kakao.com/tool/resource/static/img/button/kakaotalksharing/kakaotalk_sharing_btn_medium.png',
@@ -56,7 +59,7 @@ function ShareSheet({ isOpen, onClose, study }) {
       },
       buttons: [
         {
-          title: '스터디 보러가기',
+          title: t('viewStudy'),
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
@@ -74,7 +77,7 @@ function ShareSheet({ isOpen, onClose, study }) {
         className="share-sheet__content"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="share-sheet__title">공유하기</p>
+        <p className="share-sheet__title">{t('shareModalTitle')}</p>
 
         <div className="share-sheet__list">
           <button
@@ -82,7 +85,7 @@ function ShareSheet({ isOpen, onClose, study }) {
             className="share-sheet__item"
             onClick={handleKakaoShare}
           >
-            카카오톡 공유
+            {t('shareKakao')}
           </button>
 
           <button
@@ -90,12 +93,12 @@ function ShareSheet({ isOpen, onClose, study }) {
             className="share-sheet__item"
             onClick={handleCopyLink}
           >
-            링크 복사
+            {t('shareCopyLink')}
           </button>
         </div>
 
         <button type="button" className="share-sheet__cancel" onClick={onClose}>
-          취소
+          {t('cancel')}
         </button>
       </div>
     </div>

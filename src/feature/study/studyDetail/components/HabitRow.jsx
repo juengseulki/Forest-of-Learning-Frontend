@@ -1,7 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { HABIT_ICONS } from '../utils/habitIcons.js';
 
-function HabitRow({ habits, weekDays }) {
+function HabitRow({ habits, weekDays, translatedMap = {} }) {
+  const { t } = useTranslation();
+
   return (
     <div>
       {habits.map((habit, index) => {
@@ -10,7 +13,9 @@ function HabitRow({ habits, weekDays }) {
 
         return (
           <div key={habit.habitId} className="habit-row">
-            <div className="habit-name">{habit.habitName}</div>
+            <div className="habit-name">
+              {translatedMap[habit.habitId] || habit.habitName}
+            </div>
 
             <div className="day-cells-container">
               {weekDays.map((day) => {
@@ -18,11 +23,11 @@ function HabitRow({ habits, weekDays }) {
                 return (
                   <div key={day} className="day-cell">
                     {status === true ? (
-                      <img src={currentCompletedIcon} alt="완료" />
+                      <img src={currentCompletedIcon} alt={t('completedAlt')} />
                     ) : status === false ? (
-                      <img src={HABIT_ICONS.EMPTY} alt="미완료" />
+                      <img src={HABIT_ICONS.EMPTY} alt={t('notCompletedAlt')} />
                     ) : (
-                      <img src={HABIT_ICONS.BLACK} alt="습관 없음" />
+                      <img src={HABIT_ICONS.BLACK} alt={t('noHabitAlt')} />
                     )}
                   </div>
                 );

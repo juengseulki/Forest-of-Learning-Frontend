@@ -1,19 +1,22 @@
+import { useTranslation } from 'react-i18next';
 import BaseStudyModal from './BaseStudyModal';
 
 function StudyUnsavedChangesModal({
   isOpen,
-  title = '페이지를 나갈까요?',
-  description = '저장되지 않은 값은 사라집니다.',
-  leaveText = '나가기',
-  stayText = '계속 작성하기',
+  title,
+  description,
+  leaveText,
+  stayText,
   onClose,
   onLeave,
 }) {
+  const { t } = useTranslation();
+
   return (
     <BaseStudyModal
       isOpen={isOpen}
-      title={title}
-      description={description}
+      title={title || t('leavePage')}
+      description={description || t('leavePageDescription')}
       onClose={onClose}
       className="study-modal__content--confirm"
     >
@@ -23,7 +26,7 @@ function StudyUnsavedChangesModal({
           className="study-modal__button study-modal__button--secondary"
           onClick={onClose}
         >
-          {stayText}
+          {stayText || t('continueWriting')}
         </button>
 
         <button
@@ -31,7 +34,7 @@ function StudyUnsavedChangesModal({
           className="study-modal__button study-modal__button--danger"
           onClick={onLeave}
         >
-          {leaveText}
+          {leaveText || t('exit')}
         </button>
       </div>
     </BaseStudyModal>

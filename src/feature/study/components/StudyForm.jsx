@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Input from '../../../components/common/Input';
 import '../../../styles/StudyForm.css';
 import ic_pow from '../../../images/icon/ic_pow.svg';
@@ -22,6 +23,7 @@ function resolveImageUrl(imageUrl) {
 function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const navigate = useNavigate();
   const { studyId } = useParams();
+  const { t } = useTranslation();
 
   const [backgrounds, setBackgrounds] = useState([]);
   const [selectedBackground, setSelectedBackground] = useState(null);
@@ -67,24 +69,23 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const submitButtonClick = async () => {
     const newErrors = {};
 
-    if (!nickname.trim()) newErrors.nickname = '*닉네임을 입력해주세요.';
-    if (!name.trim()) newErrors.name = '*스터디 이름을 입력해주세요.';
+    if (!nickname.trim()) newErrors.nickname = t('errorNicknameRequired');
+    if (!name.trim()) newErrors.name = t('errorStudyNameRequired');
     if (!selectedBackground) {
-      newErrors.background = '*배경을 선택해주세요.';
+      newErrors.background = t('errorBackgroundRequired');
     }
 
     if (!isEditMode) {
       const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{5,20}$/;
 
       if (!password) {
-        newErrors.password = '*비밀번호를 입력해주세요.';
+        newErrors.password = t('errorPasswordRequired');
       } else if (!passwordRegex.test(password)) {
-        newErrors.password =
-          '*비밀번호는 5~20자의 영문 + 숫자 조합이어야 합니다. (특수문자 !@#$%^&* 사용 가능)';
+        newErrors.password = t('errorPasswordInvalid');
       }
 
       if (password !== passwordCheck) {
-        newErrors.passwordCheck = '*비밀번호가 일치하지 않습니다.';
+        newErrors.passwordCheck = t('errorPasswordMismatch');
       }
     }
 
@@ -125,37 +126,37 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     <div className="form-container common-panel-md">
       <div className="form-wrapper">
         <p className="form-title">
-          {isEditMode ? '스터디 수정하기' : '스터디 만들기'}
+          {isEditMode ? t('studyEdit') : t('studyCreate')}
         </p>
 
         <Input
-          labelName="닉네임"
-          placeholder="닉네임을 입력해주세요"
+          labelName={t('nickname')}
+          placeholder={t('nicknamePlaceholder')}
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           error={errors.nickname}
         />
 
         <Input
-          labelName="스터디 이름"
-          placeholder="스터디 이름을 입력해주세요"
+          labelName={t('studyName')}
+          placeholder={t('studyNamePlaceholder')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={errors.name}
         />
 
         <div className="form-wrapper">
-          <label className="input-label">소개</label>
+          <label className="input-label">{t('descriptionLabel')}</label>
           <textarea
             className="textarea-wrapper"
-            placeholder="소개 멘트를 작성해주세요"
+            placeholder={t('descriptionPlaceholder')}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 
         <div className="form-wrapper">
-          <label className="input-label">배경을 선택해주세요</label>
+          <label className="input-label">{t('selectBackground')}</label>
           <div className="background-grid">
             {backgrounds.map((background) => {
               const isSelected = selectedBackground === background.id;
@@ -172,7 +173,11 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
                     className="background-image"
                   />
                   {isSelected && (
-                    <img className="check-icon" src={ic_pow} alt="선택됨" />
+                    <img
+                      className="check-icon"
+                      src={ic_pow}
+                      alt={t('selectedAlt')}
+                    />
                   )}
                 </div>
               );
@@ -186,16 +191,16 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         {!isEditMode && (
           <>
             <Input
-              labelName="비밀번호"
-              placeholder="비밀번호를 입력해주세요"
+              labelName={t('password')}
+              placeholder={t('passwordPlaceholder')}
               password={true}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               error={errors.password}
             />
             <Input
-              labelName="비밀번호 확인"
-              placeholder="비밀번호를 다시 입력해주세요"
+              labelName={t('passwordConfirm')}
+              placeholder={t('passwordConfirmPlaceholder')}
               password={true}
               value={passwordCheck}
               onChange={(e) => setPasswordCheck(e.target.value)}
@@ -206,7 +211,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       </div>
 
       <button className="create-button" onClick={submitButtonClick}>
-        {isEditMode ? '수정하기' : '만들기'}
+        {isEditMode ? t('editSubmit') : t('createSubmit')}
       </button>
     </div>
   );
