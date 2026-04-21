@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFocusTimer } from '../hooks/useFocusTimer';
 import FocusTimerDisplay from './FocusTimerDisplay';
 import { useFocusPoint } from '../hooks/useFocusPoint';
@@ -11,6 +12,8 @@ import {
 import './FocusTimerCard.css';
 
 function FocusTimerCard({ studyId, onSessionComplete }) {
+  const { t } = useTranslation();
+
   const {
     minutes,
     seconds,
@@ -40,7 +43,6 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
 
   const hasShownTargetToastRef = useRef(false);
 
-  // 💚 설정시간 끝났을 때
   useEffect(() => {
     if (isOvertime && !hasShownTargetToastRef.current) {
       showTargetToast();
@@ -48,13 +50,11 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
     }
   }, [isOvertime]);
 
-  // ⏸ 일시중지
   function handlePauseWithToast() {
     handlePause();
     showPauseToast();
   }
 
-  // 🎉 종료 + 포인트
   function handleFinishWithToast() {
     if (!session) return;
 
@@ -72,7 +72,6 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
     handleFinish();
   }
 
-  // 🔄 리셋
   function handleResetWithToast() {
     handleReset();
     hasShownTargetToastRef.current = false;
@@ -81,8 +80,8 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
   const showTimerDisplay = isRunning || isPaused || isCompleted;
 
   return (
-    <div className="focus-timer-card">
-      <p className="focus-timer-card__label">오늘의 집중</p>
+    <div className="focus-timer-card common-card">
+      <p className="focus-timer-card__label">{t('focusTitle')}</p>
 
       <FocusTimerDisplay
         showTimerDisplay={showTimerDisplay}

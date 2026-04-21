@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import trashIcon from '../../../images/icon/ic_trash.svg';
 
 function HabitForm({
@@ -12,6 +13,8 @@ function HabitForm({
   onDeleteInputRow,
   onSubmit,
 }) {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   return (
@@ -20,7 +23,7 @@ function HabitForm({
         className="habit-modal__content"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="habit-modal__title">습관 목록</h3>
+        <h3 className="habit-modal__title">{t('habitListTitle')}</h3>
 
         <div className="habit-form__list">
           {draftHabitList.map((habit) => (
@@ -35,7 +38,7 @@ function HabitForm({
                 onClick={() => onDeleteDraftHabit(habit.id)}
                 disabled={isSubmitting}
               >
-                <img src={trashIcon} alt="삭제" />
+                <img src={trashIcon} alt={t('habitDeleteAlt')} />
               </button>
             </div>
           ))}
@@ -59,15 +62,15 @@ function HabitForm({
                 onClick={() => onDeleteInputRow(input.id)}
                 disabled={isSubmitting}
               >
-                <img src={trashIcon} alt="입력 삭제" />
+                <img src={trashIcon} alt={t('habitInputDeleteAlt')} />
               </button>
             </div>
           ))}
 
           {draftHabitList.length === 0 && draftInputs.length === 0 && (
             <div className="habit-empty habit-empty--modal">
-              <p className="habit-empty__title">등록된 습관이 없어요</p>
-              <p className="habit-empty__desc">플러스를 눌러 추가해보세요</p>
+              <p className="habit-empty__title">{t('habitEmptyTitle')}</p>
+              <p className="habit-empty__desc">{t('habitEmptyDesc')}</p>
             </div>
           )}
         </div>
@@ -88,7 +91,7 @@ function HabitForm({
             onClick={onClose}
             disabled={isSubmitting}
           >
-            취소
+            {t('habitCancel')}
           </button>
 
           <button
@@ -97,7 +100,7 @@ function HabitForm({
             onClick={onSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? '저장 중...' : '수정 완료'}
+            {isSubmitting ? t('habitSaving') : t('habitSaveDone')}
           </button>
         </div>
       </div>

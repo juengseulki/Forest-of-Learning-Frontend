@@ -8,13 +8,18 @@ export async function getStudyDetail(studyId) {
 
 // 습관 목록 조회
 export async function getHabitList(studyId) {
-  const response = await client.get('/habits', { params: { studyId } });
+  const response = await client.get('/habits', {
+    params: { studyId },
+  });
   return response.data;
 }
 
-// 습관 생성
+// ✅ 습관 생성 (오타 수정: /whabits → /habits)
 export async function createHabit(studyId, habitData) {
-  const response = await client.post('/habits', { studyId, ...habitData });
+  const response = await client.post('/habits', {
+    studyId,
+    ...habitData,
+  });
   return response.data;
 }
 
@@ -39,9 +44,9 @@ export async function toggleHabitCheck(habitId, date, completed) {
   return response.data;
 }
 
-// 습관별 기록 조회
+// ✅ 습관별 기록 조회 (불필요한 ? 제거)
 export async function getHabitRecords(habitId, startDate, endDate) {
-  const response = await client.get(`/habits/${habitId}/records?`, {
+  const response = await client.get(`/habits/${habitId}/records`, {
     params: {
       weekStart: startDate,
       weekEnd: endDate,

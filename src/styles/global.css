@@ -5,8 +5,14 @@
   --gray-100: #eeeeee;
   --gray-200: #dddddd;
   --gray-300: #818181;
+  --gray-400: #414141;
 
-  --bg-default: #f6f4ef;
+  --bg-default: #f6f4ef; /* 전체 배경 */
+  --bg-panel: #ffffff; /* 패널, 카드, 필드 배경 */
+  --text-main: var(--gray-400);
+  --text-sub: var(--gray-300);
+  --border-main: var(--gray-200); /* 선, 테두리 */
+  --bg-btn-alpha: rgba(255, 255, 255, 0.3); /* 이모지 버튼 등 반투명 배경 */
 
   --color-primary: #99c08e;
   --color-primary-hover: #8fb783;
@@ -36,6 +42,21 @@
   --radius-lg: 20px;
 }
 
+[data-theme='dark'] {
+  --bg-default: #121212;
+  --bg-panel: #1e1e1e;
+  --text-main: #ececec;
+  --text-sub: #b5b9c0;
+  --border-main: #333333;
+  --bg-btn-alpha: rgba(255, 255, 255, 0.1);
+
+  --color-green-text: #8ec07c;
+
+  --bg-button-gray: #333333;
+  --border-button: #444444;
+
+  --text-main: #e0e0e0;
+}
 html {
   font-size: 16px;
   font-family:
@@ -50,7 +71,7 @@ html {
 body {
   min-width: 320px;
   background-color: var(--bg-default);
-  color: var(--color-black);
+  color: var(--text-main);
   font-family: inherit;
   line-height: 1.5;
 }
@@ -76,4 +97,140 @@ textarea::placeholder {
   src: url('../assets/fonts/EF_jejudoldam\(TTF\).ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+}
+
+/* =========================
+   COMMON UI
+========================= */
+
+.common-panel {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-panel);
+  padding: 40px;
+}
+
+.common-panel-lg {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-panel);
+  padding: 40px;
+}
+
+.common-panel-md {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-panel);
+  padding: 24px;
+}
+
+.common-point-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-main);
+  border-radius: 999px;
+  background-color: var(--bg-panel);
+}
+
+.common-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid var(--border-main);
+  background: var(--bg-panel);
+}
+
+.common-action-btn {
+  border: 1px solid var(--border-main);
+  border-radius: 14px;
+  background-color: var(--bg-panel);
+  color: var(--text-sub);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.common-action-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.common-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-main);
+  border-radius: 15px;
+  background-color: var(--bg-panel);
+}
+
+.common-field-control {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--text-main);
+}
+
+.common-title-lg {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+.common-title-xl {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+.text-break {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.floating-language-buttons {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  display: flex;
+  gap: 8px;
+}
+
+.floating-language-button {
+  border: none;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #414141;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.floating-language-button.active {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.translate-loading-text {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--gray-300);
+}
+
+.habit-translate-loading-text {
+  padding: 0 24px 20px;
 }
