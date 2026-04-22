@@ -24,36 +24,42 @@ export default function StudyCard({
   const { dispatch } = useStudy();
   const { i18n, t } = useTranslation();
 
+  const [translatedNickname, setTranslatedNickname] = useState('');
   const [translatedName, setTranslatedName] = useState('');
   const [translatedDescription, setTranslatedDescription] = useState('');
 
   useEffect(() => {
     async function translateCardContent() {
       if (i18n.language === 'ko') {
+        setTranslatedNickname('');
         setTranslatedName('');
         setTranslatedDescription('');
         return;
       }
 
       try {
-        const [nameResult, descriptionResult] = await Promise.all([
-          translate(name, i18n.language),
-          translate(description, i18n.language),
-        ]);
+        const [nicknameResult, nameResult, descriptionResult] =
+          await Promise.all([
+            nickname ? translate(nickname, i18n.language) : '',
+            name ? translate(name, i18n.language) : '',
+            description ? translate(description, i18n.language) : '',
+          ]);
 
+        setTranslatedNickname(nicknameResult);
         setTranslatedName(nameResult);
         setTranslatedDescription(descriptionResult);
       } catch (error) {
         console.error('홈 카드 번역 실패:', error);
+        setTranslatedNickname('');
         setTranslatedName('');
         setTranslatedDescription('');
       }
     }
 
-    if (name || description) {
+    if (nickname || name || description) {
       translateCardContent();
     }
-  }, [i18n.language, name, description]);
+  }, [i18n.language, nickname, name, description]);
 
   const handleClick = () => {
     const updatedRecentStudies = addRecentStudy({ id });
@@ -66,6 +72,7 @@ export default function StudyCard({
     navigate(`/studies/${id}`);
   };
 
+  const displayNickname = translatedNickname || nickname;
   const displayName = translatedName || name;
   const displayDescription = translatedDescription || description;
 
@@ -76,8 +83,8 @@ export default function StudyCard({
         backgroundImage: `
           linear-gradient(
             to bottom,
-           rgba(255, 255, 255, 0.10),
-           rgba(255, 255, 255, 0.18)
+            rgba(255, 255, 255, 0.10),
+            rgba(255, 255, 255, 0.18)
           ),
           url(${backgroundImage})
         `,
@@ -88,7 +95,7 @@ export default function StudyCard({
         <div className="header-top">
           <div className="title-group">
             <h2 className="title" style={{ color: theme?.title }}>
-              <span style={{ color: theme?.nickname }}>{nickname}</span>
+              <span style={{ color: theme?.nickname }}>{displayNickname}</span>
               {t('studyPossessive')} {displayName}
             </h2>
 

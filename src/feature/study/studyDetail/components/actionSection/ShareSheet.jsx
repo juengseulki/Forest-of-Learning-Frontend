@@ -9,7 +9,8 @@ function ShareSheet({ isOpen, onClose, study }) {
 
   if (!isOpen) return null;
 
-  const shareUrl = window.location.href;
+  const shareUrl = `${window.location.origin}/studies/${study?.id ?? ''}`;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   const showToast = (type, icon, message) => {
     toast(<Toast type={type} icon={icon} message={message} />, {
@@ -39,36 +40,59 @@ function ShareSheet({ isOpen, onClose, study }) {
       return;
     }
 
+    const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
+
     if (!window.Kakao.isInitialized()) {
-      showToast('danger', '❗', t('kakaoInitFail'));
+      if (!kakaoKey) {
+        showToast('danger', '❗', t('kakaoInitFail'));
+        return;
+      }
+
+      try {
+        window.Kakao.init(kakaoKey);
+      } catch (error) {
+        console.error('카카오 초기화 실패', error);
+        showToast('danger', '❗', t('kakaoInitFail'));
+        return;
+      }
+    }
+
+    // PC에서는 앱 intent 에러가 날 수 있어서 링크 복사로 대체
+    if (!isMobile) {
+      handleCopyLink();
       return;
     }
 
-    window.Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: study?.name || t('shareStudyTitle'),
-        description: study?.description || t('shareStudyDescription'),
-        imageUrl:
-          study?.backgroundImageUrl ||
-          'https://developers.kakao.com/tool/resource/static/img/button/kakaotalksharing/kakaotalk_sharing_btn_medium.png',
-        link: {
-          mobileWebUrl: shareUrl,
-          webUrl: shareUrl,
-        },
-      },
-      buttons: [
-        {
-          title: t('viewStudy'),
+    try {
+      window.Kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: study?.name || t('shareStudyTitle'),
+          description: study?.description || t('shareStudyDescription'),
+          imageUrl:
+            study?.background?.imageUrl ||
+            'https://developers.kakao.com/tool/resource/static/img/button/kakaotalksharing/kakaotalk_sharing_btn_medium.png',
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
           },
         },
-      ],
-    });
+        buttons: [
+          {
+            title: t('viewStudy'),
+            link: {
+              mobileWebUrl: shareUrl,
+              webUrl: shareUrl,
+            },
+          },
+        ],
+      });
 
-    onClose();
+      onClose();
+    } catch (error) {
+      console.error('카카오 공유 실패', error);
+      showToast('danger', '❗', t('kakaoShareFail'));
+    }
   };
 
   return (
