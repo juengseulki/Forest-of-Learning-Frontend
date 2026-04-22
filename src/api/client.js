@@ -14,6 +14,7 @@ async function request(method, url, { data, params } = {}) {
   const options = {
     method,
     headers: {},
+    credentials: 'include',
   };
 
   if (data !== undefined) {

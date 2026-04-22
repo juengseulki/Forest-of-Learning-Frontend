@@ -112,6 +112,7 @@ function StudyDetailPage() {
         title={t('pointRecord')}
         closeText={t('close')}
         onClose={handleCloseRecordModal}
+        studyId={Number(studyId)}
       />
     </div>
   );
