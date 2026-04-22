@@ -67,7 +67,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-  color: var(--text-main);
+  color: black;
 }
 
 /* 큰 타이머 / 입력 영역 자리를 항상 고정 */
