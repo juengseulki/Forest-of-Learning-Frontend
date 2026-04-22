@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useFocusPoint } from './useFocusPoint.js';
 import { TIMER_STATUS } from '../utils/focusConstants.js';
-import { completeFocus } from '../../../api/focus/focusApi.js';
+import { completeFocus } from '../../../api/focusApi.js';
 import handleApiError from '../../../utils/handleApiError.jsx';
 import {
   clearStoredSession,
