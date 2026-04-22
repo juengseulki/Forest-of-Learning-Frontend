@@ -5,11 +5,12 @@ import { useTranslation } from 'react-i18next';
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
 
-import { addRecentStudy } from '../shared/utils/recentStudy';
-import { useStudy } from '../../../contexts/StudyContext';
-import { translate } from '../../../api/translateApi';
+import { addRecentStudy } from '../shared/utils/recentStudy.js';
+import { useStudy } from '../../../contexts/StudyContext.jsx';
+import { translate } from '../../../api/translateApi.js';
 
 export default function StudyCard({
+  id,
   nickname,
   name,
   description,

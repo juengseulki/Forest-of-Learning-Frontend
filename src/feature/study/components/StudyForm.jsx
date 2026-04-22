@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Input from '../../../components/common/Input';
+import Input from '../../../components/common/Input.jsx';
 import '../../../styles/StudyForm.css';
 import ic_pow from '../../../images/icon/ic_pow.svg';
-import { createStudy, updateStudy } from '../../../api/studyApi';
-import { getBackgrounds } from '../../../api/backgroundApi';
+import { createStudy, updateStudy } from '../../../api/studyApi.js';
+import { getBackgrounds } from '../../../api/backgroundApi.js';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -66,7 +66,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     setSelectedBackground(initialData.background?.id ?? null);
   }, [isEditMode, initialData]);
 
-  const submitButtonClink = () => {
+  const submitButtonClick = async () => {
     const newErrors = {};
 
     if (!nickname.trim()) newErrors.nickname = t('errorNicknameRequired');
@@ -92,8 +92,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    //서버 전송 데이터
-    const newData = {
+    const formData = {
       nickname,
       name,
       description,
@@ -134,32 +133,28 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
           labelName={t('nickname')}
           placeholder={t('nicknamePlaceholder')}
           value={nickname}
-          onChange={(e) => {
-            setNickname(e.target.value);
-          }}
+          onChange={(e) => setNickname(e.target.value)}
           error={errors.nickname}
         />
+
         <Input
           labelName={t('studyName')}
           placeholder={t('studyNamePlaceholder')}
           value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
+          onChange={(e) => setName(e.target.value)}
           error={errors.name}
         />
+
         <div className="form-wrapper">
           <label className="input-label">{t('descriptionLabel')}</label>
           <textarea
             className="textarea-wrapper"
             placeholder={t('descriptionPlaceholder')}
             value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-            error={errors.description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
+
         <div className="form-wrapper">
           <label className="input-label">{t('selectBackground')}</label>
           <div className="background-grid">
@@ -177,7 +172,6 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
                     alt={background.name}
                     className="background-image"
                   />
-
                   {isSelected && (
                     <img
                       className="check-icon"
@@ -224,4 +218,3 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
 }
 
 export default StudyForm;
-

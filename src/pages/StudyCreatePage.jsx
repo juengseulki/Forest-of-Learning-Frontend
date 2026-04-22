@@ -1,5 +1,4 @@
-import StudyForm from '../feature/study/components/StudyForm';
-import '../styles/CreateStudyPage.css';
+import StudyForm from '../feature/study/components/StudyForm.jsx';
 
 function StudyDetailPage() {
   return (

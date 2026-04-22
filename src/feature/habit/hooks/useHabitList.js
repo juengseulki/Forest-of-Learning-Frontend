@@ -3,7 +3,7 @@ import { getHabitList, toggleHabitCheck } from '../../../api/habitApi.js';
 import {
   getTodayDateString,
   normalizeHabitListResponse,
-} from '../utils/habitUtils';
+} from '../utils/habitUtils.js';
 import handleApiError from '../../../utils/handleApiError.jsx';
 
 export function useHabitList(studyId) {

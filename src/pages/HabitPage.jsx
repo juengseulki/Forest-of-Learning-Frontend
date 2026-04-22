@@ -5,24 +5,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
 
-import HabitItem from '../feature/habit/components/HabitItem';
-import HabitForm from '../feature/habit/components/HabitForm';
+import HabitItem from '../feature/habit/components/HabitItem.jsx';
+import HabitForm from '../feature/habit/components/HabitForm.jsx';
 
-import { useCurrentTime } from '../feature/habit/hooks/useCurrentTime';
-import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle';
-import { useHabitList } from '../feature/habit/hooks/useHabitList';
-import { useHabitForm } from '../feature/habit/hooks/useHabitForm';
+import { useCurrentTime } from '../feature/habit/hooks/useCurrentTime.js';
+import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle.js';
+import { useHabitList } from '../feature/habit/hooks/useHabitList.js';
+import { useHabitForm } from '../feature/habit/hooks/useHabitForm.js';
 
-import { formatHabitTime } from '../feature/habit/utils/formatHabitTime';
-import { toStudyId } from '../feature/habit/utils/habitUtils';
-import { translate } from '../api/translateApi';
+import { formatHabitTime } from '../feature/habit/utils/formatHabitTime.js';
+import { toStudyId } from '../feature/habit/utils/habitUtils.js';
+import { translate } from '../api/translateApi.js';
 
 function HabitPage() {
   const navigate = useNavigate();
   const { studyId, habitId } = useParams();
   const { t, i18n } = useTranslation();
 
-  const studyId = toStudyId(id);
+  const parsedStudyId = toStudyId(studyId);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
@@ -37,7 +37,7 @@ function HabitPage() {
     fetchHabitList,
     toggleHabit,
     removeHabitLocally,
-  } = useHabitList(studyId);
+  } = useHabitList(parsedStudyId);
 
   const {
     draftHabitList,
@@ -52,7 +52,7 @@ function HabitPage() {
     deleteDraftHabit,
     submitHabitList,
   } = useHabitForm({
-    studyId,
+    studyId: parsedStudyId,
     habitList,
     onAfterCreate: fetchHabitList,
     onAfterDelete: removeHabitLocally,
@@ -113,8 +113,8 @@ function HabitPage() {
                 type="button"
                 className="habit-home__nav-btn common-action-btn"
                 onClick={() => {
-                  if (!studyId || habitList.length === 0) return;
-                  navigate(`/studies/${studyId}/focus`);
+                  if (!parsedStudyId) return;
+                  navigate(`/studies/${parsedStudyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">{t('todayFocus')}</span>

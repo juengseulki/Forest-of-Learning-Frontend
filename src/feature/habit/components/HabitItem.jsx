@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { translate } from '../../../api/translateApi';
+import { translate } from '../../../api/translateApi.js';
 
 function HabitItem({ habit, onToggle }) {
   const { i18n } = useTranslation();

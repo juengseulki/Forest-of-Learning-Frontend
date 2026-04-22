@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import MainLayout from '../shared/layouts/MainLayout/MainLayout';
-import HomePage from '../pages/HomePage';
-import CreateStudyPage from '../pages/CreateStudyPage';
-import FocusPage from '../pages/FocusPage';
-import HabitPage from '../pages/HabitPage';
-import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
-import ProtectedStudyRoute from '../shared/routes/ProtectedStudyRoute';
+import MainLayout from '../shared/layouts/MainLayout/MainLayout.jsx';
+import HomePage from '../pages/HomePage.jsx';
+import StudyCreatePage from '../pages/StudyCreatePage.jsx';
+import StudyEditPage from '../pages/StudyEditPage.jsx';
+import FocusPage from '../pages/FocusPage.jsx';
+import HabitPage from '../pages/HabitPage.jsx';
+import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage.jsx';
+import ProtectedStudyRoute from '../shared/routes/ProtectedStudyRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'studies/:id',
+        path: 'studies/:studyId',
         element: <StudyDetailPage />,
       },
       {

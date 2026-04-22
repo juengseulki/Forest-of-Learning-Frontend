@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import StudyList from '../feature/study/components/StudyList';
-import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
+import StudyList from '../feature/study/components/StudyList.jsx';
+import { useHomeStudies } from '../feature/study/hooks/useHomeStudies.js';
 import ic_search from '../shared/images/icons/ic_search.png';
 import ic_select_arrow from '../shared/components/icons/icon/ic_select_arrow.png';
 
@@ -15,7 +15,6 @@ function HomePage() {
     keyword,
     setKeyword,
     setOrder,
-    order,
     isLoading,
     filteredStudies,
     recentStudies,
@@ -28,23 +27,10 @@ function HomePage() {
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [label, setLabel] = useState(t('latest'));
 
-  function getOrderLabel(order) {
-    switch (order) {
-      case 'latest':
-        return t('latest');
-      case 'oldest':
-        return t('oldest');
-      case 'pointDesc':
-        return t('pointDesc');
-      case 'pointAsc':
-        return t('pointAsc');
-      default:
-        return t('latest');
-    }
-  }
-
-  function handleSelect(value) {
+  function handleSelect(text, value) {
+    setLabel(text);
     setOrder(value);
     setIsOpen(false);
   }
@@ -92,37 +78,37 @@ function HomePage() {
               />
             </div>
 
-            <div className={`select ${isOpen && 'active'}`}>
+            <div className={`select ${isOpen ? 'active' : ''}`}>
               <button
                 type="button"
                 className="label"
                 onClick={() => setIsOpen(!isOpen)}
               >
-                {getOrderLabel(order)}
+                {label}
                 <img src={ic_select_arrow} />
               </button>
               <ul className="optionList">
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('latest')}
+                  onClick={() => handleSelect(t('latest'), 'latest')}
                 >
                   {t('latest')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('oldest')}
+                  onClick={() => handleSelect(t('oldest'), 'oldest')}
                 >
                   {t('oldest')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('pointDesc')}
+                  onClick={() => handleSelect(t('pointDesc'), 'pointDesc')}
                 >
                   {t('pointDesc')}
                 </li>
                 <li
                   className="optionItem"
-                  onClick={() => handleSelect('pointAsc')}
+                  onClick={() => handleSelect(t('pointAsc'), 'pointAsc')}
                 >
                   {t('pointAsc')}
                 </li>
