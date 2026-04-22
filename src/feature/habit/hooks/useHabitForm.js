@@ -52,7 +52,7 @@ export function useHabitForm({
 
   const deleteDraftHabit = async (habitId) => {
     try {
-      await deleteHabit(habitId);
+      await deleteHabit(habitId, studyId);
 
       setDraftHabitList((prevDraftHabitList) =>
         prevDraftHabitList.filter((habit) => habit.id !== habitId)

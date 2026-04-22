@@ -1,4 +1,5 @@
 import client from './client.js';
+import { getStudyAuthToken } from './studyApi.js';
 
 // 스터디 상세 조회
 export async function getStudyDetail(studyId) {
@@ -14,7 +15,7 @@ export async function getHabitList(studyId) {
   return response.data;
 }
 
-// ✅ 습관 생성 (오타 수정: /whabits → /habits)
+// 습관 생성
 export async function createHabit(studyId, habitData) {
   const response = await client.post('/habits', {
     studyId,
@@ -24,14 +25,20 @@ export async function createHabit(studyId, habitData) {
 }
 
 // 습관 수정
-export async function updateHabit(habitId, habitData) {
-  const response = await client.patch(`/habits/${habitId}`, habitData);
+export async function updateHabit(habitId, studyId, habitData) {
+  const token = getStudyAuthToken(studyId);
+  const response = await client.patch(`/habits/${habitId}`, habitData, {
+    token,
+  });
   return response.data;
 }
 
 // 습관 삭제
-export async function deleteHabit(habitId) {
-  const response = await client.delete(`/habits/${habitId}`);
+export async function deleteHabit(habitId, studyId) {
+  const token = getStudyAuthToken(studyId);
+  const response = await client.delete(`/habits/${habitId}`, {
+    token,
+  });
   return response.data;
 }
 
@@ -44,9 +51,9 @@ export async function toggleHabitCheck(habitId, date, completed) {
   return response.data;
 }
 
-// ✅ 습관별 기록 조회 (불필요한 ? 제거)
-export async function getHabitRecords(habitId, startDate, endDate) {
-  const response = await client.get(`/habits/${habitId}/records`, {
+// 습관 기록 조회
+export async function getHabitRecords(studyId, startDate, endDate) {
+  const response = await client.get(`/habits/${studyId}/records`, {
     params: {
       weekStart: startDate,
       weekEnd: endDate,

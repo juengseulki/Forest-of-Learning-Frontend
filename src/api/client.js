@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
-async function request(method, url, { data, params } = {}) {
+async function request(method, url, { data, params, token } = {}) {
   const fullUrl = new URL(BASE_URL + url);
 
   if (params) {
@@ -15,6 +15,10 @@ async function request(method, url, { data, params } = {}) {
     method,
     headers: {},
   };
+
+  if (token) {
+    options.headers.Authorization = `Bearer ${token}`;
+  }
 
   if (data !== undefined) {
     options.headers['Content-Type'] = 'application/json';
@@ -60,9 +64,10 @@ async function request(method, url, { data, params } = {}) {
 
 const client = {
   get: (url, options) => request('GET', url, options),
-  post: (url, data) => request('POST', url, { data }),
-  patch: (url, data) => request('PATCH', url, { data }),
-  delete: (url, data) => request('DELETE', url, { data }),
+  post: (url, data, options = {}) => request('POST', url, { ...options, data }),
+  patch: (url, data, options = {}) =>
+    request('PATCH', url, { ...options, data }),
+  delete: (url, options = {}) => request('DELETE', url, options),
 };
 
 export default client;
