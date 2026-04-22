@@ -81,7 +81,13 @@ export function useHabitForm({
       onAfterDelete(habitId);
       toast.success('습관이 삭제되었어요.');
     } catch (error) {
-      handleApiError(error, '습관 삭제에 실패했어요.');
+      if (error.status === 401) {
+        window.dispatchEvent(
+          new CustomEvent('session-expired', { detail: { studyId } })
+        );
+      } else {
+        handleApiError(error, '습관 삭제에 실패했어요.');
+      }
     }
   };
 
