@@ -14,7 +14,6 @@ async function request(method, url, { data, params } = {}) {
   const options = {
     method,
     headers: {},
-    credentials: 'include',
   };
 
   if (data !== undefined) {
@@ -36,9 +35,7 @@ async function request(method, url, { data, params } = {}) {
         const json = await res.json();
         errorMessage = json.error?.message || errorMessage;
         errorCode = json.error?.code;
-      } catch (_) {
-        // JSON 파싱 실패 시 기본 메시지.
-      }
+      } catch (_) {}
     } else if (res.status === 404) {
       errorMessage = '요청한 경로를 찾을 수 없습니다.';
       errorCode = 'NOT_FOUND';
@@ -65,7 +62,7 @@ const client = {
   get: (url, options) => request('GET', url, options),
   post: (url, data) => request('POST', url, { data }),
   patch: (url, data) => request('PATCH', url, { data }),
-  delete: (url) => request('DELETE', url),
+  delete: (url, data) => request('DELETE', url, { data }),
 };
 
 export default client;

@@ -10,7 +10,7 @@ import {
   getFilteredStudies,
   getVisibleCount,
   getHasMore,
-} from '../utils/homeStudyUtils';
+} from '../utils/homeStudyUtils.js';
 
 export function useHomeStudies() {
   const { state: studyState, dispatch: studyDispatch } = useStudy();

@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import i18n from '../../../shared/i18n';
+import i18n from '../../../shared/i18n.js';
 import Toast from '../../../shared/components/toast/Toast.jsx';
 
 const toastOptions = {
@@ -20,7 +20,7 @@ export function showPauseToast() {
 
 export function showPointToast(firstPoint, secondPoint, totalPoint) {
   toast(
-    <FocusToast
+    <Toast
       type="success"
       icon="🎉"
       message={i18n.t('focusPointMessage', {

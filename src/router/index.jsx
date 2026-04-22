@@ -1,7 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../shared/layouts/MainLayout/MainLayout.jsx';
 import HomePage from '../pages/HomePage.jsx';
-import CreateStudyPage from '../pages/CreateStudyPage.jsx';
+import StudyCreatePage from '../pages/StudyCreatePage.jsx';
+import StudyEditPage from '../pages/StudyEditPage.jsx';
 import FocusPage from '../pages/FocusPage.jsx';
 import HabitPage from '../pages/HabitPage.jsx';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage.jsx';
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'studies/:id',
+        path: 'studies/:studyId',
         element: <StudyDetailPage />,
       },
       {

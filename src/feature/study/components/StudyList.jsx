@@ -17,7 +17,7 @@ function StudyList({ studies = [], visibleCount = 0 }) {
           getBackgroundTheme,
         });
 
-        return <StudyCard key={item.id} {...cardProps} />;
+        return <StudyCard key={item.id} id={item.id} {...cardProps} />;
       })}
     </div>
   );
