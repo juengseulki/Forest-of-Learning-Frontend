@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +6,6 @@ import ic_point from '../../../shared/images/icons/ic_point.png';
 
 import { addRecentStudy } from '../shared/utils/recentStudy.js';
 import { useStudy } from '../../../contexts/StudyContext.jsx';
-import { translate } from '../../../api/translateApi.js';
 
 export default function StudyCard({
   id,
@@ -24,43 +22,6 @@ export default function StudyCard({
   const { dispatch } = useStudy();
   const { i18n, t } = useTranslation();
 
-  const [translatedNickname, setTranslatedNickname] = useState('');
-  const [translatedName, setTranslatedName] = useState('');
-  const [translatedDescription, setTranslatedDescription] = useState('');
-
-  useEffect(() => {
-    async function translateCardContent() {
-      if (i18n.language === 'ko') {
-        setTranslatedNickname('');
-        setTranslatedName('');
-        setTranslatedDescription('');
-        return;
-      }
-
-      try {
-        const [nicknameResult, nameResult, descriptionResult] =
-          await Promise.all([
-            nickname ? translate(nickname, i18n.language) : '',
-            name ? translate(name, i18n.language) : '',
-            description ? translate(description, i18n.language) : '',
-          ]);
-
-        setTranslatedNickname(nicknameResult);
-        setTranslatedName(nameResult);
-        setTranslatedDescription(descriptionResult);
-      } catch (error) {
-        console.error('홈 카드 번역 실패:', error);
-        setTranslatedNickname('');
-        setTranslatedName('');
-        setTranslatedDescription('');
-      }
-    }
-
-    if (nickname || name || description) {
-      translateCardContent();
-    }
-  }, [i18n.language, nickname, name, description]);
-
   const handleClick = () => {
     const updatedRecentStudies = addRecentStudy({ id });
 
@@ -71,10 +32,6 @@ export default function StudyCard({
 
     navigate(`/studies/${id}`);
   };
-
-  const displayNickname = translatedNickname || nickname;
-  const displayName = translatedName || name;
-  const displayDescription = translatedDescription || description;
 
   return (
     <div
@@ -95,8 +52,8 @@ export default function StudyCard({
         <div className="header-top">
           <div className="title-group">
             <h2 className="title" style={{ color: theme?.title }}>
-              <span style={{ color: theme?.nickname }}>{displayNickname}</span>
-              {t('studyPossessive')} {displayName}
+              <span style={{ color: theme?.nickname }}>{nickname}</span>
+              {t('studyPossessive')} {name}
             </h2>
 
             <div className="point" style={{ backgroundColor: theme?.pointBg }}>
@@ -123,7 +80,7 @@ export default function StudyCard({
           className="description text-break"
           style={{ color: theme?.description }}
         >
-          {displayDescription}
+          {description}
         </p>
       </section>
 
