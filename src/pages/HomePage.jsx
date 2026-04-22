@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import StudyList from '../feature/study/components/StudyList';
-import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
+import StudyList from '../feature/study/components/StudyList.jsx';
+import { useHomeStudies } from '../feature/study/hooks/useHomeStudies.js';
 import ic_search from '../shared/images/icons/ic_search.png';
 import ic_select_arrow from '../shared/components/icons/icon/ic_select_arrow.png';
 

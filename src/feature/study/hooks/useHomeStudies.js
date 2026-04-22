@@ -1,16 +1,16 @@
 import { useEffect, useMemo } from 'react';
-import { getStudies } from '../../../api/studyApi';
-import { getPoint } from '../../../api/pointApi';
-import { getEmojiReactions } from '../../../api/emojiApi';
+import { getStudies } from '../../../api/studyApi.js';
+import { getPoint } from '../../../api/pointApi.js';
+import { getEmojiReactions } from '../../../api/emojiApi.js';
 
-import { useRecentStudies } from './useRecentStudies';
-import { useStudy } from '../../../contexts/StudyContext';
-import { useUI } from '../../../contexts/UIContext';
+import { useRecentStudies } from './useRecentStudies.js';
+import { useStudy } from '../../../contexts/StudyContext.jsx';
+import { useUI } from '../../../contexts/UIContext.jsx';
 import {
   getFilteredStudies,
   getVisibleCount,
   getHasMore,
-} from '../utils/homeStudyUtils';
+} from '../utils/homeStudyUtils.js';
 
 export function useHomeStudies() {
   const { state: studyState, dispatch: studyDispatch } = useStudy();

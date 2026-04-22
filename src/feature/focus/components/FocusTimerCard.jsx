@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFocusTimer } from '../hooks/useFocusTimer';
-import FocusTimerDisplay from './FocusTimerDisplay';
-import { useFocusPoint } from '../hooks/useFocusPoint';
-import FocusTimerControls from './FocusTimerControls';
+import { useFocusTimer } from '../hooks/useFocusTimer.js';
+import FocusTimerDisplay from './FocusTimerDisplay.jsx';
+import { useFocusPoint } from '../hooks/useFocusPoint.js';
+import FocusTimerControls from './FocusTimerControls.jsx';
 import {
   showPauseToast,
   showTargetToast,

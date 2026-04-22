@@ -134,6 +134,9 @@ input:focus {
   line-height: 100%;
   white-space: nowrap;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  /* 이후 삭제 */
 }
 
 .look-study {

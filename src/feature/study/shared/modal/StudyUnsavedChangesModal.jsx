@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import BaseStudyModal from './BaseStudyModal';
+import BaseStudyModal from './BaseStudyModal.jsx';
 
 function StudyUnsavedChangesModal({
   isOpen,

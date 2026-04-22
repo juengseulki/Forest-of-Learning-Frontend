@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
-import i18n from '../../../shared/i18n';
-import Toast from '../../../shared/components/toast/Toast';
+import i18n from '../../../shared/i18n.js';
+import Toast from '../../../shared/components/toast/Toast.jsx';
 
 const toastOptions = {
   position: 'bottom-center',

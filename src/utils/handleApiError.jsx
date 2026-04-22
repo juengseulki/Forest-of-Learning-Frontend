@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import FocusToast from '../shared/components/toast/Toast';
+import FocusToast from '../shared/components/toast/Toast.jsx';
 
 const toastOptions = {
   position: 'bottom-center',
@@ -13,10 +13,7 @@ const toastOptions = {
 const handleApiError = (error, fallbackMessage = '오류가 발생했습니다.') => {
   const message = error?.message || fallbackMessage;
   console.error(message, error);
-  toast(
-    <FocusToast type="danger" icon="❗" message={message} />,
-    toastOptions
-  );
+  toast(<FocusToast type="danger" icon="❗" message={message} />, toastOptions);
 };
 
 export default handleApiError;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getStudy } from '../../../api/studyApi.js';
-import { extractStudyTitle } from '../utils/habitUtils';
+import { extractStudyTitle } from '../utils/habitUtils.js';
 import handleApiError from '../../../utils/handleApiError.jsx';
 
 export function useStudyTitle(studyId) {

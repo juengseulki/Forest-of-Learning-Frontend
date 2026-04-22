@@ -1,4 +1,4 @@
-import StudyForm from '../feature/study/components/StudyForm';
+import StudyForm from '../feature/study/components/StudyForm.jsx';
 
 function StudyDetailPage() {
   return (

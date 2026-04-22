@@ -14,6 +14,7 @@ async function request(method, url, { data, params, token } = {}) {
   const options = {
     method,
     headers: {},
+    credentials: 'include',
   };
 
   if (token) {

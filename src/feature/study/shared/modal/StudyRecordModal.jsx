@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import BaseStudyModal from './BaseStudyModal';
-import { getPointLog } from '../../../../api/pointApi';
+import BaseStudyModal from './BaseStudyModal.jsx';
+import { getPointLog } from '../../../../api/pointApi.js';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
 
 function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
@@ -123,9 +123,12 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
                   <td>{formatDuration(log.focusSession.duration)}</td>
-                  <td className="record-point">
-                    <img src={pointIcon} alt={t('pointIconAlt')} />
-                    <p>{log.amount}P</p>
+                  {/* 이후삭제 */}
+                  <td>
+                    <div className="record-point">
+                      <img src={pointIcon} alt={t('pointIconAlt')} />
+                      <p>{log.amount}P</p>
+                    </div>
                   </td>
                   <td>{formatTime(log.focusSession.startedAt)}</td>
                   <td>{formatTime(log.focusSession.completedAt)}</td>
