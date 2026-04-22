@@ -31,16 +31,23 @@ function FocusPage() {
         setIsLoading(true);
         setError('');
 
-        const [pointResponse, studyResponse] = await Promise.all([
+        const [pointResult, studyResult] = await Promise.allSettled([
           getPoint(currentStudyId),
           getStudyById(currentStudyId),
         ]);
 
-        setPointData(pointResponse.data);
-        setStudyData(studyResponse.data);
-      } catch (err) {
-        handleApiError(err, t('loadFail'));
-        setError(t('loadFail'));
+        if (studyResult.status === 'fulfilled') {
+          setStudyData(studyResult.value.data);
+        } else {
+          handleApiError(studyResult.reason, t('loadFail'));
+          setError(t('loadFail'));
+        }
+
+        if (pointResult.status === 'fulfilled') {
+          setPointData(pointResult.value.data);
+        } else {
+          setPointData({ totalPoint: 0 });
+        }
       } finally {
         setIsLoading(false);
       }
@@ -81,10 +88,9 @@ function FocusPage() {
 
   const handleSessionComplete = useCallback(
     (result) => {
-      if (result && result.totalPoint !== undefined) {
-        setPointData({
-          totalPoint: result.totalPoint,
-        });
+      const totalPoint = result?.data?.totalPoint;
+      if (totalPoint !== undefined) {
+        setPointData({ totalPoint });
       } else {
         refreshPoint();
       }

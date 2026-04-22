@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { verifyStudyPassword } from '../../api/studyApi.js';
 import { toast } from 'react-toastify';
@@ -15,6 +15,16 @@ function ProtectedStudyRoute({ children }) {
   const [isVerified, setIsVerified] = useState(() => {
     return sessionStorage.getItem(`study-auth-${studyId}`) === 'true';
   });
+
+  useEffect(() => {
+    const handleSessionExpired = ({ detail }) => {
+      if (String(detail.studyId) !== String(studyId)) return;
+      sessionStorage.removeItem(`study-auth-${studyId}`);
+      setIsVerified(false);
+    };
+    window.addEventListener('session-expired', handleSessionExpired);
+    return () => window.removeEventListener('session-expired', handleSessionExpired);
+  }, [studyId]);
 
   async function handleVerify() {
     if (!password.trim()) {

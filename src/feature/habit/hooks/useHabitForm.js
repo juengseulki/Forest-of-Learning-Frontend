@@ -60,7 +60,13 @@ export function useHabitForm({
 
       onAfterDelete(habitId);
     } catch (error) {
-      handleApiError(error, '습관 삭제에 실패했어요.');
+      if (error.status === 401) {
+        window.dispatchEvent(
+          new CustomEvent('session-expired', { detail: { studyId } })
+        );
+      } else {
+        handleApiError(error, '습관 삭제에 실패했어요.');
+      }
     }
   };
 
