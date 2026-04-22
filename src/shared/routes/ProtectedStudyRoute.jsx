@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { verifyStudyPassword } from '../../api/studyApi';
+import { verifyStudyPassword } from '../../api/studyApi.js';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import PasswordModal from '../../feature/study/shared/modal/StudyPasswordModal';
+import PasswordModal from '../../feature/study/shared/modal/StudyPasswordModal.jsx';
 
 function ProtectedStudyRoute({ children }) {
   const { studyId } = useParams();

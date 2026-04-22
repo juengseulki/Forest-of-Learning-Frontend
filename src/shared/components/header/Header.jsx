@@ -4,7 +4,7 @@ import logoDesktop from '../../images/logo/logo-desktop.png';
 import logoPad from '../../images/logo/logo-tablet.png';
 import logoMobile from '../../images/logo/logo-mobile.png';
 import './Header.css';
-import { useTheme } from '../../../shared/hooks/useTheme'; //  훅 임포트
+import { useTheme } from '../../../shared/hooks/useTheme.js'; //  훅 임포트
 
 function Header({ rightContent }) {
   const [theme, toggleTheme] = useTheme(); //  테마 상태 가져오기

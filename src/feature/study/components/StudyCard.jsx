@@ -10,6 +10,7 @@ import { useStudy } from '../../../contexts/StudyContext.jsx';
 import { translate } from '../../../api/translateApi.js';
 
 export default function StudyCard({
+  id,
   nickname,
   name,
   description,

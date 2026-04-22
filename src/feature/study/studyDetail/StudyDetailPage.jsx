@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import '../../../styles/StudyDetailPage.css';
 import '../../../styles/global.css';
+
 import StudyInfoSection from './components/StudyInfoSection.jsx';
 import StudyActionButtonGroup from './components/actionSection/StudyActionButtonGroup.jsx';
 import StudyLinkGroup from './components/actionSection/StudyLinkGroup.jsx';
@@ -63,8 +64,8 @@ function StudyDetailPage() {
       <div className="detail-container common-panel">
         <section className="detail-top-section">
           <div className="detail-left">
-            <EmojiSection studyId={id} />
-            <StudyInfoSection study={study} studyId={id} />
+            <EmojiSection studyId={studyId} />
+            <StudyInfoSection study={study} studyId={studyId} />
           </div>
 
           <div className="detail-right">
@@ -82,7 +83,7 @@ function StudyDetailPage() {
           </div>
         </section>
 
-        <HabitRecord studyId={id} />
+        <HabitRecord studyId={studyId} />
       </div>
 
       <StudyPasswordModal
@@ -112,7 +113,6 @@ function StudyDetailPage() {
         title={t('pointRecord')}
         closeText={t('close')}
         onClose={handleCloseRecordModal}
-        studyId={Number(studyId)}
       />
     </div>
   );

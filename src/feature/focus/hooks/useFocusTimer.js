@@ -16,7 +16,7 @@ import {
 } from '../utils/focusTime';
 
 export function useFocusTimer(studyId, onSessionComplete) {
-  const { calculateFirstReward, calculateFinalReward } = useFocusPoint();
+  const { calculateFirstReward } = useFocusPoint();
 
   const [minutes, setMinutes] = useState('00');
   const [seconds, setSeconds] = useState('00');
@@ -214,8 +214,8 @@ export function useFocusTimer(studyId, onSessionComplete) {
     if (!session) return;
 
     const sessionPayload = {
-      durationMinutes: session.durationMinutes,
-      durationSeconds: session.durationSeconds,
+      durationMinutes: Math.floor(session.durationSeconds / 60),
+      durationSeconds: session.durationSeconds % 60,
       totalTargetSeconds:
         session.durationMinutes * 60 + session.durationSeconds,
       startedAt: session.startedAt,

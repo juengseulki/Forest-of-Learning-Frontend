@@ -37,7 +37,7 @@ function HabitPage() {
     fetchHabitList,
     toggleHabit,
     removeHabitLocally,
-  } = useHabitList(studyId);
+  } = useHabitList(parsedStudyId);
 
   const {
     draftHabitList,
@@ -52,7 +52,7 @@ function HabitPage() {
     deleteDraftHabit,
     submitHabitList,
   } = useHabitForm({
-    studyId,
+    studyId: parsedStudyId,
     habitList,
     onAfterCreate: fetchHabitList,
     onAfterDelete: removeHabitLocally,
@@ -113,8 +113,8 @@ function HabitPage() {
                 type="button"
                 className="habit-home__nav-btn common-action-btn"
                 onClick={() => {
-                  if (!studyId || habitList.length === 0) return;
-                  navigate(`/studies/${studyId}/focus`);
+                  if (!parsedStudyId) return;
+                  navigate(`/studies/${parsedStudyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">{t('todayFocus')}</span>

@@ -161,7 +161,6 @@ function FocusPage() {
             title="포인트 기록"
             closeText="닫기"
             onClose={handleCloseRecordModal}
-            studyId={currentStudyId}
           />
         </div>
       </div>
