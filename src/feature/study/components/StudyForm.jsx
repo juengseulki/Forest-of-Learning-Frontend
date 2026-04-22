@@ -66,6 +66,12 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     setSelectedBackground(initialData.background?.id ?? null);
   }, [isEditMode, initialData]);
 
+    setNickname(initialData.nickname ?? '');
+    setName(initialData.name ?? '');
+    setDescription(initialData.description ?? '');
+    setSelectedBackground(initialData.background?.id ?? null);
+  }, [isEditMode, initialData]);
+
   const submitButtonClink = () => {
     const newErrors = {};
 
@@ -224,4 +230,3 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
 }
 
 export default StudyForm;
-
