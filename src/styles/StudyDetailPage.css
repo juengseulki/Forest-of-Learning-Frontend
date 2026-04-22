@@ -21,7 +21,6 @@
 .emoji {
   display: flex;
   gap: 8px;
-  height: 31px;
 }
 
 .emoji-wrap {
@@ -31,14 +30,18 @@
 
 .emoji-btn,
 .emoji-more-btn {
-  height: 100%;
-  padding: 6px 8px;
+  height: 34px;
+
+  padding: 0 12px;
+
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
+
   font-size: 16px;
   line-height: 1;
+
   border-radius: 50px;
   background: rgba(0, 0, 0, 0.5);
   color: white;
@@ -135,8 +138,7 @@ em-emoji-picker {
   font-weight: 800;
 }
 
-.detail-field,
-.detail-point-title {
+.detail-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -249,17 +251,16 @@ em-emoji-picker {
 }
 
 .habit-weeks {
-  padding-left: 187px;
+  padding-left: 216px;
 }
 
 .habit-name {
-  width: 170px;
+  width: 200px;
   flex-shrink: 0;
   color: var(--text-main);
   text-align: right;
   font-size: 18px;
   font-weight: 700;
-  padding: 0 24px;
 }
 
 .day-cells-container {

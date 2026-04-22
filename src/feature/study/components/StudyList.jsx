@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import '../../../styles/StudyList.css';
+
 import StudyCard from './StudyCard';
 import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
 import { getStudyCardProps } from '../utils/studyUtils';
@@ -17,7 +18,7 @@ function StudyList({ studies = [], visibleCount = 0 }) {
           getBackgroundTheme,
         });
 
-        return <StudyCard key={item.id} id={item.id} {...cardProps} />;
+        return <StudyCard key={item.id} {...cardProps} />;
       })}
     </div>
   );

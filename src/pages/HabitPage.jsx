@@ -22,7 +22,7 @@ function HabitPage() {
   const { studyId, habitId } = useParams();
   const { t, i18n } = useTranslation();
 
-  const parsedStudyId = toStudyId(studyId);
+  const studyId = toStudyId(id);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
@@ -37,7 +37,7 @@ function HabitPage() {
     fetchHabitList,
     toggleHabit,
     removeHabitLocally,
-  } = useHabitList(parsedStudyId);
+  } = useHabitList(studyId);
 
   const {
     draftHabitList,
@@ -52,7 +52,7 @@ function HabitPage() {
     deleteDraftHabit,
     submitHabitList,
   } = useHabitForm({
-    studyId: parsedStudyId,
+    studyId,
     habitList,
     onAfterCreate: fetchHabitList,
     onAfterDelete: removeHabitLocally,
@@ -113,8 +113,8 @@ function HabitPage() {
                 type="button"
                 className="habit-home__nav-btn common-action-btn"
                 onClick={() => {
-                  if (!parsedStudyId) return;
-                  navigate(`/studies/${parsedStudyId}/focus`);
+                  if (!studyId || habitList.length === 0) return;
+                  navigate(`/studies/${studyId}/focus`);
                 }}
               >
                 <span className="habit-home__nav-text">{t('todayFocus')}</span>

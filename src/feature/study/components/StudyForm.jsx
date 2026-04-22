@@ -66,7 +66,13 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     setSelectedBackground(initialData.background?.id ?? null);
   }, [isEditMode, initialData]);
 
-  const submitButtonClick = async () => {
+    setNickname(initialData.nickname ?? '');
+    setName(initialData.name ?? '');
+    setDescription(initialData.description ?? '');
+    setSelectedBackground(initialData.background?.id ?? null);
+  }, [isEditMode, initialData]);
+
+  const submitButtonClink = () => {
     const newErrors = {};
 
     if (!nickname.trim()) newErrors.nickname = t('errorNicknameRequired');
@@ -92,7 +98,8 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    const formData = {
+    //서버 전송 데이터
+    const newData = {
       nickname,
       name,
       description,
@@ -133,28 +140,32 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
           labelName={t('nickname')}
           placeholder={t('nicknamePlaceholder')}
           value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            setNickname(e.target.value);
+          }}
           error={errors.nickname}
         />
-
         <Input
           labelName={t('studyName')}
           placeholder={t('studyNamePlaceholder')}
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
           error={errors.name}
         />
-
         <div className="form-wrapper">
           <label className="input-label">{t('descriptionLabel')}</label>
           <textarea
             className="textarea-wrapper"
             placeholder={t('descriptionPlaceholder')}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+            error={errors.description}
           />
         </div>
-
         <div className="form-wrapper">
           <label className="input-label">{t('selectBackground')}</label>
           <div className="background-grid">
@@ -172,6 +183,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
                     alt={background.name}
                     className="background-image"
                   />
+
                   {isSelected && (
                     <img
                       className="check-icon"

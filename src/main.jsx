@@ -18,9 +18,6 @@ if (window.Kakao && !window.Kakao.isInitialized()) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
-    <>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </>
+    <RouterProvider router={router} />
   </QueryClientProvider>
 );

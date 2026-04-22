@@ -20,7 +20,7 @@ export function showPauseToast() {
 
 export function showPointToast(firstPoint, secondPoint, totalPoint) {
   toast(
-    <Toast
+    <FocusToast
       type="success"
       icon="🎉"
       message={i18n.t('focusPointMessage', {
