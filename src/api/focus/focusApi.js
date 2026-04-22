@@ -4,9 +4,9 @@ export async function getFocus(studyId) {
   return client.get(`/focuses/${studyId}`);
 }
 
-export async function startFocus(studyId) {
-  return client.post(`/focuses/${studyId}/start`);
-}
+// export async function startFocus(studyId) {
+//   return client.post(`/focuses/${studyId}/start`);
+// }
 
 export async function completeFocus(studyId, payload) {
   return client.post(`/focuses/${studyId}`, payload);
