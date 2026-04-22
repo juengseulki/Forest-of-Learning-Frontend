@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { verifyStudyPassword } from '../../api/studyApi';
+import { verifyStudyPassword, checkStudySession } from '../../api/studyApi';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import PasswordModal from '../../feature/study/shared/modal/StudyPasswordModal';
@@ -12,9 +12,27 @@ function ProtectedStudyRoute({ children }) {
 
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isVerified, setIsVerified] = useState(() => {
-    return sessionStorage.getItem(`study-auth-${studyId}`) === 'true';
-  });
+
+  const hasSessionStorage = sessionStorage.getItem(`study-auth-${studyId}`) === 'true';
+  const [status, setStatus] = useState(hasSessionStorage ? 'checking' : 'unverified');
+
+  useEffect(() => {
+    if (status !== 'checking') return;
+
+    checkStudySession(studyId)
+      .then((data) => {
+        if (data?.verified) {
+          setStatus('verified');
+        } else {
+          sessionStorage.removeItem(`study-auth-${studyId}`);
+          setStatus('unverified');
+        }
+      })
+      .catch(() => {
+        sessionStorage.removeItem(`study-auth-${studyId}`);
+        setStatus('unverified');
+      });
+  }, [studyId, status]);
 
   async function handleVerify() {
     if (!password.trim()) {
@@ -28,7 +46,7 @@ function ProtectedStudyRoute({ children }) {
       await verifyStudyPassword(studyId, password);
 
       sessionStorage.setItem(`study-auth-${studyId}`, 'true');
-      setIsVerified(true);
+      setStatus('verified');
       setPassword('');
     } catch (error) {
       toast.error(t('errorPasswordMismatch'));
@@ -45,7 +63,9 @@ function ProtectedStudyRoute({ children }) {
     setPassword(e.target.value);
   }
 
-  if (!isVerified) {
+  if (status === 'checking') return null;
+
+  if (status === 'unverified') {
     return (
       <PasswordModal
         isOpen={true}

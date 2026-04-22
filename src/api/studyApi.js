@@ -33,3 +33,8 @@ export async function deleteStudy(studyId, password) {
   const response = await client.delete(`/studies/${studyId}`, { password });
   return response.data;
 }
+
+export async function checkStudySession(studyId) {
+  const response = await client.get(`/studies/${studyId}/verify-session`);
+  return response.data;
+}
