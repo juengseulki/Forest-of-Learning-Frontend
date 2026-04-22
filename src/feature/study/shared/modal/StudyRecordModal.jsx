@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import BaseStudyModal from './BaseStudyModal';
-import { getPointLog } from '../../../../api/pointApi';
+import BaseStudyModal from './BaseStudyModal.jsx';
+import { getPointLog } from '../../../../api/pointApi.js';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
 
 function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {

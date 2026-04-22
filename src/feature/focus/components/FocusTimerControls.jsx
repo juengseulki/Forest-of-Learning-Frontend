@@ -12,7 +12,7 @@ import resetInactive from '../../../images/focus/reset-inactive.png';
 import resetMobileActive from '../../../images/focus/reset-mobile-active.png';
 import resetMobileInactive from '../../../images/focus/reset-mobile-inactive.png';
 
-import FocusIconButton from './FocusIconButton';
+import FocusIconButton from './FocusIconButton.jsx';
 
 function FocusTimerControls({
   session,

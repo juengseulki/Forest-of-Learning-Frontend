@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import BaseStudyModal from './BaseStudyModal';
+import BaseStudyModal from './BaseStudyModal.jsx';
 import visibleOffIcon from '../../../../shared/components/icons/button/btn_visibility_off.svg';
 import visibleOnIcon from '../../../../shared/components/icons/button/btn_visibility_on.svg';
 

@@ -1,4 +1,4 @@
-import { FOCUS_STORAGE_KEY, TIMER_STATUS } from './focusConstants';
+import { FOCUS_STORAGE_KEY, TIMER_STATUS } from './focusConstants.js';
 
 // localStorage에서 세션을 읽어오는 함수
 export function getStoredSession() {

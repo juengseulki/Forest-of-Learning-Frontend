@@ -1,5 +1,5 @@
 import './StudyModal.css';
-
+/* 기록용 주석입니다. */
 function BaseStudyModal({
   isOpen,
   title,
