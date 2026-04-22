@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import arrowRightIcon from '../../../../../shared/images/icons/ic_arrow_right.svg';
 import { useTranslation } from 'react-i18next';
 

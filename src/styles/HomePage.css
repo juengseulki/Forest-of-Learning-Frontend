@@ -31,7 +31,6 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 60px;
-  width: 1200px;
 }
 
 .list-top {

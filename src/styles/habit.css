@@ -37,7 +37,6 @@
   line-height: 1.2;
   color: var(--text-main);
   word-break: keep-all;
-  cursor: pointer;
 }
 
 .habit-home__nav {
