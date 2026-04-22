@@ -22,7 +22,7 @@ function HabitPage() {
   const { studyId, habitId } = useParams();
   const { t, i18n } = useTranslation();
 
-  const studyId = toStudyId(id);
+  const parsedStudyId = toStudyId(studyId);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
