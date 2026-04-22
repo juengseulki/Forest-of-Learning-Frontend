@@ -1,29 +1,20 @@
+import { useMemo } from 'react';
 import '../../../styles/StudyList.css';
 
 import StudyCard from './StudyCard';
-import { studiesMockResponse } from '../../../mocks/study/studyMockData.js';
-import { pointMockResponse } from '../../../mocks/point/pointMockData.js';
-import { backgroundsMockResponse } from '../../../mocks/background/backgroundMockData';
-import { emojiMockResponse } from '../../../mocks/emoji/emojiMockData.js';
 import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
 import { getStudyCardProps } from '../utils/studyUtils';
 
-function StudyList({ visibleCount }) {
-  const studies = studiesMockResponse.data.items;
-  const point = pointMockResponse.data;
-  const backgrounds = backgroundsMockResponse.data.items;
-  const emojiItems = emojiMockResponse.data.items;
-
-  const visibleStudies = studies.slice(0, visibleCount);
+function StudyList({ studies = [], visibleCount = 0 }) {
+  const visibleStudies = useMemo(() => {
+    return studies.slice(0, visibleCount).filter(Boolean);
+  }, [studies, visibleCount]);
 
   return (
     <div className="card-list">
       {visibleStudies.map((item) => {
         const cardProps = getStudyCardProps({
           item,
-          point,
-          backgrounds,
-          emojiItems,
           getBackgroundTheme,
         });
 

@@ -1,55 +1,154 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import StudyList from '../feature/study/components/StudyList';
+import { useHomeStudies } from '../feature/study/hooks/useHomeStudies';
 import ic_search from '../shared/images/icons/ic_search.png';
+import ic_select_arrow from '../shared/components/icons/icon/ic_select_arrow.png';
 
 import '../styles/HomePage.css';
+import '../styles/global.css';
 
 function HomePage() {
-  const [listPage, setListPage] = useState(1);
+  const {
+    recentLimit,
+    keyword,
+    setKeyword,
+    setOrder,
+    order,
+    isLoading,
+    filteredStudies,
+    recentStudies,
+    visibleCount,
+    hasMore,
+    moreSee,
+    clearRecentStudyList,
+  } = useHomeStudies();
 
-  const listLimit = 6;
-  const recentLimit = 3;
+  const { t } = useTranslation();
 
-  function moreSee() {
-    setListPage((prev) => prev + 1);
+  const [isOpen, setIsOpen] = useState(false);
+
+  function getOrderLabel(order) {
+    switch (order) {
+      case 'latest':
+        return t('latest');
+      case 'oldest':
+        return t('oldest');
+      case 'pointDesc':
+        return t('pointDesc');
+      case 'pointAsc':
+        return t('pointAsc');
+      default:
+        return t('latest');
+    }
+  }
+
+  function handleSelect(value) {
+    setOrder(value);
+    setIsOpen(false);
   }
 
   return (
     <div className="main-container">
-      <section className="recent-lookup">
-        <p className="home-title">최근 조회한 스터디</p>
+      <section className="recent-lookup common-panel-lg">
+        <div className="home-section-header">
+          <p className="home-title common-title-lg">{t('recentStudies')}</p>
+
+          {recentStudies.length > 0 && (
+            <button
+              type="button"
+              className="recent-clear-button"
+              onClick={clearRecentStudyList}
+            >
+              🍃 {t('clear')}
+            </button>
+          )}
+        </div>
+
         <div className="recent-scroll">
-          <StudyList visibleCount={recentLimit} />
+          {recentStudies.length === 0 ? (
+            <div className="look-study">
+              <p className="null-text">{t('noRecentStudies')}</p>
+            </div>
+          ) : (
+            <StudyList studies={recentStudies} visibleCount={recentLimit} />
+          )}
         </div>
       </section>
 
-      <section className="study-list">
+      <section className="study-list common-panel-lg">
         <div className="list-top">
-          <p className="home-title">스터디 둘러보기</p>
+          <p className="home-title common-title-lg">{t('browseStudies')}</p>
 
           <div className="filter">
-            <div className="search-container">
+            <div className="search-container common-field">
               <img src={ic_search} alt="검색 아이콘" />
-              <input placeholder="검색" />
+              <input
+                className="common-field-control"
+                placeholder={t('search')}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
             </div>
 
-            <select className="select-container">
-              <option>최근순</option>
-              <option>오래된 순</option>
-              <option>많은 포인트 순</option>
-              <option>적은 포인트 순</option>
-            </select>
+            <div className={`select ${isOpen && 'active'}`}>
+              <button
+                type="button"
+                className="label"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {getOrderLabel(order)}
+                <img src={ic_select_arrow} />
+              </button>
+              <ul className="optionList">
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('latest')}
+                >
+                  {t('latest')}
+                </li>
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('oldest')}
+                >
+                  {t('oldest')}
+                </li>
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('pointDesc')}
+                >
+                  {t('pointDesc')}
+                </li>
+                <li
+                  className="optionItem"
+                  onClick={() => handleSelect('pointAsc')}
+                >
+                  {t('pointAsc')}
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <StudyList visibleCount={listPage * listLimit} />
+          {isLoading ? (
+            <div className="look-study">
+              <p className="null-text">{t('loadingStudies')}</p>
+            </div>
+          ) : filteredStudies.length === 0 ? (
+            <div className="look-study">
+              <p className="null-text">{t('noStudies')}</p>
+            </div>
+          ) : (
+            <StudyList studies={filteredStudies} visibleCount={visibleCount} />
+          )}
         </div>
 
-        <div className="button-container">
-          <button className="see-more" onClick={moreSee}>
-            더보기
-          </button>
-        </div>
+        {hasMore && (
+          <div className="button-container">
+            <button type="button" className="see-more" onClick={moreSee}>
+              {t('seeMore')}
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

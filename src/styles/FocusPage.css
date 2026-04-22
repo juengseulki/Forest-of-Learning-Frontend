@@ -2,19 +2,14 @@
   height: 770px;
   padding-top: 40px;
 }
-
 .focus-page__status {
   padding: 40px 0;
   font-size: 16px;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .focus-page__panel {
-  width: 100%;
   height: 780px;
-  border-radius: var(--radius-lg);
-  background-color: var(--color-white);
-  padding: 40px;
 }
 
 .focus-page__study-header {
@@ -36,7 +31,7 @@
   font-size: 32px;
   font-weight: 800;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .focus-page__point-group {
@@ -54,17 +49,7 @@
   font-size: 18px;
   font-weight: 400;
   line-height: normal;
-  color: var(--gray-300);
-}
-
-.focus-page__point-box {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border: 1px solid var(--gray-200);
-  border-radius: 999px;
-  background-color: var(--color-white);
+  color: var(--text-sub);
 }
 
 .focus-page__point-icon {
@@ -79,7 +64,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: normal;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .focus-page__actions {
@@ -94,27 +79,10 @@
   min-width: 102px;
   height: 40px;
   padding: 0 16px;
-  border: 1px solid var(--gray-200);
-  border-radius: 14px;
-  background-color: var(--color-white);
-  color: var(--gray-300);
-  font-family: Pretendard;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: normal;
-  cursor: pointer;
-  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
-
-.focus-page__action-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
 }
 
 .focus-page__action-btn:hover {
@@ -235,7 +203,7 @@
   border: none;
   border-radius: 999px;
   background: #d9d9d9;
-  color: #ffffff;
+  color: var(--bg-panel);
   cursor: not-allowed;
   opacity: 1;
 }

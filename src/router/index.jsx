@@ -5,6 +5,7 @@ import CreateStudyPage from '../pages/CreateStudyPage';
 import FocusPage from '../pages/FocusPage';
 import HabitPage from '../pages/HabitPage';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage';
+import ProtectedStudyRoute from '../shared/routes/ProtectedStudyRoute';
 
 const router = createBrowserRouter([
   {
@@ -17,19 +18,35 @@ const router = createBrowserRouter([
       },
       {
         path: 'studies/create',
-        element: <CreateStudyPage />,
+        element: <StudyCreatePage />,
+      },
+      {
+        path: 'studies/:studyId/edit',
+        element: (
+          <ProtectedStudyRoute>
+            <StudyEditPage />
+          </ProtectedStudyRoute>
+        ),
       },
       {
         path: 'studies/:id',
         element: <StudyDetailPage />,
       },
       {
-        path: 'studies/:id/habit',
-        element: <HabitPage />,
+        path: 'studies/:studyId/habit',
+        element: (
+          <ProtectedStudyRoute>
+            <HabitPage />
+          </ProtectedStudyRoute>
+        ),
       },
       {
         path: 'studies/:studyId/focus',
-        element: <FocusPage />,
+        element: (
+          <ProtectedStudyRoute>
+            <FocusPage />
+          </ProtectedStudyRoute>
+        ),
       },
       {
         path: '*',

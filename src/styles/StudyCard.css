@@ -3,10 +3,10 @@
   height: 243px;
   border-radius: var(--radius-lg);
   display: flex;
-  gap: 54px;
   flex-direction: column;
-  padding: 24px;
   justify-content: center;
+  gap: 54px;
+  padding: 24px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -28,24 +28,24 @@
 .title-group {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .title {
   font-weight: 700;
   font-size: 18px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  color: #414141;
+  line-height: 1.3;
+  color: var(--text-main);
 }
 
 .point {
   display: flex;
+  align-items: center;
+  gap: 8px;
   border-radius: 50px;
   border: 1px solid #0000001a;
-  background-color: #ffffff4d;
+  background-color: var(--bg-panel) 4d;
   padding: 4px 8px;
-  gap: 8px;
-  align-items: center;
 }
 
 .point-icon {
@@ -57,23 +57,24 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 100%;
-  letter-spacing: 0%;
-  color: #414141;
+  color: var(--text-main);
 }
 
 .duration {
   font-weight: 400;
   font-size: 14px;
   line-height: 100%;
-  letter-spacing: 0%;
-  color: var(--gray-300);
+  color: var(--text-sub);
 }
 
 .description {
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  letter-spacing: 0%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-footer {
@@ -94,59 +95,132 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
-  letter-spacing: 0%;
 }
 
 .icon-count {
   font-weight: 400;
   font-size: 12px;
   line-height: 100%;
-  letter-spacing: 0%;
-  color: var(--color-white);
+  color: var(--bg-panel);
 }
 
-@media (max-width: 744px) {
-  .recent-scroll .study-card {
-    width: 358px;
-    height: 243px;
-  }
-  .study-card {
-    width: 312px;
-    height: 243px;
-  }
-}
-
-@media (max-width: 375px) {
+/* tablet */
+@media (max-width: 1024px) {
   .recent-scroll .study-card {
     width: 240px;
-    height: 180px;
-    gap: 11px;
+    height: 160px;
+    gap: 16px;
+    padding: 16px;
   }
+
   .study-card {
-    width: 312px;
-    height: 180px;
-    gap: 11px;
+    width: 100%;
+    height: 160px;
+    min-width: 0;
+    gap: 16px;
+    padding: 16px;
   }
-  .title {
-    font-size: 16px;
-  }
-  .duration {
-    font-size: 12px;
-  }
-  .description {
-    font-size: 14px;
-  }
-  .icon {
-    font-size: 12px;
-  }
-  .point {
-    align-self: flex-start;
-    gap: 4px;
-  }
-  .title-group {
-    gap: 6px;
-  }
+
   .card-header {
     gap: 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .duration {
+    font-size: 11px;
+  }
+
+  .description {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .point {
+    gap: 4px;
+    padding: 3px 6px;
+  }
+
+  .point-text {
+    font-size: 10px;
+  }
+
+  .icon {
+    font-size: 11px;
+  }
+
+  .icon-count {
+    font-size: 10px;
+  }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  .recent-scroll .study-card {
+    width: 180px;
+    height: 120px;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .study-card {
+    width: 100%;
+    height: 140px;
+    min-width: 0;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .card-header {
+    gap: 8px;
+  }
+
+  .title-group {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .title {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .duration {
+    font-size: 10px;
+  }
+
+  .description {
+    font-size: 11px;
+    line-height: 15px;
+    -webkit-line-clamp: 2;
+  }
+
+  .point {
+    align-self: flex-start;
+    gap: 3px;
+    padding: 2px 6px;
+  }
+
+  .point-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .point-text {
+    font-size: 9px;
+  }
+
+  .icon {
+    font-size: 10px;
+  }
+
+  .icon-count {
+    font-size: 9px;
+  }
+
+  .footer-content {
+    padding: 4px 6px;
   }
 }

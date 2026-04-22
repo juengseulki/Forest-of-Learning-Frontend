@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import clockIcon from '../../../images/focus/ic_timer.svg';
 
 function FocusTimerDisplay({
@@ -12,6 +13,8 @@ function FocusTimerDisplay({
   handleBlurMinutes,
   handleBlurSeconds,
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="focus-timer-card__display-section">
       <div className="focus-timer-card__duration-slot">
@@ -19,7 +22,7 @@ function FocusTimerDisplay({
           <div className="focus-timer-card__duration-badge">
             <img
               src={clockIcon}
-              alt=""
+              alt={t('focusTime')}
               className="focus-timer-card__duration-icon"
             />
             <p className="focus-timer-card__duration-text">{displayDuration}</p>
@@ -48,6 +51,7 @@ function FocusTimerDisplay({
               onChange={handleMinutesChange}
               onBlur={handleBlurMinutes}
               className="focus-timer-card__time-input"
+              aria-label={t('focusTime')}
             />
 
             <span className="focus-timer-card__colon">:</span>
@@ -61,6 +65,7 @@ function FocusTimerDisplay({
               onChange={handleSecondsChange}
               onBlur={handleBlurSeconds}
               className="focus-timer-card__time-input"
+              aria-label={t('focusTime')}
             />
           </div>
         )}

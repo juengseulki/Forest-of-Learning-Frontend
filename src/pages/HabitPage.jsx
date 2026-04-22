@@ -1,7 +1,8 @@
 import '../styles/reset.css';
 import '../styles/habit.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
 
 import HabitItem from '../feature/habit/components/HabitItem';
@@ -14,17 +15,20 @@ import { useHabitForm } from '../feature/habit/hooks/useHabitForm';
 
 import { formatHabitTime } from '../feature/habit/utils/formatHabitTime';
 import { toStudyId } from '../feature/habit/utils/habitUtils';
+import { translate } from '../api/translateApi';
 
 function HabitPage() {
   const navigate = useNavigate();
-  const { id, habitId } = useParams();
+  const { studyId, habitId } = useParams();
+  const { t, i18n } = useTranslation();
 
   const studyId = toStudyId(id);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
 
-  const studyTitle = useStudyTitle(studyId);
+  const studyTitle = useStudyTitle(parsedStudyId);
+  const [translatedStudyTitle, setTranslatedStudyTitle] = useState('');
 
   const {
     habitList,
@@ -68,68 +72,99 @@ function HabitPage() {
     return () => clearTimeout(timer);
   }, [habitId, habitList]);
 
+  useEffect(() => {
+    async function translateStudyName() {
+      if (!studyTitle) return;
+
+      if (i18n.language === 'ko') {
+        setTranslatedStudyTitle('');
+        return;
+      }
+
+      try {
+        const result = await translate(studyTitle, i18n.language);
+        setTranslatedStudyTitle(result);
+      } catch (error) {
+        console.error('습관 페이지 스터디 이름 번역 실패:', error);
+        setTranslatedStudyTitle('');
+      }
+    }
+
+    translateStudyName();
+  }, [i18n.language, studyTitle]);
+
   return (
-    <section className="habit-page">
+    <section className="habit-page common-panel-lg">
       <main className="habit-home">
         <header className="habit-home__header">
           <div className="habit-home__top">
-            <h1 className="habit-home__title">{studyTitle || '스터디'}</h1>
+            <h1
+              className="habit-home__title"
+              onClick={() => {
+                if (!parsedStudyId) return;
+                navigate(`/studies/${parsedStudyId}`);
+              }}
+            >
+              {translatedStudyTitle || studyTitle || t('studyDefault')}
+            </h1>
 
             <div className="habit-home__nav">
               <button
                 type="button"
-                className="habit-home__nav-btn"
+                className="habit-home__nav-btn common-action-btn"
                 onClick={() => {
                   if (!studyId || habitList.length === 0) return;
                   navigate(`/studies/${studyId}/focus`);
                 }}
               >
-                <span className="habit-home__nav-text">오늘의 집중</span>
+                <span className="habit-home__nav-text">{t('todayFocus')}</span>
                 <img
                   src={arrowRightIcon}
-                  alt="화살표이미지"
-                  className="habit-home__nav-icon"
+                  alt={t('arrowRight')}
+                  className="common-action-icon habit-home__nav-icon"
                 />
               </button>
 
               <button
                 type="button"
-                className="habit-home__nav-btn habit-home__nav-btn--small"
+                className="habit-home__nav-btn habit-home__nav-btn--small common-action-btn"
                 onClick={() => navigate('/')}
               >
-                <span className="habit-home__nav-text">홈</span>
+                <span className="habit-home__nav-text">{t('home')}</span>
                 <img
                   src={arrowRightIcon}
-                  alt="화살표이미지"
-                  className="habit-home__nav-icon"
+                  alt={t('arrowRight')}
+                  className="common-action-icon habit-home__nav-icon"
                 />
               </button>
             </div>
           </div>
 
           <div className="habit-home__time">
-            <span className="habit-home__time-label">현재 시간</span>
-            <span className="habit-home__time-value">{formattedTime}</span>
+            <span className="habit-home__time-label">{t('currentTime')}</span>
+            <span className="habit-home__time-value common-point-box">
+              {formattedTime}
+            </span>
           </div>
         </header>
 
-        <section className="habit-card">
+        <section className="habit-card common-card common-panel-md">
           <div className="habit-card__header">
             <div className="habit-card__header-left" />
-            <h2 className="habit-card__title">오늘의 습관</h2>
+            <h2 className="habit-card__title">{t('todayHabit')}</h2>
             <button
               type="button"
               className="habit-card__edit"
               onClick={openModal}
             >
-              목록 수정
+              {t('editList')}
             </button>
           </div>
 
           <div className="habit-list">
             {isLoading && habitList.length === 0 ? (
               <div className="habit-empty">
-                <p className="habit-empty__title">불러오는 중...</p>
+                <p className="habit-empty__title">{t('loading')}</p>
               </div>
             ) : errorMessage ? (
               <div className="habit-empty">
@@ -137,10 +172,8 @@ function HabitPage() {
               </div>
             ) : habitList.length === 0 ? (
               <div className="habit-empty">
-                <p className="habit-empty__title">아직 습관이 없어요</p>
-                <p className="habit-empty__desc">
-                  목록 수정을 눌러 습관을 생성해보세요
-                </p>
+                <p className="habit-empty__title">{t('noHabit')}</p>
+                <p className="habit-empty__desc">{t('createHabitGuide')}</p>
               </div>
             ) : (
               habitList.map((habit) => (
