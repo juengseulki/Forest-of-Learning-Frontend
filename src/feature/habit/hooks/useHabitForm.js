@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import Toast from '../../../shared/components/toast/Toast.jsx';
 import {
   createHabit,
   deleteHabit,
@@ -19,6 +20,17 @@ export function useHabitForm({
   const [draftInputs, setDraftInputs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const showToast = (type, icon, message) => {
+    toast(<Toast type={type} icon={icon} message={message} />, {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeButton: false,
+      pauseOnHover: false,
+      draggable: false,
+    });
+  };
 
   const openModal = () => {
     setDraftHabitList(habitList);
@@ -57,7 +69,7 @@ export function useHabitForm({
 
   const deleteDraftHabit = async (habitId) => {
     if (!studyId) {
-      toast.error('유효한 studyId가 없어요.');
+      showToast('danger', '❗', '유효한 studyId가 없어요.');
       return;
     }
 
@@ -79,7 +91,7 @@ export function useHabitForm({
       );
 
       onAfterDelete(habitId);
-      toast.success('습관이 삭제되었어요.');
+      showToast('success', '✅', '습관이 삭제되었어요.');
     } catch (error) {
       if (error.status === 401) {
         window.dispatchEvent(
@@ -102,7 +114,7 @@ export function useHabitForm({
     }
 
     if (!studyId) {
-      toast.error('유효한 studyId가 없어요.');
+      showToast('danger', '❗', '유효한 studyId가 없어요.');
       return;
     }
 
@@ -115,6 +127,7 @@ export function useHabitForm({
 
       await onAfterCreate();
       closeModal();
+      showToast('success', '✅', '습관이 생성되었어요.');
     } catch (error) {
       handleApiError(error, '습관 생성에 실패했어요.');
     } finally {
