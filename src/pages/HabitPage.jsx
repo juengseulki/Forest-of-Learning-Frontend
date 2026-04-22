@@ -5,17 +5,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
 
-import HabitItem from '../feature/habit/components/HabitItem';
-import HabitForm from '../feature/habit/components/HabitForm';
+import HabitItem from '../feature/habit/components/HabitItem.jsx';
+import HabitForm from '../feature/habit/components/HabitForm.jsx';
 
-import { useCurrentTime } from '../feature/habit/hooks/useCurrentTime';
-import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle';
-import { useHabitList } from '../feature/habit/hooks/useHabitList';
-import { useHabitForm } from '../feature/habit/hooks/useHabitForm';
+import { useCurrentTime } from '../feature/habit/hooks/useCurrentTime.js';
+import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle.js';
+import { useHabitList } from '../feature/habit/hooks/useHabitList.js';
+import { useHabitForm } from '../feature/habit/hooks/useHabitForm.js';
 
-import { formatHabitTime } from '../feature/habit/utils/formatHabitTime';
-import { toStudyId } from '../feature/habit/utils/habitUtils';
-import { translate } from '../api/translateApi';
+import { formatHabitTime } from '../feature/habit/utils/formatHabitTime.js';
+import { toStudyId } from '../feature/habit/utils/habitUtils.js';
+import { translate } from '../api/translateApi.js';
 
 function HabitPage() {
   const navigate = useNavigate();

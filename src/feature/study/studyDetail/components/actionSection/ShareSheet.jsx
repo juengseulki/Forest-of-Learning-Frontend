@@ -1,7 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Toast from '../../../../../shared/components/toast/Toast';
+import Toast from '../../../../../shared/components/toast/Toast.jsx';
 import './ShareSheet.css';
 
 function ShareSheet({ isOpen, onClose, study }) {

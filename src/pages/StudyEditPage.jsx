@@ -7,11 +7,11 @@ import {
 } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Toast from '../shared/components/toast/Toast';
-import StudyForm from '../feature/study/components/StudyForm';
-import StudyUnsavedChangesModal from '../feature/study/shared/modal/StudyUnsavedChangesModal';
-import StudyConfirmModal from '../feature/study/shared/modal/StudyConfirmModal';
-import { updateStudy, getStudy } from '../api/studyApi';
+import Toast from '../shared/components/toast/Toast.jsx';
+import StudyForm from '../feature/study/components/StudyForm.jsx';
+import StudyUnsavedChangesModal from '../feature/study/shared/modal/StudyUnsavedChangesModal.jsx';
+import StudyConfirmModal from '../feature/study/shared/modal/StudyConfirmModal.jsx';
+import { updateStudy, getStudy } from '../api/studyApi.js';
 
 function StudyEditPage() {
   const { t } = useTranslation();

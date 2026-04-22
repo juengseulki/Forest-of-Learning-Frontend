@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ShareSheet from './ShareSheet';
+import ShareSheet from './ShareSheet.jsx';
 
 function StudyActionButtonGroup({
   onEditClick,

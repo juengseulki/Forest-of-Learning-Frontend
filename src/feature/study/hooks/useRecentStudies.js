@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo } from 'react';
 import {
   getRecentStudies,
   clearRecentStudies,
-} from '../shared/utils/recentStudy';
-import { useStudy } from '../../../contexts/StudyContext';
+} from '../shared/utils/recentStudy.js';
+import { useStudy } from '../../../contexts/StudyContext.jsx';
 
 export function useRecentStudies(studies, recentLimit = 3) {
   const { state, dispatch } = useStudy();
