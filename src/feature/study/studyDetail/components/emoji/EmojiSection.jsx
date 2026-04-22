@@ -4,11 +4,13 @@ import { useTheme } from '../../../../../shared/hooks/useTheme.js';
 import smileIcon from '../../../../../images/icon/ic_smile.svg';
 import EmojiList from './EmojiList.jsx';
 import { useEmojiSection } from '../../hooks/useEmojiSection.js';
+import { usePickerTheme } from '../../hooks/usePickerTheme.js';
 
 function EmojiSection({ studyId }) {
   const { emojis, isPickerVisible, togglePicker, handleAddEmoji } =
     useEmojiSection(studyId);
-  const { theme } = useTheme();
+  const theme = usePickerTheme();
+
   return (
     <span className="emoji">
       <EmojiList emojis={emojis} onAddEmoji={handleAddEmoji} />
