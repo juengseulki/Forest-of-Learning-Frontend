@@ -123,9 +123,11 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
                   <td>{formatDuration(log.focusSession.duration)}</td>
-                  <td className="record-point">
-                    <img src={pointIcon} alt={t('pointIconAlt')} />
-                    <p>{log.amount}P</p>
+                  <td>
+                    <div className="record-point">
+                      <img src={pointIcon} alt={t('pointIconAlt')} />
+                      <p>{log.amount}P</p>
+                    </div>
                   </td>
                   <td>{formatTime(log.focusSession.startedAt)}</td>
                   <td>{formatTime(log.focusSession.completedAt)}</td>
