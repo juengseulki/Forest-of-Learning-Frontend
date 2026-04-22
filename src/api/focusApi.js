@@ -1,5 +1,5 @@
-import client from '../client.js';
-import { getStudyAuthToken } from '../studyApi.js';
+import client from './client.js';
+import { getStudyAuthToken } from './studyApi.js';
 
 export async function getFocus(studyId) {
   return client.get(`/focuses/${studyId}`);
