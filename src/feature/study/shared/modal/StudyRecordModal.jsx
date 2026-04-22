@@ -123,6 +123,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
                   <td>{formatDuration(log.focusSession.duration)}</td>
+                  {/* 이후삭제 */}
                   <td>
                     <div className="record-point">
                       <img src={pointIcon} alt={t('pointIconAlt')} />

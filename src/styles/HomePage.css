@@ -136,6 +136,7 @@ input:focus {
   cursor: pointer;
   display: flex;
   justify-content: center;
+  /* 이후 삭제 */
 }
 
 .look-study {
