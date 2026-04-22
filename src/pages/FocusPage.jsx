@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { getPoint, getStudyById } from '../api/focus/focusApi.js';
+import { getPoint, getStudyById } from '../api/focusApi.js';
 import { translate } from '../api/translateApi.js';
 import FocusTimerCard from '../feature/focus/components/FocusTimerCard.jsx';
 import handleApiError from '../utils/handleApiError.jsx';
