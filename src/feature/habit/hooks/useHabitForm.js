@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { createHabit, deleteHabit } from '../../../api/habitApi.js';
+import {
+  createHabit,
+  deleteHabit,
+  verifyStudyPassword,
+  checkStudySession,
+} from '../../../api/habitApi.js';
 import handleApiError from '../../../utils/handleApiError.jsx';
 import { createDraftInput } from '../utils/habitUtils.js';
 
@@ -51,7 +56,22 @@ export function useHabitForm({
   };
 
   const deleteDraftHabit = async (habitId) => {
+    if (!studyId) {
+      toast.error('유효한 studyId가 없어요.');
+      return;
+    }
+
     try {
+      const sessionData = await checkStudySession(studyId);
+      const isVerified = sessionData?.verified;
+
+      if (!isVerified) {
+        const password = window.prompt('스터디 비밀번호를 입력하세요.');
+        if (!password) return;
+
+        await verifyStudyPassword(studyId, password);
+      }
+
       await deleteHabit(habitId);
 
       setDraftHabitList((prevDraftHabitList) =>
@@ -59,6 +79,7 @@ export function useHabitForm({
       );
 
       onAfterDelete(habitId);
+      toast.success('습관이 삭제되었어요.');
     } catch (error) {
       if (error.status === 401) {
         window.dispatchEvent(
