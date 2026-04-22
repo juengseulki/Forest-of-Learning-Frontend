@@ -4,7 +4,7 @@ import BaseStudyModal from './BaseStudyModal.jsx';
 import { getPointLog } from '../../../../api/pointApi.js';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
 
-function StudyRecordModal({ isOpen, title, closeText, onClose }) {
+function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
   const { t, i18n } = useTranslation();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -66,9 +66,11 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
   };
 
   useEffect(() => {
+    if (!isOpen || !studyId || isNaN(studyId)) return;
+
     const fetchPointLogs = async () => {
       try {
-        const data = await getPointLog(18);
+        const data = await getPointLog(studyId);
         const selected = formatDateString(selectedDate);
         const filteredData = data.filter((log) => {
           const logDate = new Date(log.createdAt);
@@ -82,7 +84,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose }) {
     };
 
     fetchPointLogs();
-  }, [selectedDate]);
+  }, [isOpen, studyId, selectedDate]);
 
   return (
     <BaseStudyModal
