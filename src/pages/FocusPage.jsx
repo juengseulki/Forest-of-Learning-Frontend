@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { getPoint, getStudyById } from '../api/focus/focusApi.js';
@@ -24,6 +24,7 @@ function FocusPage() {
   const [translatedStudyName, setTranslatedStudyName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchFocusPageData() {
@@ -106,7 +107,13 @@ function FocusPage() {
       <div className="focus-page__content">
         <div className="focus-page__panel common-panel-lg">
           <div className="focus-page__study-header">
-            <h1 className="focus-page__study-title">
+            <h1
+              className="focus-page__study-title home__titile"
+              onClick={() => {
+                if (!currentStudyId) return;
+                navigate(`/studies/${currentStudyId}`);
+              }}
+            >
               {translatedStudyName || studyData?.name || t('studyDefault')}
             </h1>
 
