@@ -99,7 +99,7 @@ function HabitPage() {
         <header className="habit-home__header">
           <div className="habit-home__top">
             <h1
-              className="habit-home__title"
+              className="habit-home__title home__titile"
               onClick={() => {
                 if (!parsedStudyId) return;
                 navigate(`/studies/${parsedStudyId}`);

@@ -24,6 +24,9 @@ function resolveImageUrl(imageUrl) {
 }
 
 function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
+  // api중복호불 방지용 로딩 추가
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const { studyId } = useParams();
   const { t, i18n } = useTranslation();
@@ -110,6 +113,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   }, [isEditMode, initialData, i18n.language]);
 
   const submitButtonClick = async () => {
+    if (isLoading) return;
     const newErrors = {};
 
     if (!nickname.trim()) newErrors.nickname = t('errorNicknameRequired');
@@ -142,12 +146,15 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       backgroundId: Number(selectedBackground),
     };
 
+    setIsLoading(true);
+
     if (onValidSubmit) {
       onValidSubmit(formData);
       return;
     }
 
     try {
+      setIsLoading(true);
       if (isEditMode) {
         await updateStudy(studyId, formData);
         navigate(`/studies/${studyId}`);
@@ -161,7 +168,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         navigate(`/studies/${result.id}`);
       }
     } catch (error) {
-      console.error('스터디 저장 실패:', error);
+      setIsLoading(false);
     }
   };
 
@@ -273,8 +280,16 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         )}
       </div>
 
-      <button className="create-button" onClick={submitButtonClick}>
-        {isEditMode ? t('editSubmit') : t('createSubmit')}
+      <button
+        className={`create-button ${isLoading ? 'loading' : ''}`}
+        onClick={submitButtonClick}
+        disabled={isLoading}
+      >
+        {isLoading
+          ? t('생성중...')
+          : isEditMode
+            ? t('editSubmit')
+            : t('createSubmit')}
       </button>
     </div>
   );
