@@ -18,6 +18,7 @@ export function useStudyDetail(studyId) {
   const { t } = useTranslation();
 
   const [study, setStudy] = useState({});
+  const [notFound, setNotFound] = useState(false);
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -46,7 +47,6 @@ export function useStudyDetail(studyId) {
   useEffect(() => {
     if (studyFromStore) {
       setStudy(studyFromStore);
-      return;
     }
 
     if (!studyId) return;
@@ -58,15 +58,22 @@ export function useStudyDetail(studyId) {
 
         dispatch({
           type: 'SET_STUDIES',
-          payload: [...state.studies, targetStudy],
+          payload: [
+            ...state.studies.filter((item) => item.id !== parsedStudyId),
+            targetStudy,
+          ],
         });
       } catch (error) {
-        handleApiError(error, t('studyInfoLoadFail'));
+        if (error.status === 404 || error.code === 'NOT_FOUND') {
+          setNotFound(true);
+        } else {
+          handleApiError(error, t('studyInfoLoadFail'));
+        }
       }
     };
 
     fetchStudy();
-  }, [studyId, studyFromStore, dispatch, state.studies, t]);
+  }, [studyId, studyFromStore, dispatch, state.studies, t, parsedStudyId]);
 
   const getActionLabel = useCallback(() => {
     switch (pendingAction) {
@@ -232,6 +239,7 @@ export function useStudyDetail(studyId) {
 
   return {
     study,
+    notFound,
     password,
     isSubmitting,
     isPasswordModalOpen,
