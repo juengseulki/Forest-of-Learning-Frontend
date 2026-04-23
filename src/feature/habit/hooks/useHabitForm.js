@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import Toast from '../../../shared/components/toast/Toast.jsx';
 import {
   createHabit,
   deleteHabit,
@@ -21,17 +20,6 @@ export function useHabitForm({
   const [draftInputs, setDraftInputs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const showToast = (type, icon, message) => {
-    toast(<Toast type={type} icon={icon} message={message} />, {
-      position: 'bottom-center',
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeButton: false,
-      pauseOnHover: false,
-      draggable: false,
-    });
-  };
 
   const openModal = () => {
     setDraftHabitList(habitList);
