@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import handleApiError from '../../../../utils/handleApiError.jsx';
+import { useOnClickOutside } from './useOnClickOutside.js';
 import {
   getEmojiReactions,
   addEmojiReaction,
@@ -13,6 +14,13 @@ async function fetchEmojiItems(studyId) {
 export function useEmojiSection(studyId) {
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [emojis, setEmojis] = useState([]);
+
+  const pickerRef = useRef(null);
+  useOnClickOutside(
+    pickerRef,
+    () => setIsPickerVisible(false),
+    isPickerVisible
+  );
 
   useEffect(() => {
     if (!studyId) return;
@@ -61,5 +69,6 @@ export function useEmojiSection(studyId) {
     isPickerVisible,
     togglePicker,
     handleAddEmoji,
+    pickerRef,
   };
 }
