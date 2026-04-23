@@ -1,13 +1,8 @@
 import client from './client.js';
 
-export async function getStudies({
-  keyword,
-  order,
-  page = 1,
-  limit = 100,
-} = {}) {
+export async function getStudies({ keyword, order } = {}) {
   const response = await client.get('/studies', {
-    params: { keyword, order, page, limit },
+    params: { keyword, order },
   });
   return response.data;
 }
