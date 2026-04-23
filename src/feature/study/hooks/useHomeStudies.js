@@ -43,7 +43,12 @@ export function useHomeStudies() {
       try {
         studyDispatch({ type: 'SET_LOADING', payload: true });
 
-        const data = await getStudies();
+        const data = await getStudies({
+          page: listPage,
+          limit: listLimit,
+          keyword,
+          order,
+        });
 
         const studiesWithExtra = await Promise.all(
           (data?.items ?? []).map(async (study) => {
@@ -61,15 +66,26 @@ export function useHomeStudies() {
         );
 
         if (isMounted) {
+          const nextStudies =
+            listPage === 1
+              ? studiesWithExtra
+              : [
+                  ...studies,
+                  ...studiesWithExtra.filter(
+                    (newStudy) =>
+                      !studies.some((existing) => existing.id === newStudy.id)
+                  ),
+                ];
+
           studyDispatch({
             type: 'SET_STUDIES',
-            payload: studiesWithExtra,
+            payload: nextStudies,
           });
         }
       } catch (error) {
         console.error('홈 스터디 목록 조회 실패:', error);
 
-        if (isMounted) {
+        if (isMounted && listPage === 1) {
           studyDispatch({
             type: 'SET_STUDIES',
             payload: [],
@@ -90,7 +106,7 @@ export function useHomeStudies() {
     return () => {
       isMounted = false;
     };
-  }, [studyDispatch]);
+  }, [studyDispatch, i18n.language, listPage, keyword, order]);
 
   const filteredStudies = useMemo(() => {
     return getFilteredStudies(studies, keyword, order);
