@@ -176,7 +176,10 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
           labelName={t('nickname')}
           placeholder={t('nicknamePlaceholder')}
           value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            setNickname(e.target.value);
+            setErrors((prev) => ({ ...prev, nickname: '' }));
+          }}
           error={errors.nickname}
         />
 
@@ -184,7 +187,10 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
           labelName={t('studyName')}
           placeholder={t('studyNamePlaceholder')}
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setErrors((prev) => ({ ...prev, name: '' }));
+          }}
           error={errors.name}
         />
 
@@ -246,7 +252,10 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
               placeholder={t('passwordPlaceholder')}
               password={true}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrors((prev) => ({ ...prev, password: '' }));
+              }}
               error={errors.password}
             />
             <Input
@@ -254,7 +263,10 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
               placeholder={t('passwordConfirmPlaceholder')}
               password={true}
               value={passwordCheck}
-              onChange={(e) => setPasswordCheck(e.target.value)}
+              onChange={(e) => {
+                setPasswordCheck(e.target.value);
+                setErrors((prev) => ({ ...prev, passwordCheck: '' }));
+              }}
               error={errors.passwordCheck}
             />
           </>
