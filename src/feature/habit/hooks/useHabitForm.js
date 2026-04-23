@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { createHabit, deleteHabit } from '../../../api/habitApi.js';
+import Toast from '../../../shared/components/toast/Toast.jsx';
+import {
+  createHabit,
+  deleteHabit,
+  verifyStudyPassword,
+  checkStudySession,
+} from '../../../api/habitApi.js';
 import handleApiError from '../../../utils/handleApiError.jsx';
 import { createDraftInput } from '../utils/habitUtils.js';
 import { showToast } from '../../../shared/utils/showToast.jsx';
@@ -15,6 +21,17 @@ export function useHabitForm({
   const [draftInputs, setDraftInputs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const showToast = (type, icon, message) => {
+    toast(<Toast type={type} icon={icon} message={message} />, {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeButton: false,
+      pauseOnHover: false,
+      draggable: false,
+    });
+  };
 
   const openModal = () => {
     setDraftHabitList(habitList);
@@ -45,12 +62,28 @@ export function useHabitForm({
   };
 
   const deleteDraftHabit = async (habitId) => {
+    if (!studyId) {
+      showToast('danger', '❗', '유효한 studyId가 없어요.');
+      return;
+    }
+
     try {
+      const sessionData = await checkStudySession(studyId);
+      const isVerified = sessionData?.verified;
+
+      if (!isVerified) {
+        const password = window.prompt('스터디 비밀번호를 입력하세요.');
+        if (!password) return;
+
+        await verifyStudyPassword(studyId, password);
+      }
+
       await deleteHabit(habitId);
 
       setDraftHabitList((prev) => prev.filter((habit) => habit.id !== habitId));
 
       onAfterDelete(habitId);
+      showToast('success', '✅', '습관이 삭제되었어요.');
     } catch (error) {
       if (error.status === 401) {
         window.dispatchEvent(
@@ -75,7 +108,7 @@ export function useHabitForm({
     }
 
     if (!studyId) {
-      toast.error('유효한 studyId가 없어요.');
+      showToast('danger', '❗', '유효한 studyId가 없어요.');
       return;
     }
 

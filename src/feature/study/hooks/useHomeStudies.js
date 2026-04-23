@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getStudies } from '../../../api/studyApi.js';
 import { getPoint } from '../../../api/pointApi.js';
 import { getEmojiReactions } from '../../../api/emojiApi.js';
+import { translate } from '../../../api/translateApi.js';
 
 import { useRecentStudies } from './useRecentStudies.js';
 import { useStudy } from '../../../contexts/StudyContext.jsx';
@@ -13,6 +15,7 @@ import {
 } from '../utils/homeStudyUtils.js';
 
 export function useHomeStudies() {
+  const { i18n } = useTranslation();
   const { state: studyState, dispatch: studyDispatch } = useStudy();
   const { state: uiState, dispatch: uiDispatch } = useUI();
 
@@ -52,13 +55,37 @@ export function useHomeStudies() {
 
         const studiesWithExtra = await Promise.all(
           (data?.items ?? []).map(async (study) => {
-            const [pointData, emojiData] = await Promise.all([
+            const [
+              pointData,
+              emojiData,
+              translatedNickname,
+              translatedName,
+              translatedDescription,
+            ] = await Promise.all([
               getPoint(study.id).catch(() => ({ totalPoint: 0 })),
               getEmojiReactions(study.id).catch(() => ({ items: [] })),
+              i18n.language === 'ko'
+                ? Promise.resolve(study.nickname ?? '')
+                : translate(study.nickname ?? '', i18n.language).catch(
+                    () => study.nickname ?? ''
+                  ),
+              i18n.language === 'ko'
+                ? Promise.resolve(study.name ?? '')
+                : translate(study.name ?? '', i18n.language).catch(
+                    () => study.name ?? ''
+                  ),
+              i18n.language === 'ko'
+                ? Promise.resolve(study.description ?? '')
+                : translate(study.description ?? '', i18n.language).catch(
+                    () => study.description ?? ''
+                  ),
             ]);
 
             return {
               ...study,
+              nickname: translatedNickname,
+              name: translatedName,
+              description: translatedDescription,
               point: pointData?.totalPoint ?? 0,
               emojis: emojiData?.items ?? [],
             };

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +6,6 @@ import ic_point from '../../../shared/images/icons/ic_point.png';
 
 import { addRecentStudy } from '../shared/utils/recentStudy.js';
 import { useStudy } from '../../../contexts/StudyContext.jsx';
-import { translate } from '../../../api/translateApi.js';
 
 export default function StudyCard({
   id,
@@ -24,37 +22,6 @@ export default function StudyCard({
   const { dispatch } = useStudy();
   const { i18n, t } = useTranslation();
 
-  const [translatedName, setTranslatedName] = useState('');
-  const [translatedDescription, setTranslatedDescription] = useState('');
-
-  useEffect(() => {
-    async function translateCardContent() {
-      if (i18n.language === 'ko') {
-        setTranslatedName('');
-        setTranslatedDescription('');
-        return;
-      }
-
-      try {
-        const [nameResult, descriptionResult] = await Promise.all([
-          translate(name, i18n.language),
-          translate(description, i18n.language),
-        ]);
-
-        setTranslatedName(nameResult);
-        setTranslatedDescription(descriptionResult);
-      } catch (error) {
-        console.error('홈 카드 번역 실패:', error);
-        setTranslatedName('');
-        setTranslatedDescription('');
-      }
-    }
-
-    if (name || description) {
-      translateCardContent();
-    }
-  }, [i18n.language, name, description]);
-
   const handleClick = () => {
     const updatedRecentStudies = addRecentStudy({ id });
 
@@ -66,9 +33,6 @@ export default function StudyCard({
     navigate(`/studies/${id}`);
   };
 
-  const displayName = translatedName || name;
-  const displayDescription = translatedDescription || description;
-
   return (
     <div
       className="study-card"
@@ -76,8 +40,8 @@ export default function StudyCard({
         backgroundImage: `
           linear-gradient(
             to bottom,
-           rgba(255, 255, 255, 0.10),
-           rgba(255, 255, 255, 0.18)
+            rgba(255, 255, 255, 0.10),
+            rgba(255, 255, 255, 0.18)
           ),
           url(${backgroundImage})
         `,
@@ -89,7 +53,7 @@ export default function StudyCard({
           <div className="title-group">
             <h2 className="title" style={{ color: theme?.title }}>
               <span style={{ color: theme?.nickname }}>{nickname}</span>
-              {t('studyPossessive')} {displayName}
+              {t('studyPossessive')} {name}
             </h2>
 
             <div className="point" style={{ backgroundColor: theme?.pointBg }}>
@@ -116,7 +80,7 @@ export default function StudyCard({
           className="description text-break"
           style={{ color: theme?.description }}
         >
-          {displayDescription}
+          {description}
         </p>
       </section>
 

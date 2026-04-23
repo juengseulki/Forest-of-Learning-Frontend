@@ -240,8 +240,14 @@ export function useFocusTimer(studyId, onSessionComplete) {
         setMessage('포인트가 추가되었습니다!');
         onSessionComplete?.(result);
       } catch (err) {
-        handleApiError(err, '집중 세션 저장에 실패했습니다.');
-        setMessage('포인트 반영 실패');
+        if (err.status === 401) {
+          window.dispatchEvent(
+            new CustomEvent('session-expired', { detail: { studyId } })
+          );
+        } else {
+          handleApiError(err, '집중 세션 저장에 실패했습니다.');
+          setMessage('포인트 반영 실패');
+        }
       }
     }
   };

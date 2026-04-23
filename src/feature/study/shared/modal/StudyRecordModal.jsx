@@ -71,8 +71,9 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
     const fetchPointLogs = async () => {
       try {
         const data = await getPointLog(studyId);
+        const arr = Array.isArray(data) ? data : [];
         const selected = formatDateString(selectedDate);
-        const filteredData = data.filter((log) => {
+        const filteredData = arr.filter((log) => {
           const logDate = new Date(log.createdAt);
           return formatDateString(logDate) === selected;
         });
@@ -122,16 +123,15 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
               currentPageLogs.map((log, index) => (
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
-                  <td>{formatDuration(log.focusSession.duration)}</td>
-                  {/* 이후삭제 */}
+                  <td>{log.focusSession ? formatDuration(log.focusSession.duration) : '-'}</td>
                   <td>
                     <div className="record-point">
                       <img src={pointIcon} alt={t('pointIconAlt')} />
                       <p>{log.amount}P</p>
                     </div>
                   </td>
-                  <td>{formatTime(log.focusSession.startedAt)}</td>
-                  <td>{formatTime(log.focusSession.completedAt)}</td>
+                  <td>{log.focusSession ? formatTime(log.focusSession.startedAt) : '-'}</td>
+                  <td>{log.focusSession ? formatTime(log.focusSession.completedAt) : '-'}</td>
                 </tr>
               ))
             ) : (
