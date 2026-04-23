@@ -1,17 +1,12 @@
-import { useMemo } from 'react';
 import '../../../styles/StudyList.css';
 import StudyCard from './StudyCard.jsx';
 import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
 import { getStudyCardProps } from '../utils/studyUtils.js';
 
-function StudyList({ studies = [], visibleCount = 0 }) {
-  const visibleStudies = useMemo(() => {
-    return studies.slice(0, visibleCount).filter(Boolean);
-  }, [studies, visibleCount]);
-
+function StudyList({ studies = [] }) {
   return (
     <div className="card-list">
-      {visibleStudies.map((item) => {
+      {studies.filter(Boolean).map((item) => {
         const cardProps = getStudyCardProps({
           item,
           getBackgroundTheme,
