@@ -18,6 +18,7 @@ export function useStudyDetail(studyId) {
   const { t } = useTranslation();
 
   const [study, setStudy] = useState({});
+  const [notFound, setNotFound] = useState(false);
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -61,7 +62,11 @@ export function useStudyDetail(studyId) {
           payload: [...state.studies, targetStudy],
         });
       } catch (error) {
-        handleApiError(error, t('studyInfoLoadFail'));
+        if (error.status === 404 || error.code === 'NOT_FOUND') {
+          setNotFound(true);
+        } else {
+          handleApiError(error, t('studyInfoLoadFail'));
+        }
       }
     };
 
@@ -232,6 +237,7 @@ export function useStudyDetail(studyId) {
 
   return {
     study,
+    notFound,
     password,
     isSubmitting,
     isPasswordModalOpen,
