@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import StudyList from '../feature/study/components/StudyList.jsx';
@@ -27,6 +27,22 @@ function HomePage() {
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const scrollPosRef = useRef(null);
+  const prevLengthRef = useRef(filteredStudies.length);
+
+  useEffect(() => {
+    if (scrollPosRef.current !== null && filteredStudies.length > prevLengthRef.current) {
+      window.scrollTo(0, scrollPosRef.current);
+      scrollPosRef.current = null;
+    }
+    prevLengthRef.current = filteredStudies.length;
+  }, [filteredStudies.length]);
+
+  function handleMoreSee() {
+    scrollPosRef.current = window.scrollY;
+    moreSee();
+  }
 
   const label = useMemo(() => {
     switch (order) {
@@ -144,7 +160,7 @@ function HomePage() {
 
         {hasMore && (
           <div className="button-container">
-            <button type="button" className="see-more" onClick={moreSee}>
+            <button type="button" className="see-more" onClick={handleMoreSee}>
               {t('seeMore')}
             </button>
           </div>
