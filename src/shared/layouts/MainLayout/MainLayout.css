@@ -7,14 +7,14 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 0 80px;
+  padding: 100px 0 80px;
 }
 
 /* tablet */
 @media (max-width: 1023px) {
   .main-layout__content {
     max-width: 696px;
-    padding: 0 0 48px;
+    padding: 61px 0 48px;
   }
 }
 
@@ -22,7 +22,7 @@
 @media (max-width: 767px) {
   .main-layout__content {
     max-width: 320px;
-    padding: 0 0 32px;
+    padding: 46px 0 32px;
   }
 }
 

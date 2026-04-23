@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import router from './router/index.jsx';
 import './styles/reset.css';
 import './styles/global.css';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './shared/i18n.js';
 
@@ -18,9 +17,6 @@ if (window.Kakao && !window.Kakao.isInitialized()) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
-    <>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </>
+    <RouterProvider router={router} />
   </QueryClientProvider>
 );

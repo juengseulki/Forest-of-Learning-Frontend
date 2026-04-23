@@ -1,7 +1,11 @@
 .header {
+  position: fixed; /* 🔥 핵심 */
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100px;
   background-color: var(--bg-default);
+  z-index: 1000; /* 🔥 다른 요소 위로 */
 }
 
 .header__inner {

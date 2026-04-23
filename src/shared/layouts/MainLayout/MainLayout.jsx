@@ -70,15 +70,6 @@ function MainLayout() {
 
           <main className="main-layout__content">
             <Outlet context={{ setHeaderAction }} />
-            <ToastContainer
-              position="bottom-center"
-              autoClose={2000}
-              hideProgressBar
-              closeButton={false}
-              pauseOnHover={false}
-              draggable={false}
-              limit={1}
-            />
           </main>
 
           <div className="floating-paw-menu">
@@ -161,6 +152,16 @@ function MainLayout() {
                 className="floating-paw-menu__main-icon"
               />
             </button>
+
+            <ToastContainer
+              position="bottom-center"
+              autoClose={2000}
+              hideProgressBar
+              closeButton={false}
+              pauseOnHover={false}
+              draggable={false}
+              limit={1}
+            />
           </div>
         </div>
       </UIProvider>
