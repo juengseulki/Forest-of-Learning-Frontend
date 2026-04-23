@@ -1,13 +1,20 @@
 import client from './client.js';
 
-// 집중 세션 목록 조회
-export async function getFocusSessions(studyId) {
-  const response = await client.get('/focuses', { params: { studyId } });
-  return response.data;
+export async function getFocus(studyId) {
+  return client.get(`/focuses/${studyId}`);
 }
 
-// 집중 세션 생성
-export async function createFocusSession(sessionData) {
-  const response = await client.post('/focuses', sessionData);
-  return response.data;
+// export async function startFocus(studyId) {
+//   return client.post(`/focuses/${studyId}/start`);
+// }
+
+export async function completeFocus(studyId, payload) {
+  return client.post(`/focuses/${studyId}`, payload);
+}
+export async function getPoint(studyId) {
+  return client.get(`/points/${studyId}`);
+}
+
+export async function getStudyById(studyId) {
+  return client.get(`/studies/${studyId}`);
 }
