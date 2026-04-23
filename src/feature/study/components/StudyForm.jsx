@@ -11,6 +11,8 @@ import { translate } from '../../../api/translateApi.js';
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
+const MAX_DESC_LENGTH = 200;
+
 function resolveImageUrl(imageUrl) {
   if (!imageUrl) return '';
 
@@ -36,6 +38,13 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [errors, setErrors] = useState({});
 
+  const handleDescriptionChange = (e) => {
+    const { value } = e.target;
+
+    if (value.length <= MAX_DESC_LENGTH) {
+      setDescription(value);
+    }
+  };
   useEffect(() => {
     const fetchBackgrounds = async () => {
       try {
@@ -180,12 +189,31 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         />
 
         <div className="form-wrapper">
-          <label className="input-label">{t('descriptionLabel')}</label>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <label className="input-label">{t('descriptionLabel')}</label>
+            <span
+              style={{
+                fontSize: '12px',
+                color:
+                  description.length >= MAX_DESC_LENGTH ? '#ff4d4f' : '#888',
+                marginBottom: '8px',
+              }}
+            >
+              {description.length} / {MAX_DESC_LENGTH}
+            </span>
+          </div>
           <textarea
             className="textarea-wrapper"
             placeholder={t('descriptionPlaceholder')}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={handleDescriptionChange}
+            maxLength={MAX_DESC_LENGTH}
           />
         </div>
 
