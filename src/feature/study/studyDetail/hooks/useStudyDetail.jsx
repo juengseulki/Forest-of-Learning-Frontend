@@ -48,21 +48,16 @@ export function useStudyDetail(studyId) {
     if (studyFromStore) {
       setStudy(studyFromStore);
     }
+  }, [studyFromStore]);
 
+  useEffect(() => {
     if (!studyId) return;
 
     const fetchStudy = async () => {
       try {
         const targetStudy = await getStudy(studyId);
         setStudy(targetStudy);
-
-        dispatch({
-          type: 'SET_STUDIES',
-          payload: [
-            ...state.studies.filter((item) => item.id !== parsedStudyId),
-            targetStudy,
-          ],
-        });
+        dispatch({ type: 'UPSERT_STUDY', payload: targetStudy });
       } catch (error) {
         if (error.status === 404 || error.code === 'NOT_FOUND') {
           setNotFound(true);
@@ -73,7 +68,7 @@ export function useStudyDetail(studyId) {
     };
 
     fetchStudy();
-  }, [studyId, studyFromStore, dispatch, state.studies, t, parsedStudyId]);
+  }, [studyId, dispatch, t]);
 
   const getActionLabel = useCallback(() => {
     switch (pendingAction) {
