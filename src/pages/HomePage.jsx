@@ -129,7 +129,7 @@ function HomePage() {
             </div>
           </div>
 
-          {isLoading ? (
+          {isLoading && filteredStudies.length === 0 ? (
             <div className="look-study">
               <p className="null-text">{t('loadingStudies')}</p>
             </div>

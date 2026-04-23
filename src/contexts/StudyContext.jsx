@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer } from 'react';
 
 const StudyContext = createContext();
+const StudyDispatchContext = createContext();
 
 const initialState = {
   studies: [],
@@ -44,9 +45,11 @@ export function StudyProvider({ children }) {
   const [state, dispatch] = useReducer(studyReducer, initialState);
 
   return (
-    <StudyContext.Provider value={{ state, dispatch }}>
-      {children}
-    </StudyContext.Provider>
+    <StudyDispatchContext.Provider value={dispatch}>
+      <StudyContext.Provider value={{ state, dispatch }}>
+        {children}
+      </StudyContext.Provider>
+    </StudyDispatchContext.Provider>
   );
 }
 
@@ -58,4 +61,14 @@ export function useStudy() {
   }
 
   return context;
+}
+
+export function useStudyDispatch() {
+  const dispatch = useContext(StudyDispatchContext);
+
+  if (!dispatch) {
+    throw new Error('useStudyDispatch는 StudyProvider 안에서 사용해야 합니다.');
+  }
+
+  return dispatch;
 }
