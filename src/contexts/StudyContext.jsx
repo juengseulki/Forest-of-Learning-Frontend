@@ -18,6 +18,15 @@ function studyReducer(state, action) {
         studies: action.payload,
       };
 
+    case 'UPSERT_STUDY':
+      return {
+        ...state,
+        studies: [
+          ...state.studies.filter((item) => item.id !== action.payload.id),
+          action.payload,
+        ],
+      };
+
     case 'SET_RECENT':
       return {
         ...state,
