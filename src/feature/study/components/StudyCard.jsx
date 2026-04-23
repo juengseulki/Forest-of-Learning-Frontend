@@ -6,7 +6,7 @@ import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
 
 import { addRecentStudy } from '../shared/utils/recentStudy.js';
-import { useStudy } from '../../../contexts/StudyContext.jsx';
+import { useStudyDispatch } from '../../../contexts/StudyContext.jsx';
 
 function StudyCard({
   id,
@@ -20,7 +20,7 @@ function StudyCard({
   theme,
 }) {
   const navigate = useNavigate();
-  const { dispatch } = useStudy();
+  const dispatch = useStudyDispatch();
   const { i18n, t } = useTranslation();
 
   const handleClick = () => {
