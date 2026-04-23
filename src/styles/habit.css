@@ -1,5 +1,5 @@
 /* =========================
-   PAGE
+    PAGE
 ========================= */
 
 .habit-page {
@@ -37,6 +37,10 @@
   line-height: 1.2;
   color: var(--text-main);
   word-break: keep-all;
+}
+
+.home__titile:hover {
+  color: var(--color-green-text);
   cursor: pointer;
 }
 

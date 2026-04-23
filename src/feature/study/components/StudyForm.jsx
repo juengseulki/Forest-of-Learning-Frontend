@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Input from '../../../components/common/Input.jsx';
@@ -24,6 +24,9 @@ function resolveImageUrl(imageUrl) {
 }
 
 function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
+  // api중복호불 방지용 로딩 추가
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const { studyId } = useParams();
   const { t, i18n } = useTranslation();
@@ -37,6 +40,11 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [errors, setErrors] = useState({});
+
+  const nicknameRef = useRef(null);
+  const nameRef = useRef(null);
+  const passwordRef = useRef(null);
+  const passwordCheckRef = useRef(null);
 
   const handleDescriptionChange = (e) => {
     const { value } = e.target;
@@ -110,6 +118,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   }, [isEditMode, initialData, i18n.language]);
 
   const submitButtonClick = async () => {
+    if (isLoading) return;
     const newErrors = {};
 
     if (!nickname.trim()) newErrors.nickname = t('errorNicknameRequired');
@@ -133,7 +142,30 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     }
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+
+    if (Object.keys(newErrors).length > 0) {
+      if (newErrors.nickname) {
+        nicknameRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        nicknameRef.current?.focus();
+      } else if (newErrors.name) {
+        nameRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        nameRef.current?.focus();
+      } else if (newErrors.password) {
+        passwordRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        passwordRef.current?.focus();
+      } else if (newErrors.passwordCheck) {
+        passwordCheckRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        passwordCheckRef.current?.focus();
+      }
+    }
 
     const formData = {
       nickname,
@@ -142,12 +174,15 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       backgroundId: Number(selectedBackground),
     };
 
+    setIsLoading(true);
+
     if (onValidSubmit) {
       onValidSubmit(formData);
       return;
     }
 
     try {
+      setIsLoading(true);
       if (isEditMode) {
         await updateStudy(studyId, formData);
         navigate(`/studies/${studyId}`);
@@ -161,7 +196,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         navigate(`/studies/${result.id}`);
       }
     } catch (error) {
-      console.error('스터디 저장 실패:', error);
+      setIsLoading(false);
     }
   };
 
@@ -173,6 +208,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         </p>
 
         <Input
+          ref={nicknameRef}
           labelName={t('nickname')}
           placeholder={t('nicknamePlaceholder')}
           value={nickname}
@@ -184,6 +220,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         />
 
         <Input
+          ref={nameRef}
           labelName={t('studyName')}
           placeholder={t('studyNamePlaceholder')}
           value={name}
@@ -248,6 +285,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         {!isEditMode && (
           <>
             <Input
+              ref={passwordRef}
               labelName={t('password')}
               placeholder={t('passwordPlaceholder')}
               password={true}
@@ -273,8 +311,16 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         )}
       </div>
 
-      <button className="create-button" onClick={submitButtonClick}>
-        {isEditMode ? t('editSubmit') : t('createSubmit')}
+      <button
+        className={`create-button ${isLoading ? 'loading' : ''}`}
+        onClick={submitButtonClick}
+        disabled={isLoading}
+      >
+        {isLoading
+          ? t('생성중...')
+          : isEditMode
+            ? t('editSubmit')
+            : t('createSubmit')}
       </button>
     </div>
   );
