@@ -6,6 +6,7 @@ import '../../../styles/StudyForm.css';
 import ic_pow from '../../../images/icon/ic_pow.svg';
 import { createStudy, updateStudy } from '../../../api/studyApi.js';
 import { getBackgrounds } from '../../../api/backgroundApi.js';
+import { translate } from '../../../api/translateApi.js';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -23,7 +24,7 @@ function resolveImageUrl(imageUrl) {
 function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const navigate = useNavigate();
   const { studyId } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [backgrounds, setBackgrounds] = useState([]);
   const [selectedBackground, setSelectedBackground] = useState(null);
@@ -60,11 +61,44 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
       return;
     }
 
-    setNickname(initialData.nickname ?? '');
-    setName(initialData.name ?? '');
-    setDescription(initialData.description ?? '');
-    setSelectedBackground(initialData.background?.id ?? null);
-  }, [isEditMode, initialData]);
+    async function applyInitialData() {
+      const originalNickname = initialData.nickname ?? '';
+      const originalName = initialData.name ?? '';
+      const originalDescription = initialData.description ?? '';
+
+      if (i18n.language === 'ko') {
+        setNickname(originalNickname);
+        setName(originalName);
+        setDescription(originalDescription);
+        setSelectedBackground(initialData.background?.id ?? null);
+        return;
+      }
+
+      try {
+        const [translatedNickname, translatedName, translatedDescription] =
+          await Promise.all([
+            originalNickname ? translate(originalNickname, i18n.language) : '',
+            originalName ? translate(originalName, i18n.language) : '',
+            originalDescription
+              ? translate(originalDescription, i18n.language)
+              : '',
+          ]);
+
+        setNickname(translatedNickname || originalNickname);
+        setName(translatedName || originalName);
+        setDescription(translatedDescription || originalDescription);
+        setSelectedBackground(initialData.background?.id ?? null);
+      } catch (error) {
+        console.error('수정 폼 초기 데이터 번역 실패:', error);
+        setNickname(originalNickname);
+        setName(originalName);
+        setDescription(originalDescription);
+        setSelectedBackground(initialData.background?.id ?? null);
+      }
+    }
+
+    applyInitialData();
+  }, [isEditMode, initialData, i18n.language]);
 
   const submitButtonClick = async () => {
     const newErrors = {};

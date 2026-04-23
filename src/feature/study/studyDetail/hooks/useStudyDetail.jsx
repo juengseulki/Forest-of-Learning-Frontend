@@ -99,11 +99,11 @@ export function useStudyDetail(studyId) {
 
       if (action === 'focus') {
         navigate(`/studies/${studyId}/focus`);
+        return;
       }
 
       if (action === 'record') {
         setIsRecordModalOpen(true);
-        return;
       }
     },
     [navigate, studyId]
@@ -114,10 +114,8 @@ export function useStudyDetail(studyId) {
       const isVerified =
         sessionStorage.getItem(`study-auth-${studyId}`) === 'true';
 
-      if (
-        isVerified &&
-        (action === 'edit' || action === 'habit' || action === 'focus')
-      ) {
+      // edit는 항상 비밀번호 모달을 띄운다.
+      if (isVerified && (action === 'habit' || action === 'focus')) {
         moveByAction(action);
         return;
       }
@@ -171,11 +169,7 @@ export function useStudyDetail(studyId) {
 
       await verifyStudyPassword(studyId, password);
 
-      if (
-        pendingAction === 'edit' ||
-        pendingAction === 'habit' ||
-        pendingAction === 'focus'
-      ) {
+      if (pendingAction === 'habit' || pendingAction === 'focus') {
         sessionStorage.setItem(`study-auth-${studyId}`, 'true');
       }
 
