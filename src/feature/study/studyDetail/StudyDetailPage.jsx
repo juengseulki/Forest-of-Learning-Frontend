@@ -15,6 +15,7 @@ import StudyConfirmModal from '../shared/modal/StudyConfirmModal.jsx';
 import StudyRecordModal from '../shared/modal/StudyRecordModal.jsx';
 import { useStudyDetail } from './hooks/useStudyDetail.jsx';
 import { translate } from '../../../api/translateApi.js';
+import ErrorPage from '../../../shared/components/ErrorPage/ErrorPage.jsx';
 
 function StudyDetailPage() {
   const { studyId } = useParams();
@@ -23,6 +24,7 @@ function StudyDetailPage() {
 
   const {
     study,
+    notFound,
     password,
     isSubmitting,
     isPasswordModalOpen,
@@ -58,6 +60,15 @@ function StudyDetailPage() {
 
     translateTitle();
   }, [i18n.language, study?.name]);
+
+  if (notFound) {
+    return (
+      <ErrorPage
+        title={t('studyNotFound')}
+        desc={t('studyNotFoundDesc')}
+      />
+    );
+  }
 
   return (
     <div className="detail-wrapper">
