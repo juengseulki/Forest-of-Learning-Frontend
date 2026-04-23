@@ -180,6 +180,14 @@ textarea::placeholder {
   color: var(--text-main);
 }
 
+.common-field-control:-webkit-autofill,
+.common-field-control:-webkit-autofill:hover,
+.common-field-control:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-panel) inset;
+  -webkit-text-fill-color: var(--text-main);
+  caret-color: var(--text-main);
+}
+
 .common-title-lg {
   font-size: 24px;
   font-weight: 800;

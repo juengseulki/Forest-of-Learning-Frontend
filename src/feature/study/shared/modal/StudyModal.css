@@ -113,6 +113,14 @@
   color: #b5b9c0;
 }
 
+.study-modal__input:-webkit-autofill,
+.study-modal__input:-webkit-autofill:hover,
+.study-modal__input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-panel) inset;
+  -webkit-text-fill-color: var(--text-main);
+  caret-color: var(--text-main);
+}
+
 .study-modal__toggle {
   padding: 0;
   border: none;
