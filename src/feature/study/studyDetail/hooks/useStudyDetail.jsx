@@ -47,7 +47,6 @@ export function useStudyDetail(studyId) {
   useEffect(() => {
     if (studyFromStore) {
       setStudy(studyFromStore);
-      return;
     }
 
     if (!studyId) return;
@@ -59,7 +58,10 @@ export function useStudyDetail(studyId) {
 
         dispatch({
           type: 'SET_STUDIES',
-          payload: [...state.studies, targetStudy],
+          payload: [
+            ...state.studies.filter((item) => item.id !== parsedStudyId),
+            targetStudy,
+          ],
         });
       } catch (error) {
         if (error.status === 404 || error.code === 'NOT_FOUND') {
@@ -71,7 +73,7 @@ export function useStudyDetail(studyId) {
     };
 
     fetchStudy();
-  }, [studyId, studyFromStore, dispatch, state.studies, t]);
+  }, [studyId, studyFromStore, dispatch, state.studies, t, parsedStudyId]);
 
   const getActionLabel = useCallback(() => {
     switch (pendingAction) {
