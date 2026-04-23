@@ -26,6 +26,7 @@
 .focus-page__study-title {
   grid-area: title;
   margin: 0;
+  justify-self: start;
   font-family: Pretendard;
   font-style: normal;
   font-size: 32px;
