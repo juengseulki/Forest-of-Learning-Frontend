@@ -19,7 +19,6 @@ function HomePage() {
     isLoading,
     filteredStudies,
     recentStudies,
-    visibleCount,
     hasMore,
     moreSee,
     clearRecentStudyList,
@@ -139,7 +138,7 @@ function HomePage() {
               <p className="null-text">{t('noStudies')}</p>
             </div>
           ) : (
-            <StudyList studies={filteredStudies} visibleCount={visibleCount} />
+            <StudyList studies={filteredStudies} />
           )}
         </div>
 
