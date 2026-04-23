@@ -1,8 +1,13 @@
 import client from './client.js';
 
-export async function getStudies(keyword, order) {
+export async function getStudies({
+  keyword,
+  order,
+  page = 1,
+  limit = 100,
+} = {}) {
   const response = await client.get('/studies', {
-    params: { keyword, order },
+    params: { keyword, order, page, limit },
   });
   return response.data;
 }
@@ -24,12 +29,19 @@ export async function verifyStudyPassword(studyId, password) {
   return response.data;
 }
 
+export async function checkStudySession(studyId) {
+  const response = await client.get(`/studies/${studyId}/verify-session`);
+  return response.data;
+}
+
 export async function updateStudy(studyId, studyData) {
   const response = await client.patch(`/studies/${studyId}`, studyData);
   return response.data;
 }
 
 export async function deleteStudy(studyId, password) {
-  const response = await client.delete(`/studies/${studyId}`, { password });
+  const response = await client.delete(`/studies/${studyId}`, {
+    data: { password },
+  });
   return response.data;
 }
