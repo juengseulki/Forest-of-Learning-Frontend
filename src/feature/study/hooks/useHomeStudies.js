@@ -10,8 +10,8 @@ import { useStudy } from '../../../contexts/StudyContext.jsx';
 import { useUI } from '../../../contexts/UIContext.jsx';
 import {
   getFilteredStudies,
-  getVisibleCount,
   getHasMore,
+  getVisibleCount,
 } from '../utils/homeStudyUtils.js';
 
 export function useHomeStudies() {
@@ -19,7 +19,7 @@ export function useHomeStudies() {
   const { state: studyState, dispatch: studyDispatch } = useStudy();
   const { state: uiState, dispatch: uiDispatch } = useUI();
 
-  const { studies, isLoading } = studyState;
+  const { studies, isLoading, totalCount } = studyState;
   const { keyword, order, listPage } = uiState;
 
   const listLimit = 6;
@@ -108,6 +108,10 @@ export function useHomeStudies() {
             type: 'SET_STUDIES',
             payload: nextStudies,
           });
+          studyDispatch({
+            type: 'SET_TOTAL_COUNT',
+            payload: data?.totalCount ?? 0,
+          });
         }
       } catch (error) {
         console.error('홈 스터디 목록 조회 실패:', error);
@@ -139,13 +143,9 @@ export function useHomeStudies() {
     return getFilteredStudies(studies, keyword, order);
   }, [studies, keyword, order]);
 
-  const visibleCount = useMemo(() => {
-    return getVisibleCount(listPage, listLimit);
-  }, [listPage]);
-
   const hasMore = useMemo(() => {
-    return getHasMore(filteredStudies.length, visibleCount);
-  }, [filteredStudies.length, visibleCount]);
+    return getHasMore(totalCount, getVisibleCount(listPage, listLimit));
+  }, [totalCount, listPage, listLimit]);
 
   const { recentStudies, refreshRecentStudies, clearRecentStudyList } =
     useRecentStudies(studies, recentLimit);
@@ -161,7 +161,6 @@ export function useHomeStudies() {
     isLoading,
     filteredStudies,
     recentStudies,
-    visibleCount,
     hasMore,
     moreSee,
     clearRecentStudyList,

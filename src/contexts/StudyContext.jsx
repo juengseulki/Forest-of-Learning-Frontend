@@ -6,6 +6,7 @@ const initialState = {
   studies: [],
   recentStudies: [],
   isLoading: false,
+  totalCount: 0,
 };
 
 function studyReducer(state, action) {
@@ -26,6 +27,12 @@ function studyReducer(state, action) {
       return {
         ...state,
         isLoading: action.payload,
+      };
+
+    case 'SET_TOTAL_COUNT':
+      return {
+        ...state,
+        totalCount: action.payload,
       };
 
     default:
