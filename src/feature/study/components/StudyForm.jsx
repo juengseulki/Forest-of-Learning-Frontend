@@ -189,21 +189,10 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         />
 
         <div className="form-wrapper">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <div className="description-header">
             <label className="input-label">{t('descriptionLabel')}</label>
             <span
-              style={{
-                fontSize: '12px',
-                color:
-                  description.length >= MAX_DESC_LENGTH ? '#ff4d4f' : '#888',
-                marginBottom: '8px',
-              }}
+              className={`char-count ${description.length >= MAX_DESC_LENGTH ? 'limit' : ''}`}
             >
               {description.length} / {MAX_DESC_LENGTH}
             </span>

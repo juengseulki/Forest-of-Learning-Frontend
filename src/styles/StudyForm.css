@@ -32,6 +32,23 @@
   color: var(--text-main);
 }
 
+.description-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.char-count.limit {
+  color: #ff4d4f;
+}
+
 .background-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
