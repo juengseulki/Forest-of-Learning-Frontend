@@ -7,11 +7,13 @@ import FocusPage from '../pages/FocusPage.jsx';
 import HabitPage from '../pages/HabitPage.jsx';
 import StudyDetailPage from '../feature/study/studyDetail/StudyDetailPage.jsx';
 import ProtectedStudyRoute from '../shared/routes/ProtectedStudyRoute.jsx';
+import ErrorPage from '../shared/components/ErrorPage/ErrorPage.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

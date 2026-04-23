@@ -170,6 +170,10 @@ i18n.use(initReactI18next).init({
         studyInfoLoadFail: '스터디 정보를 불러오지 못했습니다.',
 
         viewPointLog: '포인트 로그',
+        errorPageDesc: '잠시 후 다시 시도해 주세요.',
+        goToHome: '홈으로 가기',
+        studyNotFound: '스터디를 찾을 수 없습니다.',
+        studyNotFoundDesc: '존재하지 않는 스터디입니다.',
       },
     },
 
@@ -338,6 +342,10 @@ i18n.use(initReactI18next).init({
         studyInfoLoadFail: 'Failed to load study information.',
 
         viewPointLog: 'View Point Log',
+        errorPageDesc: 'Please try again later.',
+        goToHome: 'Go to Home',
+        studyNotFound: 'Study not found.',
+        studyNotFoundDesc: 'This study does not exist.',
       },
     },
 
@@ -506,6 +514,10 @@ i18n.use(initReactI18next).init({
         studyInfoLoadFail: 'スタディ情報を読み込めませんでした。',
 
         viewPointLog: 'ポイント履歴を見る',
+        errorPageDesc: '少し後でもう一度お試しください。',
+        goToHome: 'ホームへ',
+        studyNotFound: 'スタディが見つかりませんでした。',
+        studyNotFoundDesc: '存在しないスタディです。',
       },
     },
 
@@ -673,6 +685,10 @@ i18n.use(initReactI18next).init({
         studyInfoLoadFail: '无法加载学习组信息。',
 
         viewPointLog: '查看积分记录',
+        errorPageDesc: '请稍后再试。',
+        goToHome: '前往首页',
+        studyNotFound: '找不到该学习组。',
+        studyNotFoundDesc: '该学习组不存在。',
       },
     },
   },
