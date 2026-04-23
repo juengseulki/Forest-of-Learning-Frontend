@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import '../../../styles/StudyList.css';
 import StudyCard from './StudyCard.jsx';
 import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
@@ -18,4 +19,4 @@ function StudyList({ studies = [] }) {
   );
 }
 
-export default StudyList;
+export default memo(StudyList);

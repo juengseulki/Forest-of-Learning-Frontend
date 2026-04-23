@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +8,7 @@ import ic_point from '../../../shared/images/icons/ic_point.png';
 import { addRecentStudy } from '../shared/utils/recentStudy.js';
 import { useStudy } from '../../../contexts/StudyContext.jsx';
 
-export default function StudyCard({
+function StudyCard({
   id,
   nickname,
   name,
@@ -104,3 +105,5 @@ export default function StudyCard({
     </div>
   );
 }
+
+export default memo(StudyCard);
