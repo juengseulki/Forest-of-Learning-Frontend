@@ -174,6 +174,8 @@ i18n.use(initReactI18next).init({
         goToHome: '홈으로 가기',
         studyNotFound: '스터디를 찾을 수 없습니다.',
         studyNotFoundDesc: '존재하지 않는 스터디입니다.',
+
+        complete: '완료',
       },
     },
 
@@ -346,6 +348,7 @@ i18n.use(initReactI18next).init({
         goToHome: 'Go to Home',
         studyNotFound: 'Study not found.',
         studyNotFoundDesc: 'This study does not exist.',
+        complete: 'Done',
       },
     },
 
@@ -518,6 +521,8 @@ i18n.use(initReactI18next).init({
         goToHome: 'ホームへ',
         studyNotFound: 'スタディが見つかりませんでした。',
         studyNotFoundDesc: '存在しないスタディです。',
+
+        complete: '完了',
       },
     },
 
@@ -689,6 +694,7 @@ i18n.use(initReactI18next).init({
         goToHome: '前往首页',
         studyNotFound: '找不到该学习组。',
         studyNotFoundDesc: '该学习组不存在。',
+        complete: '完成',
       },
     },
   },

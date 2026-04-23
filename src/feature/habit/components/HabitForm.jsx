@@ -100,7 +100,7 @@ function HabitForm({
             onClick={onSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? t('habitSaving') : t('habitSaveDone')}
+            {t('complete')}
           </button>
         </div>
       </div>
