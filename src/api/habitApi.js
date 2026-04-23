@@ -42,6 +42,34 @@ export async function deleteHabit(habitId, studyId) {
   return response.data;
 }
 
+// 스터디 비밀번호 인증
+export async function verifyStudyPassword(studyId, password) {
+  const response = await client.post(`/studies/${studyId}/verify-password`, {
+    password,
+  });
+  return response.data;
+}
+
+// 스터디 인증 세션 확인
+export async function checkStudySession(studyId) {
+  const response = await client.get(`/studies/${studyId}/check-session`);
+  return response.data;
+}
+
+// 스터디 비밀번호 인증
+export async function verifyStudyPassword(studyId, password) {
+  const response = await client.post(`/studies/${studyId}/verify-password`, {
+    password,
+  });
+  return response.data;
+}
+
+// 스터디 인증 세션 확인
+export async function checkStudySession(studyId) {
+  const response = await client.get(`/studies/${studyId}/check-session`);
+  return response.data;
+}
+
 // 습관 체크 / 해제
 export async function toggleHabitCheck(habitId, date, completed) {
   const response = await client.post(`/habits/${habitId}/records`, {
@@ -52,8 +80,8 @@ export async function toggleHabitCheck(habitId, date, completed) {
 }
 
 // 습관 기록 조회
-export async function getHabitRecords(studyId, startDate, endDate) {
-  const response = await client.get(`/habits/${studyId}/records`, {
+export async function getHabitRecords(habitId, startDate, endDate) {
+  const response = await client.get(`/habits/${habitId}/records`, {
     params: {
       weekStart: startDate,
       weekEnd: endDate,

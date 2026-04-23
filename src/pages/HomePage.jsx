@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import StudyList from '../feature/study/components/StudyList.jsx';
@@ -14,6 +14,7 @@ function HomePage() {
     recentLimit,
     keyword,
     setKeyword,
+    order,
     setOrder,
     order,
     isLoading,
@@ -29,20 +30,19 @@ function HomePage() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  function getOrderLabel(order) {
+  const label = useMemo(() => {
     switch (order) {
-      case 'latest':
-        return t('latest');
       case 'oldest':
         return t('oldest');
       case 'pointDesc':
         return t('pointDesc');
       case 'pointAsc':
         return t('pointAsc');
+      case 'latest':
       default:
         return t('latest');
     }
-  }
+  }, [order, t]);
 
   function handleSelect(value) {
     setOrder(value);
@@ -98,9 +98,10 @@ function HomePage() {
                 className="label"
                 onClick={() => setIsOpen(!isOpen)}
               >
-                {getOrderLabel(order)}
-                <img src={ic_select_arrow} />
+                {label}
+                <img src={ic_select_arrow} alt="" />
               </button>
+
               <ul className="optionList">
                 <li
                   className="optionItem"
@@ -129,6 +130,7 @@ function HomePage() {
               </ul>
             </div>
           </div>
+
           {isLoading ? (
             <div className="look-study">
               <p className="null-text">{t('loadingStudies')}</p>
