@@ -123,15 +123,27 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
               currentPageLogs.map((log, index) => (
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
-                  <td>{log.focusSession ? formatDuration(log.focusSession.duration) : '-'}</td>
+                  <td>
+                    {log.focusSession
+                      ? formatDuration(log.focusSession.duration)
+                      : '-'}
+                  </td>
                   <td>
                     <div className="record-point">
                       <img src={pointIcon} alt={t('pointIconAlt')} />
                       <p>{log.amount}P</p>
                     </div>
                   </td>
-                  <td>{log.focusSession ? formatTime(log.focusSession.startedAt) : '-'}</td>
-                  <td>{log.focusSession ? formatTime(log.focusSession.completedAt) : '-'}</td>
+                  <td>
+                    {log.focusSession
+                      ? formatTime(log.focusSession.startedAt)
+                      : '-'}
+                  </td>
+                  <td>
+                    {log.focusSession
+                      ? formatTime(log.focusSession.completedAt)
+                      : '-'}
+                  </td>
                 </tr>
               ))
             ) : (
@@ -187,7 +199,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
       <div className="study-modal__actions">
         <button
           type="button"
-          className="study-modal__button study-modal__button--secondary"
+          className="study-modal__button study-modal__button--secondary log"
           onClick={onClose}
         >
           {closeText || t('close')}
