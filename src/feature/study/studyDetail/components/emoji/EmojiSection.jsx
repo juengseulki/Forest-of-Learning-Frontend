@@ -1,6 +1,5 @@
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { useTheme } from '../../../../../shared/hooks/useTheme.js';
 import smileIcon from '../../../../../images/icon/ic_smile.svg';
 import EmojiList from './EmojiList.jsx';
 import { useEmojiSection } from '../../hooks/useEmojiSection.js';
