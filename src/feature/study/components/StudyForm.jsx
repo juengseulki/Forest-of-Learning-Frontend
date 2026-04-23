@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Input from '../../../components/common/Input.jsx';
@@ -40,6 +40,11 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [errors, setErrors] = useState({});
+
+  const nicknameRef = useRef(null);
+  const nameRef = useRef(null);
+  const passwordRef = useRef(null);
+  const passwordCheckRef = useRef(null);
 
   const handleDescriptionChange = (e) => {
     const { value } = e.target;
@@ -137,7 +142,30 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
     }
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+
+    if (Object.keys(newErrors).length > 0) {
+      if (newErrors.nickname) {
+        nicknameRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        nicknameRef.current?.focus();
+      } else if (newErrors.name) {
+        nameRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        nameRef.current?.focus();
+      } else if (newErrors.password) {
+        passwordRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        passwordRef.current?.focus();
+      } else if (newErrors.passwordCheck) {
+        passwordCheckRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+        passwordCheckRef.current?.focus();
+      }
+    }
 
     const formData = {
       nickname,
@@ -180,6 +208,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         </p>
 
         <Input
+          ref={nicknameRef}
           labelName={t('nickname')}
           placeholder={t('nicknamePlaceholder')}
           value={nickname}
@@ -191,6 +220,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         />
 
         <Input
+          ref={nameRef}
           labelName={t('studyName')}
           placeholder={t('studyNamePlaceholder')}
           value={name}
@@ -255,6 +285,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         {!isEditMode && (
           <>
             <Input
+              ref={passwordRef}
               labelName={t('password')}
               placeholder={t('passwordPlaceholder')}
               password={true}

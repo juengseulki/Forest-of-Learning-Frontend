@@ -4,7 +4,15 @@ import '../../styles/Input.css';
 import btn_visibility_off from '../../images/button/btn_visibility_off.svg';
 import btn_visibility_on from '../../images/button/btn_visibility_on.svg';
 
-function Input({ labelName, placeholder, password, value, onChange, error }) {
+function Input({
+  labelName,
+  placeholder,
+  password,
+  value,
+  onChange,
+  error,
+  ref,
+}) {
   const [visible, setVisible] = useState(false);
   const { t } = useTranslation();
 
@@ -17,6 +25,7 @@ function Input({ labelName, placeholder, password, value, onChange, error }) {
       <label className="input-label">{labelName}</label>
       <div className={error ? 'input-wrapper-error' : 'input-wrapper'}>
         <input
+          ref={ref}
           type={password ? (visible ? 'text' : 'password') : 'text'}
           className="input-field"
           placeholder={placeholder}
