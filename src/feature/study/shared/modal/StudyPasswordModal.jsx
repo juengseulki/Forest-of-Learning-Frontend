@@ -38,6 +38,7 @@ function StudyPasswordModal({
             value={password}
             onChange={onChangePassword}
             placeholder={t('passwordPlaceholder')}
+            autoComplete="one-time-code"
           />
 
           <button
