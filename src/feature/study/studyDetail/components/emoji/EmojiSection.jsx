@@ -4,17 +4,23 @@ import smileIcon from '../../../../../images/icon/ic_smile.svg';
 import EmojiList from './EmojiList.jsx';
 import { useEmojiSection } from '../../hooks/useEmojiSection.js';
 import { usePickerTheme } from '../../hooks/usePickerTheme.js';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useState, useRef } from 'react';
 
 function EmojiSection({ studyId }) {
-  const { emojis, isPickerVisible, togglePicker, handleAddEmoji } =
+  const { emojis, isPickerVisible, togglePicker, handleAddEmoji, pickerRef } =
     useEmojiSection(studyId);
   const theme = usePickerTheme();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const popupRef = useRef(null);
+  useOnClickOutside(popupRef, () => setIsExpanded(false), isExpanded);
 
   return (
     <span className="emoji">
       <EmojiList emojis={emojis} onAddEmoji={handleAddEmoji} />
 
-      <div className="emoji-picker-container">
+      <div className="emoji-picker-container" ref={pickerRef}>
         <button type="button" className="emoji-add-btn" onClick={togglePicker}>
           <img src={smileIcon} alt="이모지 추가" />
           추가

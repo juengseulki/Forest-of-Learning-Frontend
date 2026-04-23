@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import plusIcon from '../../../../../images/icon/ic_plus.svg';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 
 function EmojiList({ emojis, onAddEmoji }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const popupRef = useRef(null);
+  useOnClickOutside(popupRef, () => setIsExpanded(false), isExpanded);
   return (
     <div className="emoji-wrap">
       {emojis.slice(0, 3).map((e) => {
@@ -21,7 +24,7 @@ function EmojiList({ emojis, onAddEmoji }) {
       })}
 
       {emojis.length > 3 && (
-        <div className="more-emoji-wrapper">
+        <div className="more-emoji-wrapper" ref={popupRef}>
           <button
             onClick={() => {
               setIsExpanded((prev) => !prev);
