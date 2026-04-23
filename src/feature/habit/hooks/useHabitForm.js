@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import Toast from '../../../shared/components/toast/Toast.jsx';
 import {
   createHabit,
   deleteHabit,
@@ -9,6 +8,7 @@ import {
 } from '../../../api/habitApi.js';
 import handleApiError from '../../../utils/handleApiError.jsx';
 import { createDraftInput } from '../utils/habitUtils.js';
+import { showToast } from '../../../shared/utils/showToast.jsx';
 
 export function useHabitForm({
   studyId,
@@ -20,17 +20,6 @@ export function useHabitForm({
   const [draftInputs, setDraftInputs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const showToast = (type, icon, message) => {
-    toast(<Toast type={type} icon={icon} message={message} />, {
-      position: 'bottom-center',
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeButton: false,
-      pauseOnHover: false,
-      draggable: false,
-    });
-  };
 
   const openModal = () => {
     setDraftHabitList(habitList);
@@ -47,24 +36,17 @@ export function useHabitForm({
   };
 
   const addInputRow = () => {
-    setDraftInputs((prevDraftInputs) => [
-      ...prevDraftInputs,
-      createDraftInput(),
-    ]);
+    setDraftInputs((prev) => [...prev, createDraftInput()]);
   };
 
   const changeInputRow = (id, value) => {
-    setDraftInputs((prevDraftInputs) =>
-      prevDraftInputs.map((input) =>
-        input.id === id ? { ...input, name: value } : input
-      )
+    setDraftInputs((prev) =>
+      prev.map((input) => (input.id === id ? { ...input, name: value } : input))
     );
   };
 
   const deleteInputRow = (id) => {
-    setDraftInputs((prevDraftInputs) =>
-      prevDraftInputs.filter((input) => input.id !== id)
-    );
+    setDraftInputs((prev) => prev.filter((input) => input.id !== id));
   };
 
   const deleteDraftHabit = async (habitId) => {
@@ -86,9 +68,7 @@ export function useHabitForm({
 
       await deleteHabit(habitId);
 
-      setDraftHabitList((prevDraftHabitList) =>
-        prevDraftHabitList.filter((habit) => habit.id !== habitId)
-      );
+      setDraftHabitList((prev) => prev.filter((habit) => habit.id !== habitId));
 
       onAfterDelete(habitId);
       showToast('success', '✅', '습관이 삭제되었어요.');
@@ -97,9 +77,11 @@ export function useHabitForm({
         window.dispatchEvent(
           new CustomEvent('session-expired', { detail: { studyId } })
         );
-      } else {
-        handleApiError(error, '습관 삭제에 실패했어요.');
+        return;
       }
+
+      const message = handleApiError(error, '습관 삭제에 실패했어요.');
+      showToast('danger', '❗', message);
     }
   };
 
@@ -127,9 +109,11 @@ export function useHabitForm({
 
       await onAfterCreate();
       closeModal();
+
       showToast('success', '✅', '습관이 생성되었어요.');
     } catch (error) {
-      handleApiError(error, '습관 생성에 실패했어요.');
+      const message = handleApiError(error, '습관 생성에 실패했어요.');
+      showToast('danger', '❗', message);
     } finally {
       setIsSubmitting(false);
     }
