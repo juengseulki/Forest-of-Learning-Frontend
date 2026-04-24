@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import '../../../styles/StudyCard.css';
-import ic_point from '../../../shared/images/icons/ic_point.png';
+import '@/styles/StudyCard.css';
+import ic_point from '@/shared/images/icons/ic_point.png';
 
 function StudyCard({
   id,

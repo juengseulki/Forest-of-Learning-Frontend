@@ -1,10 +1,10 @@
 import { memo } from 'react';
 
 import StudyCard from './StudyCard.jsx';
-import getBackgroundTheme from '../../../shared/utils/backgroundTheme.js';
+import getBackgroundTheme from '@/shared/utils/backgroundTheme.js';
 import { getStudyCardProps } from '../utils/studyUtils.js';
 
-import '../../../styles/StudyList.css';
+import '@/styles/StudyList.css';
 
 function StudyList({ studies = [], onStudyClick }) {
   return (

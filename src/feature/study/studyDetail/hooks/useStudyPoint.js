@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getPoint } from '../../../../api/pointApi.js';
-import handleApiError from '../../../../utils/handleApiError.jsx';
+import { getPoint } from '@/api/pointApi.js';
+import handleApiError from '@/utils/handleApiError.jsx';
 
 export function useStudyPoint(studyId) {
   const { data, isLoading, isError } = useQuery({

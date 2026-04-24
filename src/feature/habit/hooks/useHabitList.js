@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getHabitList, toggleHabitCheck } from '../../../api/habitApi.js';
+import { getHabitList, toggleHabitCheck } from '@/api/habitApi.js';
 import {
   getTodayDateString,
   normalizeHabitListResponse,
 } from '../utils/habitUtils.js';
-import handleApiError from '../../../utils/handleApiError.jsx';
+import handleApiError from '@/utils/handleApiError.jsx';
 
 export function useHabitList(studyId) {
   const [habitList, setHabitList] = useState([]);

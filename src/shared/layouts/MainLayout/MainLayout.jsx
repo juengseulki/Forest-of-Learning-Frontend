@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Header from '../../../shared/components/header/Header.jsx';
-import Button from '../../../shared/components/button/Button.jsx';
+import Header from '@/shared/components/header/Header.jsx';
+import Button from '@/shared/components/button/Button.jsx';
 import { StudyProvider } from '../../../contexts/StudyContext.jsx';
 import { UIProvider } from '../../../contexts/UIContext.jsx';
 import { useTheme } from '../../hooks/useTheme.js';
 
 import mainIcon from '../../../images/habit/sticker_light_mint_100_04.png';
-import darkModeIcon from '../../../shared/components/icons/button/sticker_dark_button.png';
-import lightModeIcon from '../../../shared/components/icons/button/sticker_light_button.png';
+import darkModeIcon from '@/shared/components/icons/button/sticker_dark_button.png';
+import lightModeIcon from '@/shared/components/icons/button/sticker_light_button.png';
 
 import './MainLayout.css';
 

@@ -1,4 +1,4 @@
-import arrowRightIcon from '../../../../../shared/images/icons/ic_arrow_right.svg';
+import arrowRightIcon from '@/shared/images/icons/ic_arrow_right.svg';
 import { useTranslation } from 'react-i18next';
 
 function StudyLinkGroup({ onHabitClick, onFocusClick }) {

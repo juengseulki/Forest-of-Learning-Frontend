@@ -4,10 +4,10 @@ import {
   deleteHabit,
   verifyStudyPassword,
   checkStudySession,
-} from '../../../api/habitApi.js';
-import handleApiError from '../../../utils/handleApiError.jsx';
+} from '@/api/habitApi.js';
+import handleApiError from '@/utils/handleApiError.jsx';
 import { createDraftInput } from '../utils/habitUtils.js';
-import { showToast } from '../../../shared/utils/showToast.jsx';
+import { showToast } from '@/shared/utils/showToast.jsx';
 
 export function useHabitForm({
   studyId,

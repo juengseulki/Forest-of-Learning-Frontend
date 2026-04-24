@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import arrowRightIcon from '../../../shared/images/icons/ic_arrow_right.svg';
+import arrowRightIcon from '@/shared/images/icons/ic_arrow_right.svg';
 
 function FocusPageActions({ studyId, onOpenRecordModal }) {
   const { t } = useTranslation();

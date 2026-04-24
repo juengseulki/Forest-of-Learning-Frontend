@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import '../../styles/Input.css';
+import '@/styles/Input.css';
 import btn_visibility_off from '../../images/button/btn_visibility_off.svg';
 import btn_visibility_on from '../../images/button/btn_visibility_on.svg';
 

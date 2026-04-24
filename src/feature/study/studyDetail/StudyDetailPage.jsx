@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import '../../../styles/StudyDetailPage.css';
-import '../../../styles/global.css';
+import '@/styles/StudyDetailPage.css';
+import '@/styles/global.css';
 
-import ErrorPage from '../../../shared/components/ErrorPage/ErrorPage.jsx';
+import ErrorPage from '@/shared/components/ErrorPage/ErrorPage.jsx';
 import { useStudyDetail } from './hooks/useStudyDetail.jsx';
 import { useTranslatedStudyName } from './hooks/useTranslatedStudyName.js';
 import StudyDetailContent from './components/StudyDetailContent.jsx';

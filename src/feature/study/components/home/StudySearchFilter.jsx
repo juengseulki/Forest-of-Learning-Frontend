@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import icSearch from '../../../../shared/images/icons/ic_search.png';
-import icSelectArrow from '../../../../shared/components/icons/icon/ic_select_arrow.png';
+import icSearch from '@/shared/images/icons/ic_search.png';
+import icSelectArrow from '@/shared/components/icons/icon/ic_select_arrow.png';
 
 const ORDER_OPTIONS = [
   { value: 'latest', labelKey: 'latest' },

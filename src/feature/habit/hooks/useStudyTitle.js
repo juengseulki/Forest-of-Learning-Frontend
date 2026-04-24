@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { getStudy } from '../../../api/studyApi.js';
+import { getStudy } from '@/api/studyApi.js';
 import { extractStudyTitle } from '../utils/habitUtils.js';
-import handleApiError from '../../../utils/handleApiError.jsx';
+import handleApiError from '@/utils/handleApiError.jsx';
 
 export function useStudyTitle(studyId) {
   const { data = '' } = useQuery({

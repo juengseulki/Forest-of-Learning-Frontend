@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import StudyPasswordModal from '../../shared/modal/StudyPasswordModal.jsx';
-import StudyConfirmModal from '../../shared/modal/StudyConfirmModal.jsx';
-import StudyRecordModal from '../../shared/modal/StudyRecordModal.jsx';
+import StudyPasswordModal from '@/shared/modal/StudyPasswordModal.jsx';
+import StudyConfirmModal from '@/shared/modal/StudyConfirmModal.jsx';
+import StudyRecordModal from '@/shared/modal/StudyRecordModal.jsx';
 
 function StudyDetailModals({
   studyId,

@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { getStudies } from '../../../api/studyApi.js';
-import { translate } from '../../../api/translateApi.js';
+import { getStudies } from '@/api/studyApi.js';
+import { translate } from '@/api/translateApi.js';
 import { useUI } from '../../../contexts/UIContext.jsx';
 import { useRecentStudies } from './useRecentStudies.js';
 

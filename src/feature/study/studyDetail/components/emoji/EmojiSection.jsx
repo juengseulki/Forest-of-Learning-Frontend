@@ -1,12 +1,9 @@
 import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import handleApiError from '../../../../../utils/handleApiError.jsx';
-import { useOnClickOutside } from '../../hooks/useOnClickOutside.js';
-import {
-  getEmojiReactions,
-  addEmojiReaction,
-} from '../../../../../api/emojiApi.js';
+import handleApiError from '@/utils/handleApiError.jsx';
+import { useOnClickOutside } from './useOnClickOutside.js';
+import { getEmojiReactions, addEmojiReaction } from '@/api/emojiApi.js';
 
 async function fetchEmojiItems(studyId) {
   const emojiData = await getEmojiReactions(studyId);

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import pointIcon from '../../../shared/images/icons/ic_point.png';
+import pointIcon from '@/shared/images/icons/ic_point.png';
 
 function FocusPointSummary({ totalPoint, isLoading, isError }) {
   const { t } = useTranslation();

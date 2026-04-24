@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Toast from '../../../../../shared/components/toast/Toast.jsx';
+import Toast from '@/shared/components/toast/Toast.jsx';
 import './ShareSheet.css';
 
 const FALLBACK_IMAGE =

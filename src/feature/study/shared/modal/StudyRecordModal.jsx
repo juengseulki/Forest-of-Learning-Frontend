@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 
 import BaseStudyModal from './BaseStudyModal.jsx';
-import { getPointLog } from '../../../../api/pointApi.js';
-import pointIcon from '../../../../shared/images/icons/ic_point.png';
+import { getPointLog } from '@/api/pointApi.js';
+import pointIcon from '@/shared/images/icons/ic_point.png';
 
 function formatDateString(date) {
   return date.toISOString().slice(0, 10);
