@@ -1,41 +1,120 @@
-import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import handleApiError from '@/utils/handleApiError.jsx';
-import { getHabitRecords } from '@/api/habitApi.js';
-import { getWeekDays } from '../utils/getWeekDays.js';
-import { getThisWeekRange } from '../utils/getThisWeekRange.js';
+import HabitRow from './HabitRow.jsx';
+import { useHabitRecord } from '../hooks/useHabitRecord.js';
+import { translate } from '@/api/translateApi.js';
 
-export function useHabitRecord(studyId) {
-  const { startDate, endDate, weekStartDate } = useMemo(
-    () => getThisWeekRange(),
-    []
+function HabitRecord({ studyId }) {
+  const { habits, weekDays, hasHabits, isLoading, isError } =
+    useHabitRecord(studyId);
+
+  const { i18n, t } = useTranslation();
+
+  const [translatedMap, setTranslatedMap] = useState({});
+  const [isTranslatingHabits, setIsTranslatingHabits] = useState(false);
+
+  useEffect(() => {
+    async function translateHabits() {
+      if (!habits?.length || i18n.language === 'ko') {
+        setTranslatedMap({});
+        return;
+      }
+
+      try {
+        setIsTranslatingHabits(true);
+
+        const results = await Promise.all(
+          habits.map(async (habit) => {
+            const translatedText = await translate(
+              habit.habitName,
+              i18n.language
+            );
+
+            return {
+              id: habit.habitId,
+              text: translatedText,
+            };
+          })
+        );
+
+        const nextMap = results.reduce((acc, item) => {
+          acc[item.id] = item.text;
+          return acc;
+        }, {});
+
+        setTranslatedMap(nextMap);
+      } catch (error) {
+        console.error('습관 이름 번역 실패:', error);
+        setTranslatedMap({});
+      } finally {
+        setIsTranslatingHabits(false);
+      }
+    }
+
+    translateHabits();
+  }, [i18n.language, habits]);
+
+  if (isLoading) {
+    return (
+      <section className="detail-habit-section common-card">
+        <h2>{t('habitRecordTitle')}</h2>
+        <div className="empty-habit-container">
+          <p>{t('loading')}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="detail-habit-section common-card">
+        <h2>{t('habitRecordTitle')}</h2>
+        <div className="empty-habit-container">
+          <p>{t('habitLoadFail')}</p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="detail-habit-section common-card">
+      <h2>{t('habitRecordTitle')}</h2>
+
+      <div className="habit-scroll-container">
+        {!hasHabits ? (
+          <div className="empty-habit-container">
+            <p>{t('emptyHabitTitle')}</p>
+            <p>{t('emptyHabitDescription')}</p>
+          </div>
+        ) : (
+          <div className="habit-wrapper">
+            <div className="habit-weeks">
+              <span>{t('mon')}</span>
+              <span>{t('tue')}</span>
+              <span>{t('wed')}</span>
+              <span>{t('thu')}</span>
+              <span>{t('fri')}</span>
+              <span>{t('sat')}</span>
+              <span>{t('sun')}</span>
+            </div>
+
+            <HabitRow
+              habits={habits}
+              weekDays={weekDays}
+              translatedMap={translatedMap}
+            />
+          </div>
+        )}
+      </div>
+
+      {isTranslatingHabits && (
+        <p className="translate-loading-text habit-translate-loading-text">
+          {t('translating')}
+        </p>
+      )}
+    </section>
   );
-
-  const {
-    data: habits = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['habitRecords', Number(studyId), startDate, endDate],
-    queryFn: async () => {
-      const habitData = await getHabitRecords(studyId, startDate, endDate);
-      return habitData?.items ?? [];
-    },
-    enabled: Boolean(studyId),
-    onError: (error) => {
-      handleApiError(error, '습관 기록을 불러오지 못했습니다.');
-    },
-  });
-
-  const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
-
-  return {
-    habits,
-    weekDays,
-    hasHabits: habits.length > 0,
-    isLoading,
-    isError,
-  };
 }
-export default useHabitRecord;
+
+export default HabitRecord;
