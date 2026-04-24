@@ -4,6 +4,7 @@ export async function getStudies({ keyword, order, page, limit } = {}) {
   const response = await client.get('/studies', {
     params: { keyword, order, page, limit },
   });
+
   return response.data;
 }
 
@@ -21,6 +22,7 @@ export async function verifyStudyPassword(studyId, password) {
   const response = await client.post(`/studies/${studyId}/verify-password`, {
     password,
   });
+
   return response.data;
 }
 
@@ -38,5 +40,6 @@ export async function deleteStudy(studyId, password) {
   const response = await client.delete(`/studies/${studyId}`, {
     data: { password },
   });
+
   return response.data;
 }

@@ -34,7 +34,7 @@ async function request(method, url, { data, params } = {}) {
     if (isJson) {
       try {
         const json = await res.json();
-        errorMessage = json.error?.message || errorMessage;
+        errorMessage = json.error?.message || json.message || errorMessage;
         errorCode = json.error?.code;
       } catch (_) {}
     } else if (res.status === 404) {
@@ -56,7 +56,10 @@ async function request(method, url, { data, params } = {}) {
   }
 
   const json = await res.json();
-  return { data: json.data };
+
+  return {
+    data: json.data ?? json,
+  };
 }
 
 const client = {
