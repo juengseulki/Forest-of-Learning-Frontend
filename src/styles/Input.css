@@ -70,9 +70,9 @@
   color: var(--color-red);
 }
 
-@media (max-width: 375px) {
+@media (max-width: 767px) {
   .input-wrapper,
   .input-wrapper-error {
-    width: 312px;
+    width: 300px;
   }
 }
