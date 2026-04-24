@@ -317,7 +317,7 @@ function StudyForm({ isEditMode = false, initialData = {}, onValidSubmit }) {
         disabled={isLoading}
       >
         {isLoading
-          ? t('생성중...')
+          ? t('creating')
           : isEditMode
             ? t('editSubmit')
             : t('createSubmit')}

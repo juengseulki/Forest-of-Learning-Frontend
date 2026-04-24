@@ -132,7 +132,7 @@ function FocusPage() {
                 <img
                   src={arrowRightIcon}
                   alt={t('arrowRight')}
-                  className="common-action-icon"
+                  className="focus-page__action-icon"
                 />
               </Link>
 
@@ -171,8 +171,8 @@ function FocusPage() {
           />
           <StudyRecordModal
             isOpen={isRecordModalOpen}
-            title="포인트 기록"
-            closeText="닫기"
+            title={t(`pointRecord`)}
+            closeText={t(`close`)}
             onClose={handleCloseRecordModal}
             studyId={currentStudyId}
           />
