@@ -63,7 +63,7 @@ const client = {
   get: (url, options) => request('GET', url, options),
   post: (url, data) => request('POST', url, { data }),
   patch: (url, data) => request('PATCH', url, { data }),
-  delete: (url, data) => request('DELETE', url, { data }),
+  delete: (url, options) => request('DELETE', url, options),
 };
 
 export default client;
