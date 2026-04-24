@@ -46,7 +46,7 @@ function HabitList({ habitList = [], isLoading, isError, onToggleHabit }) {
           <HabitItem
             key={habitId}
             habit={habit}
-            onToggle={() => onToggleHabit(habitId)}
+            onToggle={() => onToggleHabit(habit)}
           />
         );
       })}

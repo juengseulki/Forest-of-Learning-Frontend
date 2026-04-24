@@ -9,9 +9,10 @@ export function useHabitAction(studyId) {
   const toggleMutation = useMutation({
     mutationFn: ({ habit }) => {
       const today = getTodayDateString();
+      const habitId = habit.id ?? habit.habitId;
       const nextCompleted = !habit.todayRecord?.completed;
 
-      return toggleHabitCheck(habit.id, today, nextCompleted);
+      return toggleHabitCheck(habitId, today, nextCompleted);
     },
 
     onSuccess: () => {
