@@ -109,17 +109,22 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 365px) {
+@media (max-width: 767px) {
   .form-container {
-    width: 344px;
+    width: 100%;
   }
 
   .textarea-wrapper,
   .create-button {
-    width: 312px;
+    width: 300px;
   }
 
   .background-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .background-image {
+    border-radius: 16px;
+    border: 1px solid #0000001a;
   }
 }
