@@ -1,0 +1,251 @@
+.focus-page {
+  height: 770px;
+  padding-top: 40px;
+}
+.focus-page__status {
+  padding: 40px 0;
+  font-size: 16px;
+  color: var(--text-sub);
+}
+
+.focus-page__panel {
+  height: 780px;
+}
+
+.focus-page__study-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'title actions'
+    'point actions';
+  column-gap: 16px;
+  row-gap: 12px;
+  margin-bottom: 24px;
+}
+
+.focus-page__study-title {
+  grid-area: title;
+  margin: 0;
+  justify-self: start;
+  font-family: Pretendard;
+  font-style: normal;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: normal;
+  color: var(--text-main);
+}
+
+.focus-page__point-group {
+  grid-area: point;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.focus-page__study-desc {
+  margin: 0;
+  font-family: Pretendard;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--text-sub);
+}
+
+.focus-page__point-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.focus-page__point-text {
+  font-family: Pretendard;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--text-main);
+}
+
+.focus-page__actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.focus-page__action-btn {
+  min-width: 102px;
+  height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.focus-page__action-btn:hover {
+  background-color: #fafafa;
+}
+
+@media (max-width: 1023px) {
+  .focus-page {
+    padding: 24px 20px 40px;
+  }
+
+  .focus-page__content {
+    width: min(100%, 696px);
+    height: min(100%, 726px);
+  }
+
+  .focus-page__panel {
+    height: min(100%, 680px);
+    padding: 24px;
+  }
+
+  .focus-page__study-header {
+    row-gap: 10px;
+    column-gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .focus-page__study-title {
+    font-size: 2.125rem;
+  }
+
+  .focus-page__study-desc {
+    font-size: 16px;
+  }
+
+  .focus-page__point-text {
+    font-size: 16px;
+  }
+
+  .focus-page__action-btn {
+    min-width: 90px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .focus-page__action-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .focus-page {
+    padding: 16px 12px 32px;
+  }
+
+  .focus-page__content {
+    width: min(100%, 344px);
+    height: min(100%, 580px);
+  }
+
+  .focus-page__panel {
+    padding: 16px;
+  }
+
+  .focus-page__study-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .focus-page__study-title {
+    font-size: 24px;
+  }
+
+  .focus-page__actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .focus-page__point-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .focus-page__study-desc {
+    font-size: 16px;
+  }
+
+  .focus-page__point-text {
+    font-size: 16px;
+  }
+
+  .focus-page__action-btn {
+    min-width: 82px;
+    height: 34px;
+    padding: 0 12px;
+    font-size: 0.625rem;
+    gap: 3px;
+  }
+
+  .focus-page__action-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.focus-timer-card__button--start-disabled {
+  width: 333px;
+  height: 66px;
+  border: none;
+  border-radius: 999px;
+  background: #d9d9d9;
+  color: var(--bg-panel);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.focus-timer-card__button--start-disabled:hover {
+  background: #d9d9d9;
+}
+
+.focus-timer-card__icon-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.focus-timer-card__control-icon {
+  transition: opacity 0.2s ease;
+}
+
+.icon-inactive {
+  opacity: 1;
+}
+
+.icon-active {
+  opacity: 0;
+}
+
+.focus-timer-card__icon-button:hover .icon-inactive {
+  opacity: 0;
+}
+
+.focus-timer-card__icon-button:hover .icon-active {
+  opacity: 1;
+}
+
+.focus-timer-card__icon-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.focus-timer-card__control-icon--desktop,
+.focus-timer-card__control-icon--mobile {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

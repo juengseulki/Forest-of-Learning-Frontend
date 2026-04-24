@@ -1,0 +1,130 @@
+.form-container {
+  width: 696px;
+  margin: 20px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.form-title {
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 100%;
+  color: var(--text-main);
+}
+
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.textarea-wrapper {
+  width: 648px;
+  resize: none;
+  height: 98px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-main);
+  border-radius: 15px;
+  background-color: var(--bg-panel);
+  outline: none;
+  color: var(--text-main);
+}
+
+.description-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.char-count.limit {
+  color: #ff4d4f;
+}
+
+.background-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.background-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.background-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 16px;
+  border: 1px solid #0000001a;
+}
+
+.check-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+}
+
+.create-button {
+  width: 648px;
+  height: 58px;
+  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 16px;
+  background-color: #99c08e;
+  color: var(--bg-panel);
+  font-family: 'Doldam', sans-serif;
+  text-shadow:
+    0px 2px 0px rgba(0, 0, 0, 0.15),
+    0px 0px 6px rgba--bg-btn-alpha;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-button:hover {
+  background-color: #8fb783;
+}
+
+.create-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .form-container {
+    width: 100%;
+  }
+
+  .textarea-wrapper,
+  .create-button {
+    width: 300px;
+  }
+
+  .background-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .background-image {
+    border-radius: 16px;
+    border: 1px solid #0000001a;
+  }
+}

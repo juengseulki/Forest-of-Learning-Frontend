@@ -1,0 +1,60 @@
+.button {
+  width: 252px;
+  height: 58px;
+  padding: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: 16px;
+  background-color: #99c08e;
+  color: var(--bg-panel);
+
+  font-family: 'Doldam', sans-serif;
+
+  text-shadow:
+    0px 2px 0px rgba(0, 0, 0, 0.15),
+    0px 0px 6px rgba--bg-btn-alpha;
+
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #8fb783;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* tablet */
+@media (max-width: 1023px) {
+  .button {
+    width: 160px;
+    height: 58px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 18px;
+  }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  .button {
+    width: 106px;
+    height: 38px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11.925px;
+  }
+}
