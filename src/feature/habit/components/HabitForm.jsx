@@ -21,46 +21,37 @@ function HabitForm({
     <div className="habit-modal" onClick={onClose}>
       <div
         className="habit-modal__content"
-        onClick={(event) => event.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="habit-modal__title">{t('editList')}</h2>
+        <h3 className="habit-modal__title">{t('habitListTitle')}</h3>
 
         <div className="habit-form__list">
-          {draftHabitList.length > 0 ? (
-            draftHabitList.map((habit) => (
-              <div key={habit.id} className="habit-form__row">
-                <div className="habit-form__item">
-                  <span className="habit-form__item-name">{habit.name}</span>
-                </div>
-
-                <button
-                  type="button"
-                  className="habit-form__action-btn habit-form__action-btn--delete"
-                  onClick={() => onDeleteDraftHabit(habit.id)}
-                  disabled={isSubmitting}
-                  aria-label={t('delete')}
-                >
-                  <img src={trashIcon} alt={t('habitDeleteAlt')} />
-                </button>
+          {draftHabitList.map((habit) => (
+            <div key={habit.id} className="habit-form__row">
+              <div className="habit-form__item">
+                <span className="habit-form__item-name">{habit.name}</span>
               </div>
-            ))
-          ) : (
-            <div className="habit-empty habit-empty--modal">
-              <p className="habit-empty__title">{t('emptyHabitTitle')}</p>
-              <p className="habit-empty__desc">{t('emptyHabitDescription')}</p>
+
+              <button
+                type="button"
+                className="habit-form__action-btn habit-form__action-btn--delete"
+                onClick={() => onDeleteDraftHabit(habit.id)}
+                disabled={isSubmitting}
+              >
+                <img src={trashIcon} alt={t('habitDeleteAlt')} />
+              </button>
             </div>
-          )}
+          ))}
 
           {draftInputs.map((input) => (
             <div key={input.id} className="habit-form__row">
               <div className="habit-form__item habit-form__item--input">
                 <input
+                  type="text"
                   className="habit-form__input"
+                  placeholder="__________________"
                   value={input.name}
-                  placeholder={t('habitPlaceholder')}
-                  onChange={(event) =>
-                    onChangeInputRow(input.id, event.target.value)
-                  }
+                  onChange={(e) => onChangeInputRow(input.id, e.target.value)}
                   disabled={isSubmitting}
                 />
               </div>
@@ -70,22 +61,28 @@ function HabitForm({
                 className="habit-form__action-btn habit-form__action-btn--delete"
                 onClick={() => onDeleteInputRow(input.id)}
                 disabled={isSubmitting}
-                aria-label={t('delete')}
               >
-                ×
+                <img src={trashIcon} alt={t('habitInputDeleteAlt')} />
               </button>
             </div>
           ))}
 
-          <button
-            type="button"
-            className="habit-form__add-btn"
-            onClick={onAddInputRow}
-            disabled={isSubmitting}
-          >
-            +
-          </button>
+          {draftHabitList.length === 0 && draftInputs.length === 0 && (
+            <div className="habit-empty habit-empty--modal">
+              <p className="habit-empty__title">{t('habitEmptyTitle')}</p>
+              <p className="habit-empty__desc">{t('habitEmptyDesc')}</p>
+            </div>
+          )}
         </div>
+
+        <button
+          type="button"
+          className="habit-form__add-btn"
+          onClick={onAddInputRow}
+          disabled={isSubmitting}
+        >
+          +
+        </button>
 
         <div className="habit-modal__footer">
           <button
@@ -94,7 +91,7 @@ function HabitForm({
             onClick={onClose}
             disabled={isSubmitting}
           >
-            {t('cancel')}
+            {t('habitCancel')}
           </button>
 
           <button
@@ -103,7 +100,7 @@ function HabitForm({
             onClick={onSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? t('loading') : t('confirm')}
+            {isSubmitting ? t('habitSaving') : t('habitSaveDone')}
           </button>
         </div>
       </div>
