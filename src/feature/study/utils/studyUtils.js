@@ -36,7 +36,7 @@ export function getStudyCardProps({ item, getBackgroundTheme }) {
     name: item.name,
     description: item.description,
     duration: getDaysFrom(item.createdAt),
-    totalPoint: item.point ?? 0,
+    totalPoint: item.point?.totalPoint ?? 0,
 
     emojis:
       item.emojiReactions?.map((e) => ({
