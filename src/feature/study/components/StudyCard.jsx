@@ -31,6 +31,10 @@ function StudyCard({
 
   const safeEmojis = Array.isArray(emojis) ? emojis : [];
 
+  const sortedEmojis = [...safeEmojis].sort(
+    (a, b) => Number(b.count ?? 0) - Number(a.count ?? 0)
+  );
+
   const handleClick = () => {
     onClick?.(id);
   };
@@ -95,19 +99,16 @@ function StudyCard({
       </section>
 
       <section className="card-footer">
-        {[...safeEmojis]
-          .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-          .slice(0, 3)
-          .map((item) => (
-            <div className="footer-content" key={item.id ?? item.emoji}>
-              <p className="icon">{item.emoji}</p>
-              <p className="icon-count">{item.count ?? 0}</p>
-            </div>
-          ))}
+        {sortedEmojis.slice(0, 3).map((item) => (
+          <div className="footer-content" key={item.id ?? item.emoji}>
+            <p className="icon">{item.emoji}</p>
+            <p className="icon-count">{Number(item.count ?? 0)}</p>
+          </div>
+        ))}
 
-        {safeEmojis.length > 3 && (
+        {sortedEmojis.length > 3 && (
           <div className="footer-content more">
-            <p className="icon">+{safeEmojis.length - 3}</p>
+            <p className="icon">+{sortedEmojis.length - 3}</p>
           </div>
         )}
       </section>
