@@ -1,17 +1,49 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+
 import BaseStudyModal from './BaseStudyModal.jsx';
 import { getPointLog } from '../../../../api/pointApi.js';
 import pointIcon from '../../../../shared/images/icons/ic_point.png';
+
+function formatDateString(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function formatDuration(seconds) {
+  const hour = String(Math.floor(seconds / 3600)).padStart(2, '0');
+  const minute = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+  const second = String(seconds % 60).padStart(2, '0');
+
+  return `${hour}:${minute}:${second}`;
+}
 
 function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
   const { t, i18n } = useTranslation();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentPage, setCurrentPage] = useState(1);
-  const [pointLogs, setPointLogs] = useState([]);
 
   const ITEMS_PER_PAGE = 5;
+
+  const { data: allPointLogs = [] } = useQuery({
+    queryKey: ['pointLogs', Number(studyId)],
+    queryFn: async () => {
+      const data = await getPointLog(studyId);
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: isOpen && Boolean(studyId),
+  });
+
+  const pointLogs = useMemo(() => {
+    const selected = formatDateString(selectedDate);
+
+    return allPointLogs.filter((log) => {
+      const logDate = new Date(log.createdAt);
+      return formatDateString(logDate) === selected;
+    });
+  }, [allPointLogs, selectedDate]);
+
   const totalPages = Math.ceil(pointLogs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -29,20 +61,22 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
     setCurrentPage(page);
   };
 
-  const formatDateString = (date) => {
-    return date.toISOString().slice(0, 10);
-  };
-
   const handlePrevDate = () => {
-    const prevDate = new Date(selectedDate);
-    prevDate.setDate(prevDate.getDate() - 1);
-    setSelectedDate(prevDate);
+    setSelectedDate((prev) => {
+      const prevDate = new Date(prev);
+      prevDate.setDate(prevDate.getDate() - 1);
+      return prevDate;
+    });
+    setCurrentPage(1);
   };
 
   const handleNextDate = () => {
-    const nextDate = new Date(selectedDate);
-    nextDate.setDate(nextDate.getDate() + 1);
-    setSelectedDate(nextDate);
+    setSelectedDate((prev) => {
+      const nextDate = new Date(prev);
+      nextDate.setDate(nextDate.getDate() + 1);
+      return nextDate;
+    });
+    setCurrentPage(1);
   };
 
   const formatTime = (dateString) => {
@@ -56,36 +90,6 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
       }
     );
   };
-
-  const formatDuration = (seconds) => {
-    const hour = String(Math.floor(seconds / 3600)).padStart(2, '0');
-    const minute = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-    const second = String(seconds % 60).padStart(2, '0');
-
-    return `${hour}:${minute}:${second}`;
-  };
-
-  useEffect(() => {
-    if (!isOpen || !studyId || isNaN(studyId)) return;
-
-    const fetchPointLogs = async () => {
-      try {
-        const data = await getPointLog(studyId);
-        const arr = Array.isArray(data) ? data : [];
-        const selected = formatDateString(selectedDate);
-        const filteredData = arr.filter((log) => {
-          const logDate = new Date(log.createdAt);
-          return formatDateString(logDate) === selected;
-        });
-        setPointLogs(filteredData);
-        setCurrentPage(1);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchPointLogs();
-  }, [isOpen, studyId, selectedDate]);
 
   return (
     <BaseStudyModal
@@ -123,22 +127,26 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
               currentPageLogs.map((log, index) => (
                 <tr key={log.id}>
                   <td>{startIndex + index + 1}</td>
+
                   <td>
                     {log.focusSession
                       ? formatDuration(log.focusSession.duration)
                       : '-'}
                   </td>
+
                   <td>
                     <div className="record-point">
                       <img src={pointIcon} alt={t('pointIconAlt')} />
                       <p>{log.amount}P</p>
                     </div>
                   </td>
+
                   <td>
                     {log.focusSession
                       ? formatTime(log.focusSession.startedAt)
                       : '-'}
                   </td>
+
                   <td>
                     {log.focusSession
                       ? formatTime(log.focusSession.completedAt)
@@ -157,6 +165,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
         {currentPageLogs.length > 0 && (
           <div className="record-pagination">
             <button
+              type="button"
               className="record-pagination__button"
               onClick={handlePrevPage}
               disabled={currentPage === 1}
@@ -186,6 +195,7 @@ function StudyRecordModal({ isOpen, title, closeText, onClose, studyId }) {
             </div>
 
             <button
+              type="button"
               className="record-pagination__button"
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
