@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useFocusPoint } from './useFocusPoint.js';
 import { TIMER_STATUS } from '../utils/focusConstants.js';
-import { completeFocus } from '../../../api/focusApi.js';
-import handleApiError from '../../../utils/handleApiError.jsx';
 import {
   clearStoredSession,
   getStoredSession,
@@ -14,15 +11,13 @@ import {
   getActualMinutes,
   getDiffSeconds,
 } from '../utils/focusTime';
+import { calculateFirstReward } from '../utils/focusReward.js';
 
-export function useFocusTimer(studyId, onSessionComplete) {
-  const { calculateFirstReward } = useFocusPoint();
-
+export function useFocusTimer() {
   const [minutes, setMinutes] = useState('00');
   const [seconds, setSeconds] = useState('00');
 
   const [session, setSession] = useState(() => getStoredSession());
-  const [message, setMessage] = useState('');
   const [now, setNow] = useState(() => Date.now());
 
   const totalSeconds = useMemo(() => {
@@ -36,13 +31,7 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
   const handleSecondsChange = (e) => {
     const value = e.target.value.replace(/\D/g, '').slice(0, 2);
-
-    if (Number(value) > 59) {
-      setSeconds('59');
-      return;
-    }
-
-    setSeconds(value);
+    setSeconds(Number(value) > 59 ? '59' : value);
   };
 
   const handleBlurMinutes = () => {
@@ -74,12 +63,9 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
       setSession((prev) => {
         if (!prev || prev.status !== TIMER_STATUS.RUNNING) return prev;
-
-        // 이미 보상 저장된 경우 → 중복 방지
         if (prev.firstSaved) return prev;
 
         const totalPausedMs = prev.totalPausedMs ?? 0;
-
         const realElapsedMinutes = Math.floor(
           (currentNow - new Date(prev.startedAt).getTime() - totalPausedMs) /
             60000
@@ -94,18 +80,16 @@ export function useFocusTimer(studyId, onSessionComplete) {
           firstSaved: true,
           basePoint: reward.basePoint,
           targetBonusPoint: reward.targetBonusPoint,
-          totalPoint: reward.basePoint + reward.targetBonusPoint,
+          totalPoint: reward.firstRewardPoint,
         };
 
         saveStoredSession(updated);
-        setMessage('기준 시간 도달!');
-
         return updated;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [session?.status, calculateFirstReward]);
+  }, [session?.status]);
 
   const effectiveNow = useMemo(() => {
     if (!session) return now;
@@ -137,7 +121,7 @@ export function useFocusTimer(studyId, onSessionComplete) {
       effectiveNow,
       session?.totalPausedMs ?? 0
     );
-  }, [startedTime, effectiveNow, session]);
+  }, [startedTime, effectiveNow, session?.totalPausedMs]);
 
   const mode = diffSeconds >= 0 ? 'COUNTDOWN' : 'OVERTIME';
   const displayTime = formatSeconds(Math.abs(diffSeconds));
@@ -172,7 +156,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     setNow(start.getTime());
     saveStoredSession(newSession);
     setSession(newSession);
-    setMessage('시작!');
   };
 
   const handlePause = () => {
@@ -199,7 +182,7 @@ export function useFocusTimer(studyId, onSessionComplete) {
       ...session,
       status: TIMER_STATUS.RUNNING,
       pausedAt: null,
-      totalPausedMs: session.totalPausedMs + pausedMs,
+      totalPausedMs: (session.totalPausedMs ?? 0) + pausedMs,
       plannedEndAt: new Date(
         new Date(session.plannedEndAt).getTime() + pausedMs
       ).toISOString(),
@@ -210,8 +193,8 @@ export function useFocusTimer(studyId, onSessionComplete) {
     setSession(updated);
   };
 
-  const handleFinish = async () => {
-    if (!session) return;
+  const handleFinish = () => {
+    if (!session) return null;
 
     const sessionPayload = {
       durationMinutes: session.durationMinutes,
@@ -229,33 +212,13 @@ export function useFocusTimer(studyId, onSessionComplete) {
 
     saveStoredSession(updated);
     setSession(updated);
-    setMessage('집중 종료!');
 
-    if (studyId) {
-      try {
-        const result = await completeFocus(studyId, {
-          sessionData: sessionPayload,
-        });
-
-        setMessage('포인트가 추가되었습니다!');
-        onSessionComplete?.(result);
-      } catch (err) {
-        if (err.status === 401) {
-          window.dispatchEvent(
-            new CustomEvent('session-expired', { detail: { studyId } })
-          );
-        } else {
-          handleApiError(err, '집중 세션 저장에 실패했습니다.');
-          setMessage('포인트 반영 실패');
-        }
-      }
-    }
+    return sessionPayload;
   };
 
   const handleReset = () => {
     clearStoredSession();
     setSession(null);
-    setMessage('');
     setNow(Date.now());
     setMinutes('00');
     setSeconds('00');
@@ -271,7 +234,6 @@ export function useFocusTimer(studyId, onSessionComplete) {
     handleBlurSeconds,
 
     session,
-    message,
     mode,
     displayTime,
     displayDuration,
@@ -286,7 +248,5 @@ export function useFocusTimer(studyId, onSessionComplete) {
     handleResume,
     handleFinish,
     handleReset,
-
-    TIMER_STATUS,
   };
 }

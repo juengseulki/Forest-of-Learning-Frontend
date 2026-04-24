@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTimer } from '../hooks/useFocusTimer.js';
+import { useCompleteFocus } from '../hooks/useCompleteFocus.js';
 import FocusTimerDisplay from './FocusTimerDisplay.jsx';
-import { useFocusPoint } from '../hooks/useFocusPoint.js';
 import FocusTimerControls from './FocusTimerControls.jsx';
 import {
   showPauseToast,
   showTargetToast,
   showPointToast,
 } from '../utils/focusToastUtils.jsx';
+import { calculateFocusToastPoint } from '../utils/focusReward.js';
 import './FocusTimerCard.css';
 
 function FocusTimerCard({ studyId, onSessionComplete }) {
@@ -37,10 +38,9 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
     handleResume,
     handleFinish,
     handleReset,
-  } = useFocusTimer(studyId, onSessionComplete);
+  } = useFocusTimer();
 
-  const { calculateFinalReward } = useFocusPoint();
-
+  const completeFocusMutation = useCompleteFocus(studyId, onSessionComplete);
   const hasShownTargetToastRef = useRef(false);
 
   useEffect(() => {
@@ -56,20 +56,20 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
   }
 
   function handleFinishWithToast() {
-    if (!session) return;
+    if (!session || completeFocusMutation.isPending) return;
 
-    const firstPoint =
-      (session.basePoint ?? 0) + (session.targetBonusPoint ?? 0);
-    const finalReward = calculateFinalReward(
-      session.durationMinutes,
+    const { firstPoint, secondPoint, totalPoint } = calculateFocusToastPoint(
+      session,
       actualMinutes
     );
-    const secondPoint = finalReward.overtimePoint;
-    const totalPoint = firstPoint + secondPoint;
 
     showPointToast(firstPoint, secondPoint, totalPoint);
 
-    handleFinish();
+    const sessionPayload = handleFinish();
+
+    if (studyId && sessionPayload) {
+      completeFocusMutation.mutate(sessionPayload);
+    }
   }
 
   function handleResetWithToast() {
@@ -103,6 +103,7 @@ function FocusTimerCard({ studyId, onSessionComplete }) {
         isPaused={isPaused}
         isCompleted={isCompleted}
         isOvertime={isOvertime}
+        isSaving={completeFocusMutation.isPending}
         handleStart={handleStart}
         handlePause={handlePauseWithToast}
         handleResume={handleResume}
