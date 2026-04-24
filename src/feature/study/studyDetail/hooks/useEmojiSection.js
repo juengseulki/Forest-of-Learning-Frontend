@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import handleApiError from '@/utils/handleApiError.jsx';
-import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside.js';
+import { useOnClickOutside } from './useOnClickOutside.js';
 import { getEmojiReactions, addEmojiReaction } from '@/api/emojiApi.js';
 
 async function fetchEmojiItems(studyId) {
