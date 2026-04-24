@@ -120,7 +120,8 @@ export function useStudyDetail(studyId) {
       if (
         pendingAction === 'edit' ||
         pendingAction === 'habit' ||
-        pendingAction === 'focus'
+        pendingAction === 'focus' ||
+        pendingAction === 'record'
       ) {
         sessionStorage.setItem(`study-auth-${parsedStudyId}`, 'true');
       }
@@ -181,7 +182,10 @@ export function useStudyDetail(studyId) {
 
       if (
         isVerified &&
-        (action === 'edit' || action === 'habit' || action === 'focus')
+        (action === 'edit' ||
+          action === 'habit' ||
+          action === 'focus' ||
+          action === 'record')
       ) {
         moveByAction(action);
         return;
