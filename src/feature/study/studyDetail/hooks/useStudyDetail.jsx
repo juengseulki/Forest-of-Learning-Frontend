@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import Toast from '../../../../shared/components/toast/Toast.jsx';
 import handleApiError from '../../../../utils/handleApiError.jsx';
@@ -10,28 +11,20 @@ import {
   verifyStudyPassword,
   deleteStudy,
 } from '../../../../api/studyApi.js';
-import { useStudy } from '../../../../contexts/StudyContext';
 
 export function useStudyDetail(studyId) {
   const navigate = useNavigate();
-  const { state, dispatch } = useStudy();
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const [study, setStudy] = useState({});
-  const [notFound, setNotFound] = useState(false);
+  const parsedStudyId = Number(studyId);
+
   const [password, setPassword] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
-
-  const parsedStudyId = Number(studyId);
-
-  const studyFromStore = useMemo(() => {
-    return state.studies.find((item) => item.id === parsedStudyId);
-  }, [state.studies, parsedStudyId]);
 
   const showToast = useCallback((type, icon, message) => {
     toast(<Toast type={type} icon={icon} message={message} />, {
@@ -44,90 +37,24 @@ export function useStudyDetail(studyId) {
     });
   }, []);
 
-  useEffect(() => {
-    if (studyFromStore) {
-      setStudy(studyFromStore);
-    }
-  }, [studyFromStore]);
-
-  useEffect(() => {
-    if (!studyId) return;
-
-    const fetchStudy = async () => {
-      try {
-        const targetStudy = await getStudy(studyId);
-        setStudy(targetStudy);
-        dispatch({ type: 'UPSERT_STUDY', payload: targetStudy });
-      } catch (error) {
-        if (error.status === 404 || error.code === 'NOT_FOUND') {
-          setNotFound(true);
-        } else {
-          handleApiError(error, t('studyInfoLoadFail'));
-        }
-      }
-    };
-
-    fetchStudy();
-  }, [studyId, dispatch, t]);
-
-  const getActionLabel = useCallback(() => {
-    switch (pendingAction) {
-      case 'edit':
-        return t('goToEdit');
-      case 'delete':
-        return t('delete');
-      case 'habit':
-        return t('goToHabit');
-      case 'focus':
-        return t('goToFocus');
-      case 'record':
-        return t('viewPointLog');
-      default:
-        return t('confirm');
-    }
-  }, [pendingAction, t]);
-
-  const moveByAction = useCallback(
-    (action) => {
-      if (action === 'edit') {
-        navigate(`/studies/${studyId}/edit`);
-        return;
-      }
-
-      if (action === 'habit') {
-        navigate(`/studies/${studyId}/habit`);
-        return;
-      }
-
-      if (action === 'focus') {
-        navigate(`/studies/${studyId}/focus`);
-        return;
-      }
-
-      if (action === 'record') {
-        setIsRecordModalOpen(true);
-      }
+  const {
+    data: study = {},
+    isError,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['study', parsedStudyId],
+    queryFn: () => getStudy(parsedStudyId),
+    enabled: Boolean(parsedStudyId),
+    retry: false,
+    onError: (error) => {
+      if (error.status === 404 || error.code === 'NOT_FOUND') return;
+      handleApiError(error, t('studyInfoLoadFail'));
     },
-    [navigate, studyId]
-  );
+  });
 
-  const handleRequirePassword = useCallback(
-    (action) => {
-      const isVerified =
-        sessionStorage.getItem(`study-auth-${studyId}`) === 'true';
-
-      // edit는 항상 비밀번호 모달을 띄운다.
-      if (isVerified && (action === 'habit' || action === 'focus')) {
-        moveByAction(action);
-        return;
-      }
-
-      setPendingAction(action);
-      setPassword('');
-      setIsPasswordModalOpen(true);
-    },
-    [studyId, moveByAction]
-  );
+  const notFound =
+    isError && (error?.status === 404 || error?.code === 'NOT_FOUND');
 
   const handleClosePasswordModal = useCallback(() => {
     setIsPasswordModalOpen(false);
@@ -153,61 +80,59 @@ export function useStudyDetail(studyId) {
     setIsRecordModalOpen(false);
   }, []);
 
-  const handleSubmitPassword = useCallback(async () => {
-    if (!password.trim()) {
-      showToast('info', '💙', t('enterPassword'));
-      return;
-    }
+  const moveByAction = useCallback(
+    (action) => {
+      if (action === 'edit') {
+        navigate(`/studies/${parsedStudyId}/edit`);
+        return;
+      }
 
-    try {
-      setIsSubmitting(true);
+      if (action === 'habit') {
+        navigate(`/studies/${parsedStudyId}/habit`);
+        return;
+      }
 
+      if (action === 'focus') {
+        navigate(`/studies/${parsedStudyId}/focus`);
+        return;
+      }
+
+      if (action === 'record') {
+        setIsRecordModalOpen(true);
+      }
+    },
+    [navigate, parsedStudyId]
+  );
+
+  const verifyPasswordMutation = useMutation({
+    mutationFn: () => verifyStudyPassword(parsedStudyId, password),
+
+    onSuccess: () => {
       if (pendingAction === 'delete') {
-        await verifyStudyPassword(studyId, password);
         setIsPasswordModalOpen(false);
         setIsDeleteConfirmModalOpen(true);
         return;
       }
 
-      await verifyStudyPassword(studyId, password);
-
       if (pendingAction === 'habit' || pendingAction === 'focus') {
-        sessionStorage.setItem(`study-auth-${studyId}`, 'true');
+        sessionStorage.setItem(`study-auth-${parsedStudyId}`, 'true');
       }
 
       handleClosePasswordModal();
       moveByAction(pendingAction);
-    } catch (error) {
+    },
+
+    onError: (error) => {
       showToast('danger', '❌', error.message || t('commonError'));
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [
-    password,
-    pendingAction,
-    studyId,
-    showToast,
-    handleClosePasswordModal,
-    moveByAction,
-    t,
-  ]);
+    },
+  });
 
-  const handleConfirmDelete = useCallback(async () => {
-    try {
-      setIsSubmitting(true);
-      await deleteStudy(studyId, password);
+  const deleteStudyMutation = useMutation({
+    mutationFn: () => deleteStudy(parsedStudyId, password),
 
-      dispatch({
-        type: 'SET_STUDIES',
-        payload: state.studies.filter((item) => item.id !== parsedStudyId),
-      });
-
-      dispatch({
-        type: 'SET_RECENT',
-        payload: state.recentStudies.filter(
-          (item) => item.id !== parsedStudyId
-        ),
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['studies'] });
+      queryClient.removeQueries({ queryKey: ['study', parsedStudyId] });
 
       setIsDeleteConfirmModalOpen(false);
       setPassword('');
@@ -215,31 +140,73 @@ export function useStudyDetail(studyId) {
 
       showToast('success', '💚', t('deleteSuccess'));
       navigate('/');
-    } catch (error) {
+    },
+
+    onError: (error) => {
       showToast('danger', '❌', error.message || t('deleteFail'));
-    } finally {
-      setIsSubmitting(false);
+    },
+  });
+
+  const isSubmitting =
+    verifyPasswordMutation.isPending || deleteStudyMutation.isPending;
+
+  const getActionLabel = useCallback(() => {
+    switch (pendingAction) {
+      case 'edit':
+        return t('goToEdit');
+      case 'delete':
+        return t('delete');
+      case 'habit':
+        return t('goToHabit');
+      case 'focus':
+        return t('goToFocus');
+      case 'record':
+        return t('viewPointLog');
+      default:
+        return t('confirm');
     }
-  }, [
-    studyId,
-    password,
-    dispatch,
-    state.studies,
-    state.recentStudies,
-    parsedStudyId,
-    showToast,
-    navigate,
-    t,
-  ]);
+  }, [pendingAction, t]);
+
+  const handleRequirePassword = useCallback(
+    (action) => {
+      const isVerified =
+        sessionStorage.getItem(`study-auth-${parsedStudyId}`) === 'true';
+
+      if (isVerified && (action === 'habit' || action === 'focus')) {
+        moveByAction(action);
+        return;
+      }
+
+      setPendingAction(action);
+      setPassword('');
+      setIsPasswordModalOpen(true);
+    },
+    [parsedStudyId, moveByAction]
+  );
+
+  const handleSubmitPassword = useCallback(() => {
+    if (!password.trim()) {
+      showToast('info', '💙', t('enterPassword'));
+      return;
+    }
+
+    verifyPasswordMutation.mutate();
+  }, [password, showToast, t, verifyPasswordMutation]);
+
+  const handleConfirmDelete = useCallback(() => {
+    deleteStudyMutation.mutate();
+  }, [deleteStudyMutation]);
 
   return {
     study,
     notFound,
+    isLoading,
     password,
     isSubmitting,
     isPasswordModalOpen,
     isDeleteConfirmModalOpen,
     isRecordModalOpen,
+
     handleRequirePassword,
     handleClosePasswordModal,
     handleCloseDeleteConfirmModal,

@@ -1,12 +1,8 @@
 import { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import '../../../styles/StudyCard.css';
 import ic_point from '../../../shared/images/icons/ic_point.png';
-
-import { addRecentStudy } from '../shared/utils/recentStudy.js';
-import { useStudyDispatch } from '../../../contexts/StudyContext.jsx';
 
 function StudyCard({
   id,
@@ -15,27 +11,27 @@ function StudyCard({
   description,
   duration,
   totalPoint,
-  emojis,
+  emojis = [],
   backgroundImage,
   theme,
+  onClick,
 }) {
-  const navigate = useNavigate();
-  const dispatch = useStudyDispatch();
   const { i18n, t } = useTranslation();
 
   const handleClick = () => {
-    const updatedRecentStudies = addRecentStudy({ id });
+    onClick?.(id);
+  };
 
-    dispatch({
-      type: 'SET_RECENT',
-      payload: updatedRecentStudies,
-    });
-
-    navigate(`/studies/${id}`);
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleClick();
+    }
   };
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       className="study-card"
       style={{
         backgroundImage: `
@@ -48,6 +44,7 @@ function StudyCard({
         `,
       }}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
       <section className="card-header">
         <div className="header-top">
@@ -63,6 +60,7 @@ function StudyCard({
                 src={ic_point}
                 alt={t('pointIconAlt')}
               />
+
               <p className="point-text" style={{ color: theme?.pointText }}>
                 {totalPoint}P {t('earned')}
               </p>
@@ -73,7 +71,7 @@ function StudyCard({
             {duration}
             {i18n.language === 'zh-CN'
               ? ` ${t('dayProgress')}`
-              : `${t('dayProgress')}`}
+              : t('dayProgress')}
           </p>
         </div>
 

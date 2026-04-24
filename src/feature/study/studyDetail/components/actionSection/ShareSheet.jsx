@@ -1,8 +1,32 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Toast from '../../../../../shared/components/toast/Toast.jsx';
 import './ShareSheet.css';
+
+const FALLBACK_IMAGE =
+  'https://developers.kakao.com/tool/resource/static/img/button/kakaotalksharing/kakaotalk_sharing_btn_medium.png';
+
+function getAbsoluteUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  return `${window.location.origin}${url}`;
+}
+
+function ensureKakaoInitialized() {
+  const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
+
+  if (!window.Kakao) {
+    throw new Error('Kakao SDK가 로드되지 않았습니다.');
+  }
+
+  if (!kakaoKey) {
+    throw new Error('카카오 JavaScript 키가 없습니다.');
+  }
+
+  if (!window.Kakao.isInitialized()) {
+    window.Kakao.init(kakaoKey);
+  }
+}
 
 function ShareSheet({ isOpen, onClose, study }) {
   const { t } = useTranslation();
@@ -10,7 +34,6 @@ function ShareSheet({ isOpen, onClose, study }) {
   if (!isOpen) return null;
 
   const shareUrl = `${window.location.origin}/studies/${study?.id ?? ''}`;
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   const showToast = (type, icon, message) => {
     toast(<Toast type={type} icon={icon} message={message} />, {
@@ -35,43 +58,16 @@ function ShareSheet({ isOpen, onClose, study }) {
   };
 
   const handleKakaoShare = () => {
-    if (!window.Kakao) {
-      showToast('danger', '❗', t('kakaoLoadFail'));
-      return;
-    }
-
-    const kakaoKey = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
-
-    if (!window.Kakao.isInitialized()) {
-      if (!kakaoKey) {
-        showToast('danger', '❗', t('kakaoInitFail'));
-        return;
-      }
-
-      try {
-        window.Kakao.init(kakaoKey);
-      } catch (error) {
-        console.error('카카오 초기화 실패', error);
-        showToast('danger', '❗', t('kakaoInitFail'));
-        return;
-      }
-    }
-
-    // PC에서는 앱 intent 에러가 날 수 있어서 링크 복사로 대체
-    if (!isMobile) {
-      handleCopyLink();
-      return;
-    }
-
     try {
+      ensureKakaoInitialized();
+
       window.Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
           title: study?.name || t('shareStudyTitle'),
           description: study?.description || t('shareStudyDescription'),
           imageUrl:
-            study?.background?.imageUrl ||
-            'https://developers.kakao.com/tool/resource/static/img/button/kakaotalksharing/kakaotalk_sharing_btn_medium.png',
+            getAbsoluteUrl(study?.background?.imageUrl) || FALLBACK_IMAGE,
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
@@ -90,7 +86,7 @@ function ShareSheet({ isOpen, onClose, study }) {
 
       onClose();
     } catch (error) {
-      console.error('카카오 공유 실패', error);
+      console.error('카카오 공유 실패:', error);
       showToast('danger', '❗', t('kakaoShareFail'));
     }
   };

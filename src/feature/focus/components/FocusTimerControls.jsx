@@ -21,6 +21,7 @@ function FocusTimerControls({
   isPaused,
   isCompleted,
   isOvertime,
+  isSaving = false,
   handleStart,
   handlePause,
   handleResume,
@@ -55,6 +56,7 @@ function FocusTimerControls({
         type="button"
         className="focus-timer-card__button focus-timer-card__button--start"
         onClick={handleReset}
+        disabled={isSaving}
       >
         <span className="focus-timer-card__button-content">
           <img
@@ -107,6 +109,7 @@ function FocusTimerControls({
         type="button"
         className="focus-timer-card__button focus-timer-card__button--stop"
         onClick={handleFinish}
+        disabled={isSaving}
       >
         <span className="focus-timer-card__button-content">
           <img
@@ -114,7 +117,7 @@ function FocusTimerControls({
             alt={t('focusStop')}
             className="focus-timer-card__button-icon"
           />
-          <span>{t('focusStop')}</span>
+          <span>{isSaving ? t('saving') : t('focusStop')}</span>
         </span>
       </button>
     );

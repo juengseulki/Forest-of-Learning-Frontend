@@ -1,43 +1,43 @@
 import '../styles/reset.css';
 import '../styles/habit.css';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import arrowRightIcon from '../shared/images/icons/ic_arrow_right.svg';
 
-import HabitItem from '../feature/habit/components/HabitItem.jsx';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import HabitForm from '../feature/habit/components/HabitForm.jsx';
+import HabitPageHeader from '../feature/habit/components/HabitPageHeader.jsx';
+import HabitCard from '../feature/habit/components/HabitCard.jsx';
 
 import { useCurrentTime } from '../feature/habit/hooks/useCurrentTime.js';
-import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle.js';
-import { useHabitList } from '../feature/habit/hooks/useHabitList.js';
+import { useHabitQuery } from '../feature/habit/hooks/useHabitQuery.js';
+import { useHabitAction } from '../feature/habit/hooks/useHabitAction.js';
 import { useHabitForm } from '../feature/habit/hooks/useHabitForm.js';
+import { useStudyTitle } from '../feature/habit/hooks/useStudyTitle.js';
+import { useTranslatedHabitList } from '../feature/habit/hooks/useTranslatedHabitList.js';
+import { useTranslatedStudyTitle } from '../feature/habit/hooks/useTranslatedStudyTitle.js';
 
 import { formatHabitTime } from '../feature/habit/utils/formatHabitTime.js';
 import { toStudyId } from '../feature/habit/utils/habitUtils.js';
-import { translate } from '../api/translateApi.js';
 
 function HabitPage() {
-  const navigate = useNavigate();
   const { studyId, habitId } = useParams();
-  const { t, i18n } = useTranslation();
-
   const parsedStudyId = toStudyId(studyId);
 
   const now = useCurrentTime();
   const formattedTime = formatHabitTime(now);
 
   const studyTitle = useStudyTitle(parsedStudyId);
-  const [translatedStudyTitle, setTranslatedStudyTitle] = useState('');
+  const displayStudyTitle = useTranslatedStudyTitle(studyTitle);
 
   const {
-    habitList,
+    data: habitList = [],
     isLoading,
-    errorMessage,
-    fetchHabitList,
-    toggleHabit,
-    removeHabitLocally,
-  } = useHabitList(parsedStudyId);
+    isError,
+    refetch,
+  } = useHabitQuery(parsedStudyId);
+
+  const translatedHabitList = useTranslatedHabitList(habitList);
+  const { toggleHabit } = useHabitAction(parsedStudyId);
 
   const {
     draftHabitList,
@@ -54,8 +54,8 @@ function HabitPage() {
   } = useHabitForm({
     studyId: parsedStudyId,
     habitList,
-    onAfterCreate: fetchHabitList,
-    onAfterDelete: removeHabitLocally,
+    onAfterCreate: refetch,
+    onAfterDelete: refetch,
   });
 
   useEffect(() => {
@@ -72,120 +72,22 @@ function HabitPage() {
     return () => clearTimeout(timer);
   }, [habitId, habitList]);
 
-  useEffect(() => {
-    async function translateStudyName() {
-      if (!studyTitle) return;
-
-      if (i18n.language === 'ko') {
-        setTranslatedStudyTitle('');
-        return;
-      }
-
-      try {
-        const result = await translate(studyTitle, i18n.language);
-        setTranslatedStudyTitle(result);
-      } catch (error) {
-        console.error('습관 페이지 스터디 이름 번역 실패:', error);
-        setTranslatedStudyTitle('');
-      }
-    }
-
-    translateStudyName();
-  }, [i18n.language, studyTitle]);
-
   return (
     <section className="habit-page common-panel-lg">
       <main className="habit-home">
-        <header className="habit-home__header">
-          <div className="habit-home__top">
-            <h1
-              className="habit-home__title home__titile"
-              onClick={() => {
-                if (!parsedStudyId) return;
-                navigate(`/studies/${parsedStudyId}`);
-              }}
-            >
-              {translatedStudyTitle || studyTitle || t('studyDefault')}
-            </h1>
+        <HabitPageHeader
+          studyId={parsedStudyId}
+          studyTitle={displayStudyTitle}
+          formattedTime={formattedTime}
+        />
 
-            <div className="habit-home__nav">
-              <button
-                type="button"
-                className="habit-home__nav-btn common-action-btn"
-                onClick={() => {
-                  if (!parsedStudyId) return;
-                  navigate(`/studies/${parsedStudyId}/focus`);
-                }}
-              >
-                <span className="habit-home__nav-text">{t('todayFocus')}</span>
-                <img
-                  src={arrowRightIcon}
-                  alt={t('arrowRight')}
-                  className="common-action-icon habit-home__nav-icon"
-                />
-              </button>
-
-              <button
-                type="button"
-                className="habit-home__nav-btn habit-home__nav-btn--small common-action-btn"
-                onClick={() => navigate('/')}
-              >
-                <span className="habit-home__nav-text">{t('home')}</span>
-                <img
-                  src={arrowRightIcon}
-                  alt={t('arrowRight')}
-                  className="common-action-icon habit-home__nav-icon"
-                />
-              </button>
-            </div>
-          </div>
-
-          <div className="habit-home__time">
-            <span className="habit-home__time-label">{t('currentTime')}</span>
-            <span className="habit-home__time-value common-point-box">
-              {formattedTime}
-            </span>
-          </div>
-        </header>
-
-        <section className="habit-card common-card common-panel-md">
-          <div className="habit-card__header">
-            <div className="habit-card__header-left" />
-            <h2 className="habit-card__title">{t('todayHabit')}</h2>
-            <button
-              type="button"
-              className="habit-card__edit"
-              onClick={openModal}
-            >
-              {t('editList')}
-            </button>
-          </div>
-
-          <div className="habit-list">
-            {isLoading && habitList.length === 0 ? (
-              <div className="habit-empty">
-                <p className="habit-empty__title">{t('loading')}</p>
-              </div>
-            ) : errorMessage ? (
-              <div className="habit-empty">
-                <p className="habit-empty__title">{errorMessage}</p>
-              </div>
-            ) : habitList.length === 0 ? (
-              <div className="habit-empty">
-                <p className="habit-empty__title">{t('noHabit')}</p>
-                <p className="habit-empty__desc">{t('createHabitGuide')}</p>
-              </div>
-            ) : (
-              habitList.map((habit) => (
-                <HabitItem
-                  key={habit.id}
-                  habit={habit}
-                  onToggle={toggleHabit}
-                />
-              ))
-            )}
-          </div>
-        </section>
+        <HabitCard
+          habitList={translatedHabitList}
+          isLoading={isLoading}
+          isError={isError}
+          onOpenModal={openModal}
+          onToggleHabit={toggleHabit}
+        />
       </main>
 
       <HabitForm

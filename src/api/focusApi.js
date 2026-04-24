@@ -1,20 +1,21 @@
 import client from './client.js';
 
 export async function getFocus(studyId) {
-  return client.get(`/focuses/${studyId}`);
+  const response = await client.get(`/focuses/${studyId}`);
+  return response.data;
 }
-
-// export async function startFocus(studyId) {
-//   return client.post(`/focuses/${studyId}/start`);
-// }
 
 export async function completeFocus(studyId, payload) {
-  return client.post(`/focuses/${studyId}`, payload);
-}
-export async function getPoint(studyId) {
-  return client.get(`/points/${studyId}`);
+  const response = await client.post(`/focuses/${studyId}`, payload);
+  return response.data;
 }
 
-export async function getStudyById(studyId) {
-  return client.get(`/studies/${studyId}`);
+export async function getFocusPoint(studyId) {
+  const response = await client.get(`/points/${studyId}`);
+  return response.data;
+}
+
+export async function getFocusStudy(studyId) {
+  const response = await client.get(`/studies/${studyId}`);
+  return response.data;
 }

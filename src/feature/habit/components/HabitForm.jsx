@@ -1,111 +1,134 @@
-import { useTranslation } from 'react-i18next';
-import trashIcon from '../../../images/icon/ic_trash.svg';
+import { useState } from 'react';
+import {
+  createHabit,
+  deleteHabit,
+  verifyStudyPassword,
+  checkStudySession,
+} from '../../../api/habitApi.js';
+import handleApiError from '../../../utils/handleApiError.jsx';
+import { createDraftInput } from '../utils/habitUtils.js';
+import { showToast } from '../../../shared/utils/showToast.jsx';
 
-function HabitForm({
-  isOpen,
-  draftHabitList,
-  draftInputs,
-  isSubmitting,
-  onClose,
-  onDeleteDraftHabit,
-  onAddInputRow,
-  onChangeInputRow,
-  onDeleteInputRow,
-  onSubmit,
+export function useHabitForm({
+  studyId,
+  habitList,
+  onAfterCreate,
+  onAfterDelete,
 }) {
-  const { t } = useTranslation();
+  const [draftHabitList, setDraftHabitList] = useState([]);
+  const [draftInputs, setDraftInputs] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!isOpen) return null;
+  const openModal = () => {
+    setDraftHabitList(habitList);
+    setDraftInputs([]);
+    setIsModalOpen(true);
+  };
 
-  return (
-    <div className="habit-modal" onClick={onClose}>
-      <div
-        className="habit-modal__content"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h3 className="habit-modal__title">{t('habitListTitle')}</h3>
+  const closeModal = () => {
+    if (isSubmitting) return;
 
-        <div className="habit-form__list">
-          {draftHabitList.map((habit) => (
-            <div key={habit.id} className="habit-form__row">
-              <div className="habit-form__item">
-                <span className="habit-form__item-name">{habit.name}</span>
-              </div>
+    setDraftHabitList([]);
+    setDraftInputs([]);
+    setIsModalOpen(false);
+  };
 
-              <button
-                type="button"
-                className="habit-form__action-btn habit-form__action-btn--delete"
-                onClick={() => onDeleteDraftHabit(habit.id)}
-                disabled={isSubmitting}
-              >
-                <img src={trashIcon} alt={t('habitDeleteAlt')} />
-              </button>
-            </div>
-          ))}
+  const addInputRow = () => {
+    setDraftInputs((prev) => [...prev, createDraftInput()]);
+  };
 
-          {draftInputs.map((input) => (
-            <div key={input.id} className="habit-form__row">
-              <div className="habit-form__item habit-form__item--input">
-                <input
-                  type="text"
-                  className="habit-form__input"
-                  placeholder="__________________"
-                  value={input.name}
-                  onChange={(e) => onChangeInputRow(input.id, e.target.value)}
-                  disabled={isSubmitting}
-                />
-              </div>
+  const changeInputRow = (id, value) => {
+    setDraftInputs((prev) =>
+      prev.map((input) => (input.id === id ? { ...input, name: value } : input))
+    );
+  };
 
-              <button
-                type="button"
-                className="habit-form__action-btn habit-form__action-btn--delete"
-                onClick={() => onDeleteInputRow(input.id)}
-                disabled={isSubmitting}
-              >
-                <img src={trashIcon} alt={t('habitInputDeleteAlt')} />
-              </button>
-            </div>
-          ))}
+  const deleteInputRow = (id) => {
+    setDraftInputs((prev) => prev.filter((input) => input.id !== id));
+  };
 
-          {draftHabitList.length === 0 && draftInputs.length === 0 && (
-            <div className="habit-empty habit-empty--modal">
-              <p className="habit-empty__title">{t('habitEmptyTitle')}</p>
-              <p className="habit-empty__desc">{t('habitEmptyDesc')}</p>
-            </div>
-          )}
-        </div>
+  const deleteDraftHabit = async (habitId) => {
+    if (!studyId) {
+      showToast('danger', '❗', '유효한 studyId가 없어요.');
+      return;
+    }
 
-        <button
-          type="button"
-          className="habit-form__add-btn"
-          onClick={onAddInputRow}
-          disabled={isSubmitting}
-        >
-          +
-        </button>
+    try {
+      const sessionData = await checkStudySession(studyId);
+      const isVerified = sessionData?.verified;
 
-        <div className="habit-modal__footer">
-          <button
-            type="button"
-            className="habit-modal__cancel"
-            onClick={onClose}
-            disabled={isSubmitting}
-          >
-            {t('habitCancel')}
-          </button>
+      if (!isVerified) {
+        const password = window.prompt('스터디 비밀번호를 입력하세요.');
+        if (!password) return;
 
-          <button
-            type="button"
-            className="habit-modal__submit"
-            onClick={onSubmit}
-            disabled={isSubmitting}
-          >
-            {t('complete')}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+        await verifyStudyPassword(studyId, password);
+      }
+
+      await deleteHabit(habitId);
+
+      setDraftHabitList((prev) => prev.filter((habit) => habit.id !== habitId));
+
+      await onAfterDelete?.();
+      showToast('success', '✅', '습관이 삭제되었어요.');
+    } catch (error) {
+      if (error.status === 401) {
+        window.dispatchEvent(
+          new CustomEvent('session-expired', { detail: { studyId } })
+        );
+        return;
+      }
+
+      const message = handleApiError(error, '습관 삭제에 실패했어요.');
+      showToast('danger', '❗', message);
+    }
+  };
+
+  const submitHabitList = async () => {
+    const habitNames = draftInputs
+      .map((input) => input.name.trim())
+      .filter(Boolean);
+
+    if (habitNames.length === 0) {
+      closeModal();
+      return;
+    }
+
+    if (!studyId) {
+      showToast('danger', '❗', '유효한 studyId가 없어요.');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      await Promise.all(
+        habitNames.map((name) => createHabit(studyId, { name }))
+      );
+
+      await onAfterCreate?.();
+      closeModal();
+
+      showToast('success', '✅', '습관이 생성되었어요.');
+    } catch (error) {
+      const message = handleApiError(error, '습관 생성에 실패했어요.');
+      showToast('danger', '❗', message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return {
+    draftHabitList,
+    draftInputs,
+    isModalOpen,
+    isSubmitting,
+    openModal,
+    closeModal,
+    addInputRow,
+    changeInputRow,
+    deleteInputRow,
+    deleteDraftHabit,
+    submitHabitList,
+  };
 }
-
-export default HabitForm;
