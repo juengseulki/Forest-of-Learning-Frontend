@@ -318,11 +318,11 @@ em-emoji-picker {
   }
 
   .emoji-popup {
-    width: 230px;
+    padding: 8px;
   }
 
   .action-item {
-    font-size: 14px;
+    font-size: 12px;
   }
 }
 
