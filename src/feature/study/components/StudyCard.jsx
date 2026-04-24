@@ -4,6 +4,12 @@ import { useTranslation } from 'react-i18next';
 import '@/styles/StudyCard.css';
 import ic_point from '@/shared/images/icons/ic_point.png';
 
+function toText(value, fallback = '') {
+  if (value == null) return fallback;
+  if (typeof value === 'string' || typeof value === 'number') return value;
+  return fallback;
+}
+
 function StudyCard({
   id,
   nickname,
@@ -18,14 +24,19 @@ function StudyCard({
 }) {
   const { i18n, t } = useTranslation();
 
+  const displayNickname = toText(nickname);
+  const displayName = toText(name);
+  const displayDescription = toText(description);
+  const displayDuration = toText(duration);
+
+  const safeEmojis = Array.isArray(emojis) ? emojis : [];
+
   const handleClick = () => {
     onClick?.(id);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleClick();
-    }
+    if (e.key === 'Enter') handleClick();
   };
 
   return (
@@ -50,8 +61,8 @@ function StudyCard({
         <div className="header-top">
           <div className="title-group">
             <h2 className="title" style={{ color: theme?.title }}>
-              <span style={{ color: theme?.nickname }}>{nickname}</span>
-              {t('studyPossessive')} {name}
+              <span style={{ color: theme?.nickname }}>{displayNickname}</span>
+              {t('studyPossessive')} {displayName}
             </h2>
 
             <div className="point" style={{ backgroundColor: theme?.pointBg }}>
@@ -62,13 +73,13 @@ function StudyCard({
               />
 
               <p className="point-text" style={{ color: theme?.pointText }}>
-                {totalPoint}P {t('earned')}
+                {totalPoint ?? 0}P {t('earned')}
               </p>
             </div>
           </div>
 
           <p className="duration" style={{ color: theme?.duration }}>
-            {duration}
+            {displayDuration}
             {i18n.language === 'zh-CN'
               ? ` ${t('dayProgress')}`
               : t('dayProgress')}
@@ -79,24 +90,24 @@ function StudyCard({
           className="description text-break"
           style={{ color: theme?.description }}
         >
-          {description}
+          {displayDescription}
         </p>
       </section>
 
       <section className="card-footer">
-        {[...emojis]
-          .sort((a, b) => b.count - a.count)
+        {[...safeEmojis]
+          .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
           .slice(0, 3)
           .map((item) => (
-            <div className="footer-content" key={item.emoji}>
+            <div className="footer-content" key={item.id ?? item.emoji}>
               <p className="icon">{item.emoji}</p>
-              <p className="icon-count">{item.count}</p>
+              <p className="icon-count">{item.count ?? 0}</p>
             </div>
           ))}
 
-        {emojis.length > 3 && (
+        {safeEmojis.length > 3 && (
           <div className="footer-content more">
-            <p className="icon">+{emojis.length - 3}</p>
+            <p className="icon">+{safeEmojis.length - 3}</p>
           </div>
         )}
       </section>
