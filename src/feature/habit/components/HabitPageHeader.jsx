@@ -2,9 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import arrowRightIcon from '@/shared/images/icons/ic_arrow_right.svg';
 
+function toText(value, fallback = '') {
+  if (value == null) return fallback;
+  if (typeof value === 'string' || typeof value === 'number') {
+    return String(value);
+  }
+  return value?.name || fallback;
+}
+
 function HabitPageHeader({ studyId, studyTitle, formattedTime }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const displayStudyTitle = toText(studyTitle, t('studyDefault'));
 
   return (
     <header className="habit-home__header">
@@ -16,7 +26,7 @@ function HabitPageHeader({ studyId, studyTitle, formattedTime }) {
             navigate(`/studies/${studyId}`);
           }}
         >
-          {studyTitle || t('studyDefault')}
+          {displayStudyTitle}
         </h1>
 
         <div className="habit-home__nav">
