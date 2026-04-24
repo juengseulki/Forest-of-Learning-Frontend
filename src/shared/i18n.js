@@ -176,6 +176,7 @@ i18n.use(initReactI18next).init({
         studyNotFoundDesc: '존재하지 않는 스터디입니다.',
 
         complete: '완료',
+        creating: '생성중...',
       },
     },
 
@@ -349,6 +350,7 @@ i18n.use(initReactI18next).init({
         studyNotFound: 'Study not found.',
         studyNotFoundDesc: 'This study does not exist.',
         complete: 'Done',
+        creating: 'Creating...',
       },
     },
 
@@ -523,6 +525,7 @@ i18n.use(initReactI18next).init({
         studyNotFoundDesc: '存在しないスタディです。',
 
         complete: '完了',
+        creating: '作成中...',
       },
     },
 
@@ -695,6 +698,7 @@ i18n.use(initReactI18next).init({
         studyNotFound: '找不到该学习组。',
         studyNotFoundDesc: '该学习组不存在。',
         complete: '完成',
+        creating: '创建中...',
       },
     },
   },

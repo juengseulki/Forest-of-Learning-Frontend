@@ -188,13 +188,13 @@
     min-width: 82px;
     height: 34px;
     padding: 0 12px;
-    font-size: 0.75rem;
-    gap: 6px;
+    font-size: 0.625rem;
+    gap: 3px;
   }
 
   .focus-page__action-icon {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
   }
 }
 
