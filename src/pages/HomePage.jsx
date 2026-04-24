@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useHomeStudies } from '../feature/study/hooks/useHomeStudies.js';
 import RecentStudySection from '../feature/study/components/home/RecentStudySection.jsx';
@@ -8,6 +9,8 @@ import '../styles/HomePage.css';
 import '../styles/global.css';
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const {
     keyword,
     setKeyword,
@@ -43,11 +46,16 @@ function HomePage() {
     moreSee();
   }
 
+  function handleStudyClick(id) {
+    addRecentStudyItem({ id });
+    navigate(`/studies/${id}`);
+  }
+
   return (
     <div className="main-container">
       <RecentStudySection
         studies={recentStudies}
-        onStudyClick={addRecentStudyItem}
+        onStudyClick={handleStudyClick}
         onClear={clearRecentStudyList}
       />
 
@@ -61,7 +69,7 @@ function HomePage() {
         isFetchingNextPage={isFetchingNextPage}
         hasMore={hasMore}
         onMoreSee={handleMoreSee}
-        onStudyClick={addRecentStudyItem}
+        onStudyClick={handleStudyClick}
       />
     </div>
   );
