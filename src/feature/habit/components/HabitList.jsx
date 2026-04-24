@@ -39,9 +39,17 @@ function HabitList({ habitList = [], isLoading, isError, onToggleHabit }) {
 
   return (
     <div className="habit-list">
-      {habitList.map((habit) => (
-        <HabitItem key={habit.id} habit={habit} onToggle={onToggleHabit} />
-      ))}
+      {habitList.map((habit) => {
+        const habitId = habit.id ?? habit.habitId;
+
+        return (
+          <HabitItem
+            key={habitId}
+            habit={habit}
+            onToggle={() => onToggleHabit(habitId)}
+          />
+        );
+      })}
     </div>
   );
 }
