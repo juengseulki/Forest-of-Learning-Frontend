@@ -38,3 +38,4 @@ export function useHabitRecord(studyId) {
     isError,
   };
 }
+export default useHabitRecord;
