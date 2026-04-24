@@ -13,7 +13,8 @@ function EmojiList({ emojis, onAddEmoji }) {
         return (
           <button
             key={e.emoji}
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               onAddEmoji(e.emoji);
             }}
             className="emoji-btn"
@@ -26,7 +27,8 @@ function EmojiList({ emojis, onAddEmoji }) {
       {emojis.length > 3 && (
         <div className="more-emoji-wrapper" ref={popupRef}>
           <button
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               setIsExpanded((prev) => !prev);
             }}
             className="emoji-more-btn"
@@ -34,13 +36,20 @@ function EmojiList({ emojis, onAddEmoji }) {
             <img src={plusIcon} alt="+ 아이콘 " /> {emojis.length - 3}..
           </button>
           {isExpanded && (
-            <div className="emoji-popup">
+            <div
+              className="emoji-popup"
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+            >
               {emojis.slice(3).map((e) => {
                 return (
                   <button
                     key={e.emoji}
                     className="emoji-btn"
-                    onClick={() => onAddEmoji(e.emoji)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onAddEmoji(e.emoji);
+                    }}
                   >
                     {e.emoji} {e.count}
                   </button>

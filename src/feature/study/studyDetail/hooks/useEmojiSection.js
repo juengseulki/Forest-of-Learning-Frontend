@@ -58,7 +58,6 @@ export function useEmojiSection(studyId) {
 
       const items = await fetchEmojiItems(studyId);
       setEmojis(items);
-      setIsPickerVisible(false);
     } catch (error) {
       handleApiError(error, '이모지 추가에 실패했습니다.');
     }

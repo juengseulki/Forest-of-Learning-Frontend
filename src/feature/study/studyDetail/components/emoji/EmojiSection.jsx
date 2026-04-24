@@ -11,23 +11,34 @@ function EmojiSection({ studyId }) {
   const { emojis, isPickerVisible, togglePicker, handleAddEmoji, pickerRef } =
     useEmojiSection(studyId);
   const theme = usePickerTheme();
-  const [isExpanded, setIsExpanded] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
 
-  const popupRef = useRef(null);
-  useOnClickOutside(popupRef, () => setIsExpanded(false), isExpanded);
+  // const popupRef = useRef(null);
+  // useOnClickOutside(popupRef, () => setIsExpanded(false), isExpanded);
 
   return (
     <span className="emoji">
       <EmojiList emojis={emojis} onAddEmoji={handleAddEmoji} />
 
       <div className="emoji-picker-container" ref={pickerRef}>
-        <button type="button" className="emoji-add-btn" onClick={togglePicker}>
+        <button
+          type="button"
+          className="emoji-add-btn"
+          onClick={(event) => {
+            event.stopPropagation();
+            togglePicker();
+          }}
+        >
           <img src={smileIcon} alt="이모지 추가" />
           추가
         </button>
 
         {isPickerVisible && (
-          <div className="picker">
+          <div
+            className="picker"
+            onMouseDown={(e) => e.stopPropagation()} // 추가
+            onClick={(e) => e.stopPropagation()}
+          >
             <Picker
               data={data}
               onEmojiSelect={handleAddEmoji}
