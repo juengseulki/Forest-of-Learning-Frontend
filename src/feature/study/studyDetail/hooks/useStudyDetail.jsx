@@ -110,7 +110,11 @@ export function useStudyDetail(studyId) {
         return;
       }
 
-      if (pendingAction === 'habit' || pendingAction === 'focus') {
+      if (
+        pendingAction === 'edit' ||
+        pendingAction === 'habit' ||
+        pendingAction === 'focus'
+      ) {
         sessionStorage.setItem(`study-auth-${parsedStudyId}`, 'true');
       }
 

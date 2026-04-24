@@ -1,65 +1,50 @@
-import { useRef, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
 
-import handleApiError from '@/utils/handleApiError.jsx';
-import { useOnClickOutside } from '@/feature/study/studyDetail/hooks/useOnClickOutside';
-import { getEmojiReactions, addEmojiReaction } from '@/api/emojiApi.js';
+import smileIcon from '@/images/icon/ic_smile.svg';
+import EmojiList from './EmojiList.jsx';
+import { useEmojiSection } from '../../hooks/useEmojiSection.js';
 
-async function fetchEmojiItems(studyId) {
-  const emojiData = await getEmojiReactions(studyId);
-  return emojiData?.items ?? [];
-}
+function EmojiSection({ studyId }) {
+  const { emojis, isPickerVisible, togglePicker, handleAddEmoji, pickerRef } =
+    useEmojiSection(studyId);
 
-export function useEmojiSection(studyId) {
-  const queryClient = useQueryClient();
-  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  return (
+    <span className="emoji">
+      <EmojiList emojis={emojis} onAddEmoji={handleAddEmoji} />
 
-  const pickerRef = useRef(null);
+      <div className="emoji-picker-container" ref={pickerRef}>
+        <button
+          type="button"
+          className="emoji-add-btn"
+          onClick={(event) => {
+            event.stopPropagation();
+            togglePicker();
+          }}
+        >
+          <img src={smileIcon} alt="이모지 추가" />
+          추가
+        </button>
 
-  useOnClickOutside(
-    pickerRef,
-    () => setIsPickerVisible(false),
-    isPickerVisible
+        {isPickerVisible && (
+          <div
+            className="picker"
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <Picker
+              data={data}
+              onEmojiSelect={handleAddEmoji}
+              theme="light"
+              perLine={7}
+              maxFrequentRows={0}
+              skinTonePosition="none"
+            />
+          </div>
+        )}
+      </div>
+    </span>
   );
-
-  const { data: emojis = [] } = useQuery({
-    queryKey: ['emojis', Number(studyId)],
-    queryFn: () => fetchEmojiItems(studyId),
-    enabled: Boolean(studyId),
-    onError: (error) => {
-      handleApiError(error, '이모지를 불러오지 못했습니다.');
-    },
-  });
-
-  const addEmojiMutation = useMutation({
-    mutationFn: (emojiData) => {
-      const emojiValue = emojiData?.native ?? emojiData;
-      return addEmojiReaction(studyId, emojiValue);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['emojis', Number(studyId)] });
-      queryClient.invalidateQueries({ queryKey: ['studies'] });
-    },
-    onError: (error) => {
-      handleApiError(error, '이모지 추가에 실패했습니다.');
-    },
-  });
-
-  const togglePicker = () => {
-    setIsPickerVisible((prev) => !prev);
-  };
-
-  const handleAddEmoji = (emojiData) => {
-    addEmojiMutation.mutate(emojiData);
-  };
-
-  return {
-    emojis,
-    isPickerVisible,
-    togglePicker,
-    handleAddEmoji,
-    pickerRef,
-    isAddingEmoji: addEmojiMutation.isPending,
-  };
 }
-export default useEmojiSection;
+
+export default EmojiSection;
