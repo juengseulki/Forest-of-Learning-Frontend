@@ -8,6 +8,10 @@ import Toast from '@/shared/components/toast/Toast.jsx';
 import handleApiError from '@/utils/handleApiError.jsx';
 import { getStudy, verifyStudyPassword, deleteStudy } from '@/api/studyApi.js';
 
+function resolveStudyResponse(response) {
+  return response?.data ?? response ?? {};
+}
+
 export function useStudyDetail(studyId) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -40,7 +44,10 @@ export function useStudyDetail(studyId) {
     isLoading,
   } = useQuery({
     queryKey: ['study', parsedStudyId],
-    queryFn: () => getStudy(parsedStudyId),
+    queryFn: async () => {
+      const response = await getStudy(parsedStudyId);
+      return resolveStudyResponse(response);
+    },
     enabled: Boolean(parsedStudyId),
     retry: false,
     onError: (error) => {
@@ -172,7 +179,10 @@ export function useStudyDetail(studyId) {
       const isVerified =
         sessionStorage.getItem(`study-auth-${parsedStudyId}`) === 'true';
 
-      if (isVerified && (action === 'habit' || action === 'focus')) {
+      if (
+        isVerified &&
+        (action === 'edit' || action === 'habit' || action === 'focus')
+      ) {
         moveByAction(action);
         return;
       }
