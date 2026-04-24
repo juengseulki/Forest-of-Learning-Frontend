@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import plusIcon from '../../../../../images/icon/ic_plus.svg';
-import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useOnClickOutside } from '.@/shared/hooks/useOnClickOutside.js';
 
 function EmojiList({ emojis, onAddEmoji }) {
   const [isExpanded, setIsExpanded] = useState(false);
