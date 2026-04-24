@@ -1,10 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
-import handleApiError from '../../../../utils/handleApiError.jsx';
+import handleApiError from '@/utils/handleApiError.jsx';
 import { useOnClickOutside } from './useOnClickOutside.js';
-import {
-  getEmojiReactions,
-  addEmojiReaction,
-} from '../../../../api/emojiApi.js';
+import { getEmojiReactions, addEmojiReaction } from '@/api/emojiApi.js';
 
 async function fetchEmojiItems(studyId) {
   const emojiData = await getEmojiReactions(studyId);

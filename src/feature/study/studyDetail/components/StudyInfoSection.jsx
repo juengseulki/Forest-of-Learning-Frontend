@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import pointIcon from '../../../../shared/images/icons/ic_point.png';
-import '../../../../styles/StudyDetailPage.css';
+import pointIcon from '@/shared/images/icons/ic_point.png';
+import '@/styles/StudyDetailPage.css';
 import { useStudyPoint } from '../hooks/useStudyPoint.js';
-import { translate } from '../../../../api/translateApi.js';
+import { translate } from '@/api/translateApi.js';
 
 function StudyInfoSection({ study, studyId }) {
   const { point } = useStudyPoint(studyId);

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { translate } from '../../../../api/translateApi.js';
+import { translate } from '@/api/translateApi.js';
 
 export function useTranslatedStudyName(studyName) {
   const { i18n } = useTranslation();

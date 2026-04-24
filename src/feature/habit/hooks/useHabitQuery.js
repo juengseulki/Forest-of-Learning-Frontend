@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getHabitList } from '../../../api/habitApi.js';
+import { getHabitList } from '@/api/habitApi.js';
 import { normalizeHabitListResponse } from '../utils/habitUtils.js';
 
 export function useHabitQuery(studyId) {

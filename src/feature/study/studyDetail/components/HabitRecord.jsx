@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import handleApiError from '../../../../utils/handleApiError.jsx';
-import { getHabitRecords } from '../../../../api/habitApi.js';
+import handleApiError from '@/utils/handleApiError.jsx';
+import { getHabitRecords } from '@/api/habitApi.js';
 import { getWeekDays } from '../utils/getWeekDays.js';
 import { getThisWeekRange } from '../utils/getThisWeekRange.js';
 

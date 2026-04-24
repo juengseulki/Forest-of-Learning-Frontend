@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Input from '../../../components/common/Input.jsx';
-import '../../../styles/StudyForm.css';
+import '@/styles/StudyForm.css';
 import ic_pow from '../../../images/icon/ic_pow.svg';
-import { createStudy, updateStudy } from '../../../api/studyApi.js';
-import { getBackgrounds } from '../../../api/backgroundApi.js';
-import { translate } from '../../../api/translateApi.js';
+import { createStudy, updateStudy } from '@/api/studyApi.js';
+import { getBackgrounds } from '@/api/backgroundApi.js';
+import { translate } from '@/api/translateApi.js';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';

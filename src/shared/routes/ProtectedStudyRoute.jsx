@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { verifyStudyPassword } from '../../api/studyApi.js';
+import { verifyStudyPassword } from '@/api/studyApi.js';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import PasswordModal from '../../feature/study/shared/modal/StudyPasswordModal.jsx';
@@ -23,7 +23,8 @@ function ProtectedStudyRoute({ children }) {
       setIsVerified(false);
     };
     window.addEventListener('session-expired', handleSessionExpired);
-    return () => window.removeEventListener('session-expired', handleSessionExpired);
+    return () =>
+      window.removeEventListener('session-expired', handleSessionExpired);
   }, [studyId]);
 
   async function handleVerify() {

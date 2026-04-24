@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { completeFocus } from '../../../api/focusApi.js';
-import handleApiError from '../../../utils/handleApiError.jsx';
+import { completeFocus } from '@/api/focusApi.js';
+import handleApiError from '@/utils/handleApiError.jsx';
 
 export function useCompleteFocus(studyId, onSessionComplete) {
   const queryClient = useQueryClient();

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toggleHabitCheck } from '../../../api/habitApi.js';
-import handleApiError from '../../../utils/handleApiError.jsx';
+import { toggleHabitCheck } from '@/api/habitApi.js';
+import handleApiError from '@/utils/handleApiError.jsx';
 import { getTodayDateString } from '../utils/habitUtils.js';
 
 export function useHabitAction(studyId) {

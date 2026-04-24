@@ -4,13 +4,9 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import Toast from '../../../../shared/components/toast/Toast.jsx';
-import handleApiError from '../../../../utils/handleApiError.jsx';
-import {
-  getStudy,
-  verifyStudyPassword,
-  deleteStudy,
-} from '../../../../api/studyApi.js';
+import Toast from '@/shared/components/toast/Toast.jsx';
+import handleApiError from '@/utils/handleApiError.jsx';
+import { getStudy, verifyStudyPassword, deleteStudy } from '@/api/studyApi.js';
 
 export function useStudyDetail(studyId) {
   const navigate = useNavigate();
