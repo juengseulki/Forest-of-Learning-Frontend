@@ -1,168 +1,129 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getStudies } from '../../../api/studyApi.js';
-import { getPoint } from '../../../api/pointApi.js';
-import { getEmojiReactions } from '../../../api/emojiApi.js';
-import { translate } from '../../../api/translateApi.js';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { useRecentStudies } from './useRecentStudies.js';
-import { useStudy } from '../../../contexts/StudyContext.jsx';
+import { getStudies } from '../../../api/studyApi.js';
+import { translate } from '../../../api/translateApi.js';
 import { useUI } from '../../../contexts/UIContext.jsx';
-import {
-  getFilteredStudies,
-  getHasMore,
-  getVisibleCount,
-} from '../utils/homeStudyUtils.js';
+import { useRecentStudies } from './useRecentStudies.js';
+
+const LIST_LIMIT = 6;
+const RECENT_LIMIT = 3;
+
+async function translateStudy(study, language) {
+  if (language === 'ko') return study;
+
+  const [nickname, name, description] = await Promise.all([
+    study.nickname
+      ? translate(study.nickname, language).catch(() => study.nickname)
+      : '',
+    study.name ? translate(study.name, language).catch(() => study.name) : '',
+    study.description
+      ? translate(study.description, language).catch(() => study.description)
+      : '',
+  ]);
+
+  return {
+    ...study,
+    nickname,
+    name,
+    description,
+  };
+}
+
+function normalizeStudies(studies) {
+  const map = new Map();
+
+  studies.forEach((study) => {
+    if (!study?.id) return;
+    map.set(study.id, study);
+  });
+
+  return Array.from(map.values());
+}
 
 export function useHomeStudies() {
   const { i18n } = useTranslation();
-  const { state: studyState, dispatch: studyDispatch } = useStudy();
   const { state: uiState, dispatch: uiDispatch } = useUI();
 
-  const { studies, isLoading, totalCount } = studyState;
-  const { keyword, order, listPage } = uiState;
-
-  const listLimit = 6;
-  const recentLimit = 3;
+  const { keyword, order } = uiState;
 
   const setKeyword = (value) => {
     uiDispatch({ type: 'SET_KEYWORD', payload: value });
-    uiDispatch({ type: 'RESET_PAGE' });
   };
 
   const setOrder = (value) => {
     uiDispatch({ type: 'SET_ORDER', payload: value });
-    uiDispatch({ type: 'RESET_PAGE' });
   };
 
-  const moreSee = () => {
-    uiDispatch({ type: 'INCREMENT_PAGE' });
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function fetchData() {
-      try {
-        studyDispatch({ type: 'SET_LOADING', payload: true });
-
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ['studies', { keyword, order, language: i18n.language }],
+      initialPageParam: 1,
+      queryFn: async ({ pageParam }) => {
         const data = await getStudies({
-          page: listPage,
-          limit: listLimit,
+          page: pageParam,
+          limit: LIST_LIMIT,
           keyword,
           order,
         });
 
-        const studiesWithExtra = await Promise.all(
-          (data?.items ?? []).map(async (study) => {
-            const [
-              pointData,
-              emojiData,
-              translatedNickname,
-              translatedName,
-              translatedDescription,
-            ] = await Promise.all([
-              getPoint(study.id).catch(() => ({ totalPoint: 0 })),
-              getEmojiReactions(study.id).catch(() => ({ items: [] })),
-              i18n.language === 'ko'
-                ? Promise.resolve(study.nickname ?? '')
-                : translate(study.nickname ?? '', i18n.language).catch(
-                    () => study.nickname ?? ''
-                  ),
-              i18n.language === 'ko'
-                ? Promise.resolve(study.name ?? '')
-                : translate(study.name ?? '', i18n.language).catch(
-                    () => study.name ?? ''
-                  ),
-              i18n.language === 'ko'
-                ? Promise.resolve(study.description ?? '')
-                : translate(study.description ?? '', i18n.language).catch(
-                    () => study.description ?? ''
-                  ),
-            ]);
-
-            return {
-              ...study,
-              nickname: translatedNickname,
-              name: translatedName,
-              description: translatedDescription,
-              point: pointData?.totalPoint ?? 0,
-              emojis: emojiData?.items ?? [],
-            };
-          })
+        const items = await Promise.all(
+          (data?.items ?? []).map((study) =>
+            translateStudy(study, i18n.language)
+          )
         );
 
-        if (isMounted) {
-          const nextStudies =
-            listPage === 1
-              ? studiesWithExtra
-              : [
-                  ...studies,
-                  ...studiesWithExtra.filter(
-                    (newStudy) =>
-                      !studies.some((existing) => existing.id === newStudy.id)
-                  ),
-                ];
+        return {
+          items,
+          totalCount: data?.totalCount ?? 0,
+          page: pageParam,
+        };
+      },
+      getNextPageParam: (lastPage, allPages) => {
+        const loadedCount = allPages.reduce(
+          (sum, page) => sum + page.items.length,
+          0
+        );
 
-          studyDispatch({
-            type: 'SET_STUDIES',
-            payload: nextStudies,
-          });
-          studyDispatch({
-            type: 'SET_TOTAL_COUNT',
-            payload: data?.totalCount ?? 0,
-          });
-        }
-      } catch (error) {
-        console.error('홈 스터디 목록 조회 실패:', error);
+        return loadedCount < lastPage.totalCount
+          ? lastPage.page + 1
+          : undefined;
+      },
+      staleTime: 1000 * 30,
+    });
 
-        if (isMounted && listPage === 1) {
-          studyDispatch({
-            type: 'SET_STUDIES',
-            payload: [],
-          });
-        }
-      } finally {
-        if (isMounted) {
-          studyDispatch({
-            type: 'SET_LOADING',
-            payload: false,
-          });
-        }
-      }
-    }
+  const studies = useMemo(() => {
+    const flatStudies = data?.pages.flatMap((page) => page.items) ?? [];
+    return normalizeStudies(flatStudies);
+  }, [data]);
 
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [studyDispatch, i18n.language, listPage, keyword, order]);
-
-  const filteredStudies = useMemo(() => {
-    return getFilteredStudies(studies, keyword, order);
-  }, [studies, keyword, order]);
-
-  const hasMore = useMemo(() => {
-    return getHasMore(totalCount, getVisibleCount(listPage, listLimit));
-  }, [totalCount, listPage, listLimit]);
-
-  const { recentStudies, refreshRecentStudies, clearRecentStudyList } =
-    useRecentStudies(studies, recentLimit);
+  const {
+    recentStudies,
+    addRecentStudyItem,
+    clearRecentStudyList,
+    refreshRecentStudies,
+  } = useRecentStudies(studies, RECENT_LIMIT);
 
   return {
-    listPage,
-    listLimit,
-    recentLimit,
+    listLimit: LIST_LIMIT,
+    recentLimit: RECENT_LIMIT,
+
     keyword,
     setKeyword,
     order,
     setOrder,
+
     isLoading,
-    filteredStudies,
+    isFetchingNextPage,
+
+    studies,
     recentStudies,
-    hasMore,
-    moreSee,
+
+    hasMore: Boolean(hasNextPage),
+    moreSee: fetchNextPage,
+
+    addRecentStudyItem,
     clearRecentStudyList,
     refreshRecentStudies,
   };
