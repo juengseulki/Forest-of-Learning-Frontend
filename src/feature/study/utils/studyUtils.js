@@ -17,6 +17,17 @@ function resolveBackgroundImage(imageUrl) {
   return `${API_BASE_URL}${imageUrl}`;
 }
 
+function resolveTotalPoint(point) {
+  if (typeof point === 'number') return point;
+  return point?.totalPoint ?? 0;
+}
+
+function resolveEmojis(item) {
+  return [...(item.emojiReactions ?? item.emojis ?? item.reactions ?? [])].sort(
+    (a, b) => Number(b.count ?? 0) - Number(a.count ?? 0)
+  );
+}
+
 export function getStudyCardProps({ item, getBackgroundTheme }) {
   const theme = getBackgroundTheme(item.background?.id);
 
@@ -25,8 +36,8 @@ export function getStudyCardProps({ item, getBackgroundTheme }) {
     name: item.name,
     description: item.description,
     duration: getDaysFrom(item.createdAt),
-    totalPoint: item.point ?? 0,
-    emojis: item.emojis ?? [],
+    totalPoint: resolveTotalPoint(item.point),
+    emojis: resolveEmojis(item),
     backgroundImage: resolveBackgroundImage(item.background?.imageUrl),
     theme,
   };
