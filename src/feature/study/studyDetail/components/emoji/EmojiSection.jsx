@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import handleApiError from '@/utils/handleApiError.jsx';
-import { useOnClickOutside } from './useOnClickOutside.js';
+import { useOnClickOutside } from '@/feature/study/studyDetail/hooks/useOnClickOutside';
 import { getEmojiReactions, addEmojiReaction } from '@/api/emojiApi.js';
 
 async function fetchEmojiItems(studyId) {
