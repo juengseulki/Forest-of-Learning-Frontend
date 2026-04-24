@@ -5,6 +5,7 @@ import { getTodayDateString } from '../utils/habitUtils.js';
 
 export function useHabitAction(studyId) {
   const queryClient = useQueryClient();
+  const parsedStudyId = Number(studyId);
 
   const toggleMutation = useMutation({
     mutationFn: ({ habit }) => {
@@ -16,7 +17,9 @@ export function useHabitAction(studyId) {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['habits', studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ['habits', parsedStudyId],
+      });
     },
 
     onError: (error) => {
