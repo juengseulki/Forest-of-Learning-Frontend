@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import handleApiError from '@/utils/handleApiError.jsx';
 import { getHabitRecords } from '@/api/habitApi.js';
 import { getWeekDays } from '../utils/getWeekDays.js';
-import { getThisWeekRange } from '../utils/getThisWeekRange.js';
+import { getThisWeekRange } from '@/utils/date.js';
 
 export function useHabitRecord(studyId) {
   const [habits, setHabits] = useState([]);
