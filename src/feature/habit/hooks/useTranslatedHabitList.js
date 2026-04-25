@@ -44,6 +44,8 @@ export function useTranslatedHabitList(habitList = []) {
     queryFn: () => translateHabitList(habitList, i18n.language),
     enabled: shouldTranslate,
     staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60,
+    retry: 1,
   });
 
   if (!shouldTranslate) {
