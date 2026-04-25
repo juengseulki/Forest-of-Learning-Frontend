@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getHabitList, toggleHabitCheck } from '@/api/habitApi.js';
+import { getHabitList, toggleHabitCheck, deleteHabit } from '@/api/habitApi.js';
 import {
   getTodayDateString,
   normalizeHabitListResponse,
@@ -65,10 +65,18 @@ export function useHabitList(studyId) {
     }
   }, []);
 
-  const removeHabitLocally = useCallback((habitId) => {
-    setHabitList((prevHabitList) =>
-      prevHabitList.filter((habit) => habit.id !== habitId)
-    );
+  const removeHabit = useCallback(async (habit) => {
+    const habitId = habit.id ?? habit.habitId;
+
+    try {
+      await deleteHabit(habitId);
+
+      setHabitList((prevHabitList) =>
+        prevHabitList.filter((item) => (item.id ?? item.habitId) !== habitId)
+      );
+    } catch (error) {
+      handleApiError(error, '습관 삭제에 실패했어요.');
+    }
   }, []);
 
   return {
@@ -77,6 +85,6 @@ export function useHabitList(studyId) {
     errorMessage,
     fetchHabitList,
     toggleHabit,
-    removeHabitLocally,
+    removeHabit,
   };
 }

@@ -14,6 +14,7 @@ function FocusTimerDisplay({
   handleBlurSeconds,
 }) {
   const { t } = useTranslation();
+  const [mm, ss] = displayTime.split(':');
 
   return (
     <div className="focus-timer-card__display-section">
@@ -38,7 +39,10 @@ function FocusTimerDisplay({
             }`}
           >
             {isOvertime && '-'}
-            {displayTime}
+
+            <span className="time-part">{mm}</span>
+            <span className="time-colon">:</span>
+            <span className="time-part">{ss}</span>
           </div>
         ) : (
           <div className="focus-timer-card__time-input-wrap">

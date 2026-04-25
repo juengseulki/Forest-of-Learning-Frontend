@@ -134,6 +134,16 @@
   color: var(--text-main);
 }
 
+.time-part {
+  letter-spacing: 2px;
+}
+
+.time-colon {
+  margin: 0 21px;
+  display: inline-block;
+  transform: translateY(-2.5px);
+}
+
 .focus-timer-card__time-display.is-running {
   color: #ff5050;
 }

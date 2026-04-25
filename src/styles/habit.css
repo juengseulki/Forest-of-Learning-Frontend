@@ -222,6 +222,9 @@
   flex-direction: column;
   gap: 20px;
   box-sizing: border-box;
+
+  max-height: 80vh;
+  overflow: hidden;
 }
 
 .habit-modal__title {
@@ -238,6 +241,21 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.habit-form__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.habit-form__list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
 }
 
 .habit-form__row {
