@@ -42,6 +42,8 @@ function FocusPage() {
     queryFn: () => translate(studyData.name, i18n.language),
     enabled: Boolean(studyData?.name) && i18n.language !== 'ko',
     staleTime: 1000 * 60 * 60,
+    gcTime: 1000 * 60 * 60,
+    retry: 1,
   });
 
   const displayStudyName = useMemo(() => {
