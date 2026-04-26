@@ -129,7 +129,7 @@ export function useFocusTimer() {
   const isRunning = session?.status === TIMER_STATUS.RUNNING;
   const isPaused = session?.status === TIMER_STATUS.PAUSED;
   const isCompleted = session?.status === TIMER_STATUS.COMPLETED;
-  const isOvertime = isRunning && mode === 'OVERTIME';
+  const isOvertime = (isRunning || isPaused) && mode === 'OVERTIME';
 
   const handleStart = () => {
     if (totalSeconds === 0) return;
