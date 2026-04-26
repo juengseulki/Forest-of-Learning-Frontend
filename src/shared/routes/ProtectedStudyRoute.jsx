@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { verifyStudyPassword } from '@/api/studyApi.js';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import PasswordModal from '../../feature/study/shared/modal/StudyPasswordModal.jsx';
+import { showToast } from '@/shared/utils/showToast.jsx';
 
 function ProtectedStudyRoute({ children }) {
   const { studyId } = useParams();
@@ -29,7 +29,7 @@ function ProtectedStudyRoute({ children }) {
 
   async function handleVerify() {
     if (!password.trim()) {
-      toast.error(t('enterPassword'));
+      showToast('info', '💙', t('enterPassword'));
       return;
     }
 
@@ -42,7 +42,7 @@ function ProtectedStudyRoute({ children }) {
       setIsVerified(true);
       setPassword('');
     } catch (error) {
-      toast.error(t('errorPasswordMismatch'));
+      showToast('danger', '❌', t('errorPasswordMismatch'));
     } finally {
       setIsSubmitting(false);
     }
