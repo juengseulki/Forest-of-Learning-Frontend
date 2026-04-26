@@ -1,6 +1,5 @@
-import { toast } from 'react-toastify';
+import { showToast } from '@/shared/utils/showToast.jsx';
 import { useTranslation } from 'react-i18next';
-import Toast from '@/shared/components/toast/Toast.jsx';
 import './ShareSheet.css';
 
 const FALLBACK_IMAGE =
@@ -34,17 +33,6 @@ function ShareSheet({ isOpen, onClose, study }) {
   if (!isOpen) return null;
 
   const shareUrl = `${window.location.origin}/studies/${study?.id ?? ''}`;
-
-  const showToast = (type, icon, message) => {
-    toast(<Toast type={type} icon={icon} message={message} />, {
-      position: 'bottom-center',
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeButton: false,
-      pauseOnHover: false,
-      draggable: false,
-    });
-  };
 
   const handleCopyLink = async () => {
     try {

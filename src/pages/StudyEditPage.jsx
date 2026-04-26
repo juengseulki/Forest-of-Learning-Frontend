@@ -5,9 +5,8 @@ import {
   useParams,
   useLocation,
 } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import Toast from '../shared/components/toast/Toast.jsx';
+import { showToast } from '@/shared/utils/showToast.jsx';
 import StudyForm from '../feature/study/components/StudyForm.jsx';
 import StudyUnsavedChangesModal from '../feature/study/shared/modal/StudyUnsavedChangesModal.jsx';
 import StudyConfirmModal from '../feature/study/shared/modal/StudyConfirmModal.jsx';
@@ -58,25 +57,18 @@ function StudyEditPage() {
 
   const handleConfirmEdit = async () => {
     if (!pendingFormData) return;
+
     try {
       setIsSubmitting(true);
       await updateStudy(studyId, pendingFormData);
       setIsConfirmModalOpen(false);
 
-      toast(<Toast type="success" icon="✅" message={t('editSuccess')} />, {
-        position: 'bottom-center',
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
+      showToast('success', '✅', t('editSuccess'));
 
       navigate(`/studies/${studyId}`);
     } catch (error) {
       console.error('스터디 수정 실패', error);
-      toast(<Toast type="danger" icon="❗" message={t('editFail')} />, {
-        position: 'bottom-center',
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
+      showToast('danger', '❗', t('editFail'));
     } finally {
       setIsSubmitting(false);
     }

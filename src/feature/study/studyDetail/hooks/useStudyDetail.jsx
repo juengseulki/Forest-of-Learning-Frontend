@@ -1,10 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import Toast from '@/shared/components/toast/Toast.jsx';
+import { showToast } from '@/shared/utils/showToast.jsx';
 import handleApiError from '@/utils/handleApiError.jsx';
 import { getStudy, verifyStudyPassword, deleteStudy } from '@/api/studyApi.js';
 
@@ -25,17 +24,6 @@ export function useStudyDetail(studyId) {
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
-
-  const showToast = useCallback((type, icon, message) => {
-    toast(<Toast type={type} icon={icon} message={message} />, {
-      position: 'bottom-center',
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeButton: false,
-      pauseOnHover: false,
-      draggable: false,
-    });
-  }, []);
 
   const {
     data: study = {},
