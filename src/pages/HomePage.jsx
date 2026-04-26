@@ -46,19 +46,17 @@ function HomePage() {
     moreSee();
   }
 
-  function handleStudyClick(studyOrId) {
+  function handleStudyClick(id) {
     const study =
-      typeof studyOrId === 'object'
-        ? studyOrId
-        : studies.find((item) => item.id === studyOrId) ||
-          recentStudies.find((item) => item.id === studyOrId);
+      studies.find((item) => item.id === id) ||
+      recentStudies.find((item) => item.id === id);
 
-    if (!study?.id) return;
+    if (study) {
+      addRecentStudyItem(study);
+    }
 
-    addRecentStudyItem(study);
-    navigate(`/studies/${study.id}`);
+    navigate(`/studies/${id}`);
   }
-
   return (
     <div className="main-container">
       <RecentStudySection

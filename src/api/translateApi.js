@@ -6,32 +6,51 @@ import {
 
 const pendingRequests = new Map();
 
+function normalizeText(text) {
+  if (text == null) return '';
+  return String(text).trim();
+}
+
 function makeKey(text, target) {
   return `${target}::${text}`;
 }
 
-export async function translate(text, target = 'en') {
-  if (!text?.trim()) return '';
+function resolveTranslatedText(response) {
+  return (
+    response?.data?.translatedText ??
+    response?.translatedText ??
+    response?.data ??
+    ''
+  );
+}
 
-  const cached = getCachedTranslation(text, target);
+export async function translate(text, target = 'en') {
+  const normalizedText = normalizeText(text);
+
+  if (!normalizedText) return '';
+
+  const cached = getCachedTranslation(normalizedText, target);
   if (cached) return cached;
 
-  const requestKey = makeKey(text, target);
+  const requestKey = makeKey(normalizedText, target);
 
   if (pendingRequests.has(requestKey)) {
     return pendingRequests.get(requestKey);
   }
 
   const requestPromise = (async () => {
-    const data = await client.post('/translate', {
-      text,
+    const response = await client.post('/translate', {
+      text: normalizedText,
       target,
     });
 
-    const translatedText = data.translatedText || '';
-    setCachedTranslation(text, target, translatedText);
+    const translatedText = normalizeText(resolveTranslatedText(response));
 
-    return translatedText;
+    const finalText = translatedText || normalizedText;
+
+    setCachedTranslation(normalizedText, target, finalText);
+
+    return finalText;
   })();
 
   pendingRequests.set(requestKey, requestPromise);
