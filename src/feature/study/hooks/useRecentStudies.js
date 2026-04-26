@@ -5,7 +5,7 @@ import {
   clearRecentStudies,
 } from '../shared/utils/recentStudy.js';
 
-export function useRecentStudies(studies = [], recentLimit = 3) {
+export function useRecentStudies(recentLimit = 3) {
   const [recentItems, setRecentItems] = useState(() => getRecentStudies());
 
   const refreshRecentStudies = useCallback(() => {
@@ -23,11 +23,8 @@ export function useRecentStudies(studies = [], recentLimit = 3) {
   }, []);
 
   const recentStudies = useMemo(() => {
-    return recentItems
-      .map((recentItem) => studies.find((study) => study.id === recentItem.id))
-      .filter(Boolean)
-      .slice(0, recentLimit);
-  }, [recentItems, studies, recentLimit]);
+    return recentItems.slice(0, recentLimit);
+  }, [recentItems, recentLimit]);
 
   return {
     recentStudies,
