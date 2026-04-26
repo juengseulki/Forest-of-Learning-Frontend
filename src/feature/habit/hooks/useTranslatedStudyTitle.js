@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { translate } from '@/api/translateApi.js';
 
 function normalizeText(text) {
-  return text?.trim() ?? '';
+  if (text == null) return '';
+  return String(text).trim();
 }
 
 export function useTranslatedStudyTitle(studyTitle) {

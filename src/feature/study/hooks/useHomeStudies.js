@@ -10,17 +10,61 @@ import { useRecentStudies } from './useRecentStudies.js';
 const LIST_LIMIT = 6;
 const RECENT_LIMIT = 3;
 
+const translationCache = new Map();
+const pendingTranslations = new Map();
+
+function normalizeText(text) {
+  if (text == null) return '';
+  return String(text).trim();
+}
+
+async function safeTranslate(text, language) {
+  const originalText = normalizeText(text);
+
+  if (!originalText) return '';
+  if (language === 'ko') return originalText;
+
+  const cacheKey = `${language}::${originalText}`;
+
+  if (translationCache.has(cacheKey)) {
+    return translationCache.get(cacheKey);
+  }
+
+  if (pendingTranslations.has(cacheKey)) {
+    return pendingTranslations.get(cacheKey);
+  }
+
+  const request = translate(originalText, language)
+    .then((result) => {
+      const translated =
+        typeof result === 'string'
+          ? result
+          : (result?.translatedText ?? result?.data?.translatedText);
+
+      const finalText = normalizeText(translated) || originalText;
+
+      translationCache.set(cacheKey, finalText);
+      pendingTranslations.delete(cacheKey);
+
+      return finalText;
+    })
+    .catch(() => {
+      pendingTranslations.delete(cacheKey);
+      return originalText;
+    });
+
+  pendingTranslations.set(cacheKey, request);
+
+  return request;
+}
+
 async function translateStudy(study, language) {
   if (language === 'ko') return study;
 
   const [nickname, name, description] = await Promise.all([
-    study.nickname
-      ? translate(study.nickname, language).catch(() => study.nickname)
-      : '',
-    study.name ? translate(study.name, language).catch(() => study.name) : '',
-    study.description
-      ? translate(study.description, language).catch(() => study.description)
-      : '',
+    safeTranslate(study.nickname, language),
+    safeTranslate(study.name, language),
+    safeTranslate(study.description, language),
   ]);
 
   return {
@@ -90,7 +134,9 @@ export function useHomeStudies() {
           ? lastPage.page + 1
           : undefined;
       },
-      staleTime: 1000 * 30,
+      staleTime: 1000 * 60 * 10,
+      gcTime: 1000 * 60 * 30,
+      retry: 1,
     });
 
   const studies = useMemo(() => {
