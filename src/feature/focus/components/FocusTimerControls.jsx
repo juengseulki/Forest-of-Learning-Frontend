@@ -82,6 +82,7 @@ function FocusTimerControls({
           type="button"
           className="focus-timer-card__button focus-timer-card__button--start"
           onClick={handleResume}
+          disabled={isSaving}
         >
           <span className="focus-timer-card__button-content">
             <img
