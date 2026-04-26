@@ -46,9 +46,9 @@ function HomePage() {
     moreSee();
   }
 
-  function handleStudyClick(id) {
-    addRecentStudyItem({ id });
-    navigate(`/studies/${id}`);
+  function handleStudyClick(study) {
+    addRecentStudyItem(study);
+    navigate(`/studies/${study.id}`);
   }
 
   return (

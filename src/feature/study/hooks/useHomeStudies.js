@@ -103,7 +103,7 @@ export function useHomeStudies() {
     addRecentStudyItem,
     clearRecentStudyList,
     refreshRecentStudies,
-  } = useRecentStudies(studies, RECENT_LIMIT);
+  } = useRecentStudies(RECENT_LIMIT);
 
   return {
     listLimit: LIST_LIMIT,
