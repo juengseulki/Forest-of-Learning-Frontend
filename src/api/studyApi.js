@@ -27,7 +27,7 @@ export async function verifyStudyPassword(studyId, password) {
 }
 
 export async function checkStudySession(studyId) {
-  const response = await client.get(`/studies/${studyId}/verify-session`);
+  const response = await client.get(`/studies/${studyId}/check-session`);
   return response.data;
 }
 
